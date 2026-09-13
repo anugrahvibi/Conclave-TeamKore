@@ -1,0 +1,66 @@
+{
+  "model": {
+    "type": "random_forest",
+    "n_estimators": 50,
+    "max_depth": 8,
+    "random_state": 42
+  },
+  "training": {
+    "mock_data_size": 300,
+    "test_split": 0.2
+  },
+  "features": {
+    "input": [
+      "block_temp",
+      "block_rain",
+      "block_humidity",
+      "elevation",
+      "dist_to_water"
+    ]
+  },
+  "weather_codes": {
+    "rain_24h": {
+      "description": "Rain expected in next 24 hours",
+      "triggers": {
+        "rain_mm_threshold": 20
+      }
+    },
+    "no_rain_7d": {
+      "description": "No rain expected for 7 days",
+      "triggers": {
+        "rain_mm_threshold": 5
+      }
+    },
+    "frost_risk": {
+      "description": "Temperature below 5°C",
+      "triggers": {
+        "temp_c_threshold": 5
+      }
+    },
+    "high_temp_dry": {
+      "description": "High temperature + low humidity",
+      "triggers": {
+        "temp_c_threshold": 32,
+        "humidity_pct_threshold": 50
+      }
+    },
+    "high_wind": {
+      "description": "Strong winds expected",
+      "triggers": {
+        "wind_speed_threshold": 20
+      }
+    },
+    "normal": {
+      "description": "Normal conditions"
+    }
+  },
+  "crop_stages": [
+    "seedling",
+    "young_seedling",
+    "vegetative",
+    "spraying_window",
+    "flowering",
+    "pod_formation",
+    "mature"
+  ]
+}
