@@ -487,6 +487,60 @@ def test_improvement_over_baseline(
     }
 
 
+def test_robustness():
+    """Test input validation, missing static feature defaults, and safe advisory fallbacks."""
+    print("\n" + "="*70)
+    print("TEST 7: Robustness & Error Handling")
+    print("="*70)
+
+    import warnings
+    model = CorrectionModel()
+    X, y = generate_mock_training_data(n_samples=200)
+    model.train(X, y)
+
+    # 1. Missing static features: should use defaults and issue warnings
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        delta = model.predict({"temp_c": 25.0, "rain_mm": 5.0, "humidity_pct": 65.0}, {})
+        assert isinstance(delta, float)
+        assert len(w) >= 3, f"Expected at least 3 warnings for missing features, got {len(w)}"
+        print(f"  ✓ Missing static features: used sensible defaults, logged {len(w)} warnings")
+
+    # 2. Advisory fallback: unmapped weather code or crop stage must not crash
+    engine = AgroAdvisoryEngine()
+    adv_unknown = engine.get_advisory("unmapped_weather_xyz", "unmapped_stage_123")
+    assert isinstance(adv_unknown, dict)
+    assert "text" in adv_unknown and adv_unknown.get("confidence") == "low"
+    print("  ✓ Unmapped weather/crop codes: safely returned generic fallback advisory without crashing")
+
+    adv_none = engine.get_advisory(None, None)
+    assert isinstance(adv_none, dict)
+    assert "text" in adv_none
+    print("  ✓ None inputs to advisory: safely handled without crashing")
+
+    # 3. Input validation: missing required forecast keys raises ValueError
+    try:
+        model.predict({"temp_c": 25.0, "humidity_pct": 65.0}, {"elevation_m": 300})
+        assert False, "Should have raised ValueError for missing rain_mm"
+    except ValueError as e:
+        print(f"  ✓ Missing required forecast key caught: {e}")
+
+    # 4. Input validation: out-of-range forecast values raise ValueError
+    try:
+        model.predict({"temp_c": 125.0, "rain_mm": 5.0, "humidity_pct": 65.0}, {"elevation_m": 300})
+        assert False, "Should have raised ValueError for temp_c=125"
+    except ValueError as e:
+        print(f"  ✓ Out-of-range temperature caught: {e}")
+
+    try:
+        model.predict({"temp_c": 25.0, "rain_mm": 5.0, "humidity_pct": 65.0}, {"elevation_m": 12000})
+        assert False, "Should have raised ValueError for elevation_m=12000"
+    except ValueError as e:
+        print(f"  ✓ Out-of-range elevation caught: {e}")
+
+    print("  ✓ All robustness checks passed!")
+
+
 def interactive_demo():
     """
     Interactive mode: You can type in values and see what the system outputs.
@@ -545,6 +599,7 @@ if __name__ == "__main__":
         test_backend_integration()
         test_load_real_training_data()
         test_improvement_over_baseline()
+        test_robustness()
         
         print("\n" + "="*70)
         print("All tests passed! ✓")

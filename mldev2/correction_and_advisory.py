@@ -7,12 +7,101 @@ This is a complete, hackathon-ready module. No external dependencies beyond skle
 
 import csv
 import json
+import logging
+import warnings
 import numpy as np
 import pickle
 from collections import defaultdict
 from pathlib import Path
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
+
+logger = logging.getLogger("mldev2.correction_and_advisory")
+
+# Sensible defaults for static features when omitted
+DEFAULT_STATIC_FEATURES = {
+    "elevation_m": 300.0,
+    "dist_to_water_km": 5.0,
+    "land_cover": "agriculture",
+}
+
+# Physically reasonable ranges for validation (based on domain & BACKEND_CONTRACT.md)
+FEATURE_RANGES = {
+    "temp_c": (-40.0, 60.0),          # Expected range in °C
+    "rain_mm": (0.0, 1000.0),         # Expected rain in mm
+    "humidity_pct": (0.0, 100.0),     # Relative humidity 0-100%
+    "elevation_m": (-500.0, 9000.0),  # Elevation in meters
+    "dist_to_water_km": (0.0, 500.0), # Distance to water in km
+}
+
+REQUIRED_FORECAST_KEYS = ("temp_c", "rain_mm", "humidity_pct")
+
+
+def validate_block_forecast(block_forecast):
+    """
+    Validate that block_forecast is a dict with all required keys and
+    that values are within physically reasonable ranges.
+
+    Raises:
+        TypeError: If block_forecast is not a dictionary.
+        ValueError: If required keys are missing or values are out of reasonable ranges.
+    """
+    if not isinstance(block_forecast, dict):
+        raise TypeError(f"block_forecast must be a dict, got {type(block_forecast).__name__}")
+
+    missing_keys = [k for k in REQUIRED_FORECAST_KEYS if k not in block_forecast]
+    if missing_keys:
+        raise ValueError(
+            f"block_forecast missing required key(s): {missing_keys}. "
+            f"Required keys: {list(REQUIRED_FORECAST_KEYS)}"
+        )
+
+    for key, (min_val, max_val) in [
+        ("temp_c", FEATURE_RANGES["temp_c"]),
+        ("rain_mm", FEATURE_RANGES["rain_mm"]),
+        ("humidity_pct", FEATURE_RANGES["humidity_pct"]),
+    ]:
+        val = block_forecast[key]
+        if not isinstance(val, (int, float, np.number)) or np.isnan(val):
+            raise ValueError(f"block_forecast['{key}'] must be a valid number, got {val!r}")
+        if not (min_val <= float(val) <= max_val):
+            raise ValueError(
+                f"block_forecast['{key}'] value {val} is outside reasonable range [{min_val}, {max_val}]"
+            )
+
+
+def validate_static_features(static_features):
+    """
+    Validate static_features if provided.
+
+    Raises:
+        TypeError: If static_features is not a dict.
+        ValueError: If any provided feature value is outside reasonable ranges.
+    """
+    if static_features is None:
+        return
+    if not isinstance(static_features, dict):
+        raise TypeError(f"static_features must be a dict, got {type(static_features).__name__}")
+
+    elev = static_features.get("elevation_m", static_features.get("elevation"))
+    if elev is not None:
+        if not isinstance(elev, (int, float, np.number)) or np.isnan(elev):
+            raise ValueError(f"static_features elevation must be a valid number, got {elev!r}")
+        min_e, max_e = FEATURE_RANGES["elevation_m"]
+        if not (min_e <= float(elev) <= max_e):
+            raise ValueError(
+                f"static_features elevation {elev}m is outside reasonable range [{min_e}, {max_e}]m"
+            )
+
+    dist = static_features.get("dist_to_water_km", static_features.get("dist_to_water"))
+    if dist is not None:
+        if not isinstance(dist, (int, float, np.number)) or np.isnan(dist):
+            raise ValueError(f"static_features dist_to_water must be a valid number, got {dist!r}")
+        min_d, max_d = FEATURE_RANGES["dist_to_water_km"]
+        if not (min_d <= float(dist) <= max_d):
+            raise ValueError(
+                f"static_features distance to water {dist}km is outside reasonable range [{min_d}, {max_d}]km"
+            )
 
 
 # Land cover is a word ("forest"), the model needs a number (1).
@@ -293,7 +382,7 @@ class CorrectionModel:
         print(f"✓ Model trained on {len(X)} samples")
         print(f"  Feature importances: {self._get_feature_names_and_importance()}")
     
-    def predict(self, block_forecast, static_features):
+    def predict(self, block_forecast, static_features=None):
         """
         Predict correction delta for a new village forecast.
         
@@ -301,27 +390,68 @@ class CorrectionModel:
             block_forecast: dict with keys: temp_c, rain_mm, humidity_pct
                            Example: {"temp_c": 25.2, "rain_mm": 30.5, "humidity_pct": 70}
             
-            static_features: dict with keys: elevation_m, dist_to_water_km, land_cover
+            static_features: dict with keys: elevation_m, dist_to_water_km, land_cover (optional)
                             land_cover: "agriculture"|"forest"|"urban"|"water"|"barren" (or 0-4)
                             Example: {"elevation_m": 150, "dist_to_water_km": 2.5, "land_cover": "agriculture"}
+                            Missing keys fall back to sensible defaults with a warning logged.
         
         Returns:
             float: Correction delta (e.g., +1.2 means add 1.2°C to baseline)
         
         Raises:
             RuntimeError: If model hasn't been trained yet
+            ValueError: If block_forecast has missing keys or values out of reasonable ranges
         """
         if not self.is_trained:
             raise RuntimeError("Model not trained. Call train() first.")
-        
+
+        # Input validation
+        validate_block_forecast(block_forecast)
+        validate_static_features(static_features)
+
+        # Handle missing static_features dictionary
+        if static_features is None:
+            static_features = {}
+
+        # Resolve elevation with fallback default and logged warning
+        if "elevation_m" in static_features:
+            elevation_val = static_features["elevation_m"]
+        elif "elevation" in static_features:
+            elevation_val = static_features["elevation"]
+        else:
+            elevation_val = DEFAULT_STATIC_FEATURES["elevation_m"]
+            msg = f"Missing 'elevation_m' in static_features; using default {elevation_val}m"
+            logger.warning(msg)
+            warnings.warn(msg, UserWarning, stacklevel=2)
+
+        # Resolve dist_to_water with fallback default and logged warning
+        if "dist_to_water_km" in static_features:
+            dist_val = static_features["dist_to_water_km"]
+        elif "dist_to_water" in static_features:
+            dist_val = static_features["dist_to_water"]
+        else:
+            dist_val = DEFAULT_STATIC_FEATURES["dist_to_water_km"]
+            msg = f"Missing 'dist_to_water_km' in static_features; using default {dist_val}km"
+            logger.warning(msg)
+            warnings.warn(msg, UserWarning, stacklevel=2)
+
+        # Resolve land_cover with fallback default and logged warning
+        if "land_cover" in static_features:
+            land_cover_val = static_features["land_cover"]
+        else:
+            land_cover_val = DEFAULT_STATIC_FEATURES["land_cover"]
+            msg = f"Missing 'land_cover' in static_features; using default '{land_cover_val}'"
+            logger.warning(msg)
+            warnings.warn(msg, UserWarning, stacklevel=2)
+
         # Extract features in the same order as training
         x_single = np.array([
-            block_forecast.get("temp_c", 25),
-            block_forecast.get("rain_mm", 5),
-            block_forecast.get("humidity_pct", 65),
-            static_features.get("elevation_m", 300),
-            static_features.get("dist_to_water_km", 5),
-            encode_land_cover(static_features.get("land_cover", "agriculture")),
+            float(block_forecast["temp_c"]),
+            float(block_forecast["rain_mm"]),
+            float(block_forecast["humidity_pct"]),
+            float(elevation_val),
+            float(dist_val),
+            encode_land_cover(land_cover_val),
         ]).reshape(1, -1)
         
         # Normalize using the fitted scaler
@@ -496,32 +626,48 @@ class AgroAdvisoryEngine:
     
     def get_advisory(self, weather_code, crop_stage):
         """
-        Look up advisory for weather + crop stage.
+        Look up advisory for weather + crop stage with safe fallbacks.
         
         Args:
             weather_code: str, e.g., "rain_24h", "frost_risk", "high_temp_dry", "normal"
             crop_stage: str, e.g., "seedling", "spraying_window", "flowering", "pod_formation"
         
         Returns:
-            dict with keys: text, confidence, matched_rule (or None if no match)
+            dict with keys: text, confidence, matched_rule
                 Example: {
                     "text": "Rain expected in next 24 hours...",
                     "confidence": "high",
                     "matched_rule": "rain_24h + spraying_window"
                 }
         """
-        # Try exact match
-        for rule in self.rules:
-            if (rule["condition"]["weather"] == weather_code and
-                (rule["condition"]["crop_stage"] == crop_stage or 
-                 rule["condition"]["crop_stage"] == "any")):
-                return {
-                    "text": rule["advisory"]["text"],
-                    "confidence": rule["advisory"]["confidence"],
-                    "matched_rule": f"{weather_code} + {crop_stage}"
-                }
-        
-        # Fallback to "normal"
+        # Safely normalize inputs without crashing on None or non-string types
+        w_code = str(weather_code).strip().lower() if weather_code is not None else ""
+        c_stage = str(crop_stage).strip().lower() if crop_stage is not None else ""
+
+        # Try exact or "any" crop stage rule match
+        if self.rules and isinstance(self.rules, list):
+            for rule in self.rules:
+                if not isinstance(rule, dict):
+                    continue
+                cond = rule.get("condition", {})
+                if not isinstance(cond, dict):
+                    continue
+                rule_w = str(cond.get("weather", "")).strip().lower()
+                rule_c = str(cond.get("crop_stage", "")).strip().lower()
+
+                if rule_w == w_code and (rule_c == c_stage or rule_c == "any"):
+                    adv = rule.get("advisory", {})
+                    return {
+                        "text": adv.get("text", "No specific advisory available. Follow standard practices."),
+                        "confidence": adv.get("confidence", "high"),
+                        "matched_rule": f"{weather_code} + {crop_stage}"
+                    }
+
+        # Safe fallback if weather_code or crop_stage not found (don't crash, return generic advice)
+        msg = f"Weather code '{weather_code}' or crop stage '{crop_stage}' not found in rules. Using safe fallback advisory."
+        logger.warning(msg)
+        warnings.warn(msg, UserWarning, stacklevel=2)
+
         return {
             "text": "No specific advisory available. Follow standard practices.",
             "confidence": "low",
