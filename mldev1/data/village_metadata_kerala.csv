@@ -1,0 +1,1032 @@
+village_id,panchayat_id,name,name_ml,lat,lon,osm_id
+VIL_0001,KL_PANCH_0001,Vorkady,വോര്‍ക്കാടി,12.75962,74.96348,relation/11299737
+VIL_0002,KL_PANCH_0002,Manjeswaram,മഞ്ചേശ്വരം,12.73285,74.88874,relation/11299738
+VIL_0003,KL_PANCH_0003,Paivalike,പൈവെളിഗെ,12.68989,75.00191,relation/11299769
+VIL_0004,KL_PANCH_0004,Meenja,മീഞ്ച,12.70521,74.94448,relation/11299770
+VIL_0005,KL_PANCH_0005,Mangalpaddy,മംഗൽപ്പാടി,12.66545,74.92529,relation/11299774
+VIL_0006,KL_PANCH_0006,Puthige,പുത്തിഗെ,12.62953,75.01788,relation/11299816
+VIL_0007,KL_PANCH_0007,Kumbala,കുമ്പള,12.59982,74.95973,relation/11299817
+VIL_0008,KL_PANCH_0008,Enmakaje,എന്‍മകജെ,12.65172,75.108,relation/11299835
+VIL_0009,KL_PANCH_0009,Madhur,മധൂര്‍,12.54175,75.00368,relation/11299934
+VIL_0010,KL_PANCH_0010,Mogral-Puthur,മൊഗ്രാൽ-പുത്തൂർ,12.5388,74.9683,relation/11299935
+VIL_0011,KL_PANCH_0011,Badiadka,ബദിയടുക്ക,12.59443,75.06267,relation/11299947
+VIL_0012,KL_PANCH_0012,Kumbadaje,കുംബഡാജെ,12.58159,75.1244,relation/11299962
+VIL_0013,KL_PANCH_0013,Beloor,ബേലൂര്‍,12.60558,75.17255,relation/11299974
+VIL_0014,KL_PANCH_0014,Chengala,ചെങ്കള,12.5334,75.06999,relation/11299992
+VIL_0015,KL_PANCH_0015,Karaduka,കാറഡുക്ക,12.55712,75.17074,relation/11299993
+VIL_0016,KL_PANCH_0016,Kasaragod,കാസർഗോഡ്,12.50223,74.99184,relation/11300007
+VIL_0017,KL_PANCH_0017,Chemnad,ചെമ്മനാട്,12.47252,75.02528,relation/11300021
+VIL_0018,KL_PANCH_0018,Muliyar,മൂളിയാര്‍,12.51578,75.12399,relation/11300035
+VIL_0019,KL_PANCH_0019,Bedadka,ബേടഡുക്ക,12.45814,75.14153,relation/11300057
+VIL_0020,KL_PANCH_0020,Delampadi,ദേലമ്പാടി,12.55638,75.24662,relation/11300083
+VIL_0021,KL_PANCH_0021,Kuttikol,കുറ്റിക്കോല്‍,12.49339,75.24965,relation/11300084
+VIL_0022,KL_PANCH_0022,Kallar,കള്ളാര്‍,12.43245,75.24349,relation/11302618
+VIL_0023,KL_PANCH_0023,Pananthadi,പനത്തടി,12.46406,75.35454,relation/11302645
+VIL_0024,KL_PANCH_0024,Kodom-Belur,കോടോം-ബേളൂർ,12.37783,75.19811,relation/11302664
+VIL_0025,KL_PANCH_0025,Balal,ബളാല്‍,12.38433,75.31089,relation/11302684
+VIL_0026,KL_PANCH_0026,Kinanur-Karindalam,കിനാനീർ-കരിന്തളം,12.32387,75.2338,relation/11302743
+VIL_0027,KL_PANCH_0027,East Eleri,ഈസ്റ്റ് എളേരി,12.30275,75.37607,relation/11302773
+VIL_0028,KL_PANCH_0028,West Eleri,വെസ്റ്റ് എളേരി,12.32631,75.32238,relation/11302774
+VIL_0029,KL_PANCH_0029,Uduma,ഉദുമ,12.43755,75.02593,relation/11302801
+VIL_0030,KL_PANCH_0030,Pallikkara,പള്ളിക്കര,12.40763,75.05445,relation/11302814
+VIL_0031,KL_PANCH_0031,Ajanur,അജാനൂർ,12.34733,75.08171,relation/11302834
+VIL_0032,KL_PANCH_0032,Pullur-Periya,പുല്ലൂര്‍-പെരിയ,12.39847,75.12364,relation/11302874
+VIL_0033,KL_PANCH_0033,Kanhangad,കാഞ്ഞങ്ങാട്,12.29328,75.10848,relation/11302892
+VIL_0034,KL_PANCH_0034,Madikai,മടിക്കൈ,12.31365,75.14882,relation/11302958
+VIL_0035,KL_PANCH_0035,Nileswaram,നീലേശ്വരം,12.25472,75.13121,relation/11303000
+VIL_0036,KL_PANCH_0036,Kayyur-Chimeni,കയ്യൂർ-ചീമേനി,12.24579,75.22422,relation/11303002
+VIL_0037,KL_PANCH_0037,Cheruvathur,ചെറുവത്തൂര്‍,12.21794,75.14955,relation/11303040
+VIL_0038,KL_PANCH_0038,Pilicode,പിലിക്കോട്,12.20076,75.18105,relation/11303050
+VIL_0039,KL_PANCH_0039,Valiyaparampa,വലിയപറമ്പ,12.1369,75.14752,relation/11303066
+VIL_0040,KL_PANCH_0040,Padanna,പടന്ന,12.17422,75.15624,relation/11303071
+VIL_0041,KL_PANCH_0041,Thrikkarippur,തൃക്കരിപ്പൂര്‍,12.13739,75.18002,relation/11303086
+VIL_0042,KL_PANCH_0042,Ramanthali,രാമന്തളി,12.02333,75.20767,relation/11303919
+VIL_0043,KL_PANCH_0043,Payyannur,പയ്യന്നൂര്‍,12.12154,75.22811,relation/11303941
+VIL_0044,KL_PANCH_0044,Karvellur-Peralam,കരിവെള്ളൂര്‍ പെരളം,12.17807,75.2068,relation/11303966
+VIL_0045,KL_PANCH_0045,Kankol-Alappadamba,കാങ്കോൽ-ആലപ്പടമ്പ,12.17701,75.24834,relation/11303981
+VIL_0046,KL_PANCH_0046,Perongome-Vayakkara,പെരിങ്ങോം-വയക്കര,12.2109,75.32408,relation/11304042
+VIL_0047,KL_PANCH_0047,Cherupuzha,ചെറുപുഴ,12.26847,75.4093,relation/11304056
+VIL_0048,KL_PANCH_0048,Eramam-Kuttur,എരമം-കുറ്റൂർ,12.17832,75.32085,relation/11304077
+VIL_0049,KL_PANCH_0049,Kadannappally-Panapuzha,കടന്നപ്പള്ളി-പാണപ്പുഴ,12.11659,75.31757,relation/11304145
+VIL_0050,KL_PANCH_0050,Cheruthazham,ചെറുതാഴം,12.0712,75.26241,relation/11304226
+VIL_0051,KL_PANCH_0051,Kunhimangalam,കുഞ്ഞിമംഗലം,12.08328,75.23548,relation/11304231
+VIL_0052,KL_PANCH_0052,Madayi,മാടായി,12.02612,75.24448,relation/11304235
+VIL_0053,KL_PANCH_0053,Ezhome,ഏഴോം,12.04146,75.2959,relation/11304237
+VIL_0054,KL_PANCH_0054,Udayagiri,ഉദയഗിരി,12.22977,75.50249,relation/11304271
+VIL_0055,KL_PANCH_0055,Alakode,ആലക്കോട്,12.20049,75.45114,relation/11304290
+VIL_0056,KL_PANCH_0056,Chapparapadavu,ചപ്പാരപ്പടവ്,12.12628,75.41116,relation/11304332
+VIL_0057,KL_PANCH_0057,Thaliparambu,തളിപ്പറമ്പ്,12.033,75.35823,relation/11304399
+VIL_0058,KL_PANCH_0058,Pariyaram (Kannur),പരിയാരം (കണ്ണൂർ),12.08185,75.35213,relation/11304400
+VIL_0059,KL_PANCH_0059,Pattuvam,പട്ടുവം,12.02023,75.33049,relation/11304475
+VIL_0060,KL_PANCH_0060,Cherukunnu,ചെറുകുന്ന്,12.00411,75.29252,relation/11304495
+VIL_0061,KL_PANCH_0061,Mattool,മാട്ടൂൽ,11.97141,75.28292,relation/11304600
+VIL_0062,KL_PANCH_0062,Kurumathur,കുറുമാത്തൂർ,12.05266,75.40234,relation/11306131
+VIL_0063,KL_PANCH_0063,Chengalayi,ചെങ്ങളായി,12.06181,75.46175,relation/11306143
+VIL_0064,KL_PANCH_0064,Naduvil,നടുവില്‍,12.14792,75.5116,relation/11306148
+VIL_0065,KL_PANCH_0065,Eruvessy,എരുവട്ടി,12.11412,75.56657,relation/11306154
+VIL_0066,KL_PANCH_0066,Payyavoor,പയ്യാവൂര്‍,12.0993,75.60865,relation/11306156
+VIL_0067,KL_PANCH_0067,Sreekandapuram,ശ്രീകണ്ഠാപുരം,12.05673,75.5274,relation/11306183
+VIL_0068,KL_PANCH_0068,Irikkur,ഇരിക്കൂര്‍,11.99615,75.5423,relation/11306191
+VIL_0069,KL_PANCH_0069,Malappattam,മലപ്പട്ടം,12.0148,75.50146,relation/11306199
+VIL_0070,KL_PANCH_0070,Kuttiatoor,കുറ്റ്യാട്ടൂര്‍,11.9665,75.47006,relation/11306202
+VIL_0071,KL_PANCH_0071,Mayyil,മയ്യില്‍,11.98609,75.44323,relation/11306212
+VIL_0072,KL_PANCH_0072,Kolacherry,കൊളച്ചേരി,11.95996,75.4102,relation/11306223
+VIL_0073,KL_PANCH_0073,Anthoor,ആന്തൂർ,11.9929,75.36794,relation/11306286
+VIL_0074,KL_PANCH_0074,Kannapuram,കണ്ണപുരം,11.99196,75.32036,relation/11307275
+VIL_0075,KL_PANCH_0075,Kalliasseri,കല്യാശ്ശേരി,11.96781,75.34642,relation/11307287
+VIL_0076,KL_PANCH_0076,Azhikode,അഴിക്കോട്,11.91718,75.32097,relation/11307317
+VIL_0077,KL_PANCH_0077,Valapattanam,വളപട്ടണം,11.92732,75.34863,relation/11307360
+VIL_0078,KL_PANCH_0078,Pappinisseri,പാപ്പിനിശ്ശേരി,11.95753,75.35247,relation/11307396
+VIL_0079,KL_PANCH_0079,Chirakkal,ചിറക്കല്‍,11.91584,75.3564,relation/11307441
+VIL_0080,KL_PANCH_0080,Narath,നാറാത്ത്,11.94141,75.39762,relation/11307463
+VIL_0081,KL_PANCH_0081,Munderi,മുണ്ടേരി,11.91559,75.45166,relation/11307533
+VIL_0082,KL_PANCH_0082,Anjarakandy,അഞ്ചരക്കണ്ടി,11.88948,75.49388,relation/11307640
+VIL_0083,KL_PANCH_0083,Peralassery,പെരളശ്ശേരി,11.84564,75.48079,relation/11307676
+VIL_0084,KL_PANCH_0084,Chembilode,ചെമ്പിലോട്ടു്,11.863,75.45292,relation/11307685
+VIL_0085,KL_PANCH_0085,Kadambur,കടമ്പൂര്‍,11.83442,75.44751,relation/11308012
+VIL_0086,KL_PANCH_0086,Muzhappilangad,മുഴപ്പിലങ്ങാടു്,11.80521,75.4393,relation/11308027
+VIL_0087,KL_PANCH_0087,Kannur,കണ്ണൂര്‍,11.85596,75.38371,relation/11308065
+VIL_0088,KL_PANCH_0088,Ulikkal,ഉള്ളിക്കല്‍,12.06352,75.66654,relation/11308106
+VIL_0089,KL_PANCH_0089,Padiyoor,പടിയൂർ-കല്യാട്,12.00685,75.61195,relation/11308180
+VIL_0090,KL_PANCH_0090,Payam,പായം,12.01954,75.69247,relation/11308216
+VIL_0091,KL_PANCH_0091,Iritty,ഇരിട്ടി,11.96348,75.64167,relation/11308325
+VIL_0092,KL_PANCH_0092,Thillankery,തില്ലങ്കേരി,11.9301,75.65355,relation/11308345
+VIL_0093,KL_PANCH_0093,Muzhakkunnu,മുഴക്കുന്നു്,11.93956,75.70612,relation/11308371
+VIL_0094,KL_PANCH_0094,Peravoor,പേരാവൂര്‍,11.90856,75.74153,relation/11308439
+VIL_0095,KL_PANCH_0095,Kanichar,കണിച്ചാര്‍,11.89937,75.76901,relation/11308556
+VIL_0096,KL_PANCH_0096,Ayyankunnu,അയ്യൻകുന്ന്,12.04269,75.75129,relation/11308586
+VIL_0097,KL_PANCH_0097,Aralam,ആറളം,11.96626,75.78095,relation/11308597
+VIL_0098,KL_PANCH_0098,Kottiyoor,കൊട്ടിയൂര്‍,11.89239,75.90751,relation/11308634
+VIL_0099,KL_PANCH_0099,Kelakam,കേളകം,11.90276,75.82101,relation/11308644
+VIL_0100,KL_PANCH_0100,Koodali,കൂടാളി,11.95027,75.51067,relation/11308663
+VIL_0101,KL_PANCH_0101,Keezhallur,കീഴാല്ലൂര്‍,11.91939,75.5312,relation/11308671
+VIL_0102,KL_PANCH_0102,Mattannur,മട്ടന്നൂര്‍,11.92405,75.57123,relation/11308678
+VIL_0103,KL_PANCH_0103,Malur,മാലൂര്‍,11.88968,75.62758,relation/11308698
+VIL_0104,KL_PANCH_0104,Kolayad,കോളയാടു്,11.83547,75.7203,relation/11308713
+VIL_0105,KL_PANCH_0105,Triprangottoor,തൃപ്പങ്ങോട്ടൂര്‍,11.7542,75.641,relation/11309944
+VIL_0106,KL_PANCH_0106,Kunnothuparamba,കുന്നോത്തുപറമ്പു്,11.77212,75.61225,relation/11309950
+VIL_0107,KL_PANCH_0107,Pattiam,പാട്യം,11.80988,75.60307,relation/11309968
+VIL_0108,KL_PANCH_0108,Chittariparamba,ചിറ്റാരിപറമ്പു്,11.85143,75.6317,relation/11309972
+VIL_0109,KL_PANCH_0109,Koothuparamba,കൂത്തുപറമ്പ,11.8325,75.57321,relation/11309977
+VIL_0110,KL_PANCH_0110,Mangattidam,മാങ്ങാട്ടിടം,11.86267,75.56524,relation/11309985
+VIL_0111,KL_PANCH_0111,Vengad,വേങ്ങാടു്,11.85892,75.5163,relation/11309989
+VIL_0112,KL_PANCH_0112,Pinarayi,പിണറായി,11.81277,75.50217,relation/11309993
+VIL_0113,KL_PANCH_0113,Kottayam,കോട്ടയം,11.81717,75.54121,relation/11310007
+VIL_0114,KL_PANCH_0114,Mokeri,മൊകേരി,11.78343,75.57333,relation/11310013
+VIL_0115,KL_PANCH_0115,Kadirur,കതിരൂര്‍,11.77663,75.53216,relation/11310016
+VIL_0116,KL_PANCH_0116,Eranholi,എരിഞ്ഞോളി,11.77966,75.50409,relation/11310020
+VIL_0117,KL_PANCH_0117,Dharmadam,ധര്‍മ്മടം,11.78299,75.4674,relation/11310028
+VIL_0118,KL_PANCH_0118,Thalassery,തലശ്ശേരി,11.74655,75.50063,relation/11310038
+VIL_0119,KL_PANCH_0119,Panniyannur,പന്യന്നൂര്‍,11.75254,75.55672,relation/11310045
+VIL_0120,KL_PANCH_0120,Chokli,ചൊക്ലി,11.72391,75.55863,relation/11310053
+VIL_0121,KL_PANCH_0121,Panoor,പാനൂർ,11.72819,75.58479,relation/11310054
+VIL_0122,KL_PANCH_0122,New Mahe,ന്യൂമാഹി,11.7133,75.52799,relation/11310147
+VIL_0123,KL_PANCH_0123,Thondernad,തൊണ്ടര്‍നാടു്,11.76184,75.87106,relation/11311253
+VIL_0124,KL_PANCH_0124,Thavinhal,തവിഞ്ഞാല്‍,11.81984,75.90759,relation/11311263
+VIL_0125,KL_PANCH_0125,Thirunelly,തിരുനെല്ലി,11.87813,76.01328,relation/11311471
+VIL_0126,KL_PANCH_0126,Mananthavady,മാനന്തവാടി,11.81296,76.01758,relation/11311516
+VIL_0127,KL_PANCH_0127,Edavaka,എടവക,11.77656,75.98736,relation/11311528
+VIL_0128,KL_PANCH_0128,Vellamunda,വെള്ളമുണ്ട,11.72903,75.97355,relation/11311623
+VIL_0129,KL_PANCH_0129,Panamaram,പനമരം,11.74431,76.05576,relation/11311665
+VIL_0130,KL_PANCH_0130,Padinharathara,പടിഞ്ഞാറത്തറ,11.67562,75.95072,relation/11311703
+VIL_0131,KL_PANCH_0131,Thariode,തരിയോട,11.62875,75.96063,relation/11311996
+VIL_0132,KL_PANCH_0132,Pozhuthana,പൊഴുതന,11.58712,76.00208,relation/11312036
+VIL_0133,KL_PANCH_0133,Kottathara,കോട്ടത്തറ,11.6857,76.02835,relation/11312064
+VIL_0134,KL_PANCH_0134,Vengappally,വേങ്ങപ്പള്ളി,11.63336,76.03981,relation/11312078
+VIL_0135,KL_PANCH_0135,Kaniyambetta,കണിയാമ്പറ്റ,11.69722,76.10224,relation/11312128
+VIL_0136,KL_PANCH_0136,Poothadi,പൂതാടി,11.73539,76.17314,relation/11312149
+VIL_0137,KL_PANCH_0137,Pulpally,പുല്പള്ളി,11.79996,76.14753,relation/11312203
+VIL_0138,KL_PANCH_0138,Mullankolly,മുള്ളന്‍കൊല്ലി,11.8457,76.16465,relation/11312212
+VIL_0139,KL_PANCH_0139,Sulthan Bathery,സുൽത്താൻ ബത്തേരി,11.70283,76.30233,relation/11312246
+VIL_0140,KL_PANCH_0140,Meenangadi,മീനങ്ങാടി,11.67091,76.17039,relation/11312261
+VIL_0141,KL_PANCH_0141,Ambalavayal,അമ്പലവയൽ,11.60254,76.20582,relation/11312281
+VIL_0142,KL_PANCH_0142,Nenmeni,നെന്മേനി,11.61623,76.26975,relation/11312289
+VIL_0143,KL_PANCH_0143,Noolpuzha,നൂല്‍പ്പുഴ,11.66456,76.35064,relation/11312298
+VIL_0144,KL_PANCH_0144,Vythiri,വൈത്തിരി,11.54778,76.04317,relation/11312307
+VIL_0145,KL_PANCH_0145,Kalpetta,കല്‍പ്പറ്റ,11.61289,76.07768,relation/11312314
+VIL_0146,KL_PANCH_0146,Meppadi,മേപ്പാടി,11.52871,76.13972,relation/11312337
+VIL_0147,KL_PANCH_0147,Muttil,മുട്ടില്,11.64277,76.12878,relation/11312348
+VIL_0148,KL_PANCH_0148,Mupainad,മൂപ്പനാടു്,11.54418,76.19036,relation/11312377
+VIL_0149,KL_PANCH_0149,Kozhikode,കോഴിക്കോട്,11.25779,75.78163,relation/11312801
+VIL_0150,KL_PANCH_0150,Azhiyur,അഴിയൂർ,11.68006,75.54896,relation/11315584
+VIL_0151,KL_PANCH_0151,Eramala,ഏറാമല,11.65428,75.60004,relation/11315669
+VIL_0152,KL_PANCH_0152,Onchiyam,ഒഞ്ചിയം,11.65021,75.57252,relation/11315949
+VIL_0153,KL_PANCH_0153,Chorode,ചോറോട്,11.626,75.58871,relation/11315956
+VIL_0154,KL_PANCH_0154,Edacheri,എടച്ചേരി,11.68937,75.6119,relation/11315980
+VIL_0155,KL_PANCH_0155,Tuneri,തൂണേരി,11.70769,75.62723,relation/11316094
+VIL_0156,KL_PANCH_0156,Nadapuram,നാദാപുരം,11.68905,75.66964,relation/11316110
+VIL_0157,KL_PANCH_0157,Chekkiad,ചെക്യാട്,11.73984,75.65893,relation/11316142
+VIL_0158,KL_PANCH_0158,Valayam,വളയം,11.74197,75.68674,relation/11316164
+VIL_0159,KL_PANCH_0159,Vanimal,വാണിമൽ,11.75058,75.72373,relation/11316212
+VIL_0160,KL_PANCH_0160,Narippatta,നരിപ്പറ്റ,11.72957,75.72981,relation/11316228
+VIL_0161,KL_PANCH_0161,Kavilumpara,കാവിലുമ്പാറ,11.69568,75.81949,relation/11316249
+VIL_0162,KL_PANCH_0162,Maruthonkara,മരുതോങ്കര,11.65025,75.79544,relation/11316255
+VIL_0163,KL_PANCH_0163,Kayakkody,കായക്കൊടി,11.68187,75.74516,relation/11316280
+VIL_0164,KL_PANCH_0164,Kuttiadi,കുറ്റ്യാടി,11.65438,75.72837,relation/11316286
+VIL_0165,KL_PANCH_0165,Kunnummal,കുന്നുമ്മൽ,11.68067,75.71204,relation/11316621
+VIL_0166,KL_PANCH_0166,Purameri,പുറമേരി,11.66161,75.66066,relation/11317506
+VIL_0167,KL_PANCH_0167,Velom,വേളം,11.62435,75.71467,relation/11317516
+VIL_0168,KL_PANCH_0168,Ayancheri,ആയഞ്ചരി,11.63322,75.664,relation/11317520
+VIL_0169,KL_PANCH_0169,Thiruvallur,തിരുവള്ളൂർ,11.60358,75.66161,relation/11317529
+VIL_0170,KL_PANCH_0170,Maniyur,മണിയൂർ,11.56714,75.64392,relation/11317558
+VIL_0171,KL_PANCH_0171,Villiappally,വില്യാപ്പള്ളി,11.6067,75.63047,relation/11317577
+VIL_0172,KL_PANCH_0172,Vatakara,വടകര,11.59338,75.59454,relation/11317590
+VIL_0173,KL_PANCH_0173,Payyoli,പയ്യോളി,11.53487,75.61836,relation/11318575
+VIL_0174,KL_PANCH_0174,Thikkodi,തിക്കോടി,11.49955,75.63523,relation/11318589
+VIL_0175,KL_PANCH_0175,Moodadi,മൂടാടി,11.47592,75.6505,relation/11318621
+VIL_0176,KL_PANCH_0176,Thurayur,തുറയൂർ,11.52737,75.67489,relation/11318681
+VIL_0177,KL_PANCH_0177,Keezhariyur,കീഴരിയൂർ,11.49143,75.69223,relation/11318828
+VIL_0178,KL_PANCH_0178,Cheruvannur,ചെറുവണ്ണൂർ,11.57061,75.70904,relation/11318841
+VIL_0179,KL_PANCH_0179,Meppayur,മേപ്പയൂർ,11.5284,75.70767,relation/11318855
+VIL_0180,KL_PANCH_0180,Arikkulam,അരിക്കുളം,11.5083,75.72799,relation/11318864
+VIL_0181,KL_PANCH_0181,Nochad,നൊച്ചാട്,11.53305,75.75578,relation/11318879
+VIL_0182,KL_PANCH_0182,Perambra,പേരാമ്പ്ര,11.56856,75.75898,relation/11318887
+VIL_0183,KL_PANCH_0183,Changaroth,ചങ്ങരോത്ത്,11.60513,75.77026,relation/11318906
+VIL_0184,KL_PANCH_0184,Koothali,കൂത്താളി,11.57867,75.78466,relation/11318912
+VIL_0185,KL_PANCH_0185,Chakkittapara,ചക്കിട്ടപ്പാറ,11.60068,75.84125,relation/11318940
+VIL_0186,KL_PANCH_0186,Koorachundu,കൂരാച്ചുണ്ട്,11.54656,75.88826,relation/11318955
+VIL_0187,KL_PANCH_0187,Kayanna,കായണ്ണ,11.53024,75.80925,relation/11319000
+VIL_0188,KL_PANCH_0188,Panangad,പനങ്ങാട്,11.4733,75.86017,relation/11319125
+VIL_0189,KL_PANCH_0189,Kottur,കോട്ടൂർ,11.49051,75.80652,relation/11319138
+VIL_0190,KL_PANCH_0190,Naduvannur,നടുവണ്ണൂർ,11.49004,75.75949,relation/11319173
+VIL_0191,KL_PANCH_0191,Balussery,ബാലുശ്ശേരി,11.44547,75.79594,relation/11319188
+VIL_0192,KL_PANCH_0192,Ulliyeri,ഉള്ളിയേരി,11.45253,75.76456,relation/11319191
+VIL_0193,KL_PANCH_0193,Atholi,അത്തോളി,11.40878,75.76404,relation/11319228
+VIL_0194,KL_PANCH_0194,Chemanchery,ചേമഞ്ചരി,11.3888,75.72615,relation/11319261
+VIL_0195,KL_PANCH_0195,Chengottukavu,ചേങ്ങോട്ടുകാവ്,11.42015,75.71934,relation/11319368
+VIL_0196,KL_PANCH_0196,Koyilandy,കൊയിലാണ്ടി,11.45393,75.6925,relation/11319373
+VIL_0197,KL_PANCH_0197,Thalakulathur,തലക്കുളത്തൂർ,11.36929,75.77725,relation/11319520
+VIL_0198,KL_PANCH_0198,Nanminda,നന്മണ്ട,11.41094,75.81661,relation/11319533
+VIL_0199,KL_PANCH_0199,Kakkur,കാക്കൂർ,11.38749,75.82376,relation/11319541
+VIL_0200,KL_PANCH_0200,Chelannur,ചേളന്നൂർ,11.35945,75.81287,relation/11319550
+VIL_0201,KL_PANCH_0201,Kakkodi,കക്കോടി,11.32994,75.79627,relation/11319552
+VIL_0202,KL_PANCH_0202,Kuruvattoor,കുരുവട്ടൂർ,11.32132,75.847,relation/11320907
+VIL_0203,KL_PANCH_0203,Madavoor,മടവൂർ,11.35033,75.85659,relation/11320911
+VIL_0204,KL_PANCH_0204,Kunnamangalam,കുന്ദമംഗലം,11.30421,75.88719,relation/11320913
+VIL_0205,KL_PANCH_0205,Peruvayal,പെരുവയൽ,11.26978,75.88903,relation/11320926
+VIL_0206,KL_PANCH_0206,Perumanna,പെരുമണ്ണ,11.2419,75.87215,relation/11320930
+VIL_0207,KL_PANCH_0207,Mavoor,മാവൂർ,11.26867,75.9304,relation/11320933
+VIL_0208,KL_PANCH_0208,Chathamangalam,ചാത്തമംഗലം,11.30319,75.94552,relation/11320945
+VIL_0209,KL_PANCH_0209,Mukkam,മുക്കം,11.33281,75.97127,relation/11320954
+VIL_0210,KL_PANCH_0210,Karassery,കാരശ്ശേരി,11.31503,76.01312,relation/11320974
+VIL_0211,KL_PANCH_0211,Kodiyathur,കൊടിയത്തൂർ,11.2828,76.01082,relation/11320977
+VIL_0212,KL_PANCH_0212,Olavanna,ഒളവണ്ണ,11.22902,75.84368,relation/11320982
+VIL_0213,KL_PANCH_0213,Ramanattukara,രാമനാട്ടുകര,11.18234,75.864,relation/11320991
+VIL_0214,KL_PANCH_0214,Feroke,ഫറോക്ക്,11.16815,75.84306,relation/11321014
+VIL_0215,KL_PANCH_0215,Kadalundi,കടലുണ്ടി,11.15058,75.82358,relation/11321024
+VIL_0216,KL_PANCH_0216,Unnikulam,ഉണിക്കുളം,11.4422,75.87825,relation/11321400
+VIL_0217,KL_PANCH_0217,Kattippara,കട്ടിപ്പാറ,11.46818,75.93876,relation/11321411
+VIL_0218,KL_PANCH_0218,Puthuppadi,പുതുപ്പാടി,11.47509,75.98991,relation/11321422
+VIL_0219,KL_PANCH_0219,Kodanchery,കോടഞ്ചേരി,11.4475,76.0199,relation/11321434
+VIL_0220,KL_PANCH_0220,Thiruvambadi,തിരുവമ്പാടി,11.39003,76.0475,relation/11321454
+VIL_0221,KL_PANCH_0221,Koodaranhi,കൂടരഞ്ഞി,11.35789,76.06487,relation/11321461
+VIL_0222,KL_PANCH_0222,Omassery,ഓമശ്ശേരി,11.36624,75.94928,relation/11321494
+VIL_0223,KL_PANCH_0223,Koduvally,കൊടുവള്ളി,11.37402,75.9206,relation/11321498
+VIL_0224,KL_PANCH_0224,Kizhakkoth,കിഴക്കോത്ത്,11.38671,75.90234,relation/11321505
+VIL_0225,KL_PANCH_0225,Narikunni,നരിക്കുനി,11.38243,75.86398,relation/11321508
+VIL_0226,KL_PANCH_0226,Thamarassery,താമരശ്ശേരി,11.41448,75.93492,relation/11321510
+VIL_0227,KL_PANCH_0227,Pothukal,പോത്തുകല്ല് ഗ്രാമപഞ്ചായത്ത്,11.47084,76.21548,relation/11322097
+VIL_0228,KL_PANCH_0228,Chungathara,ചുങ്കത്തറ ഗ്രാമപഞ്ചായത്ത്,11.35896,76.20921,relation/11322113
+VIL_0229,KL_PANCH_0229,Chaliyar,ചാലിയാർ ഗ്രാമപഞ്ചായത്ത്,11.32077,76.18484,relation/11322121
+VIL_0230,KL_PANCH_0230,Mampad,മമ്പാട് ഗ്രാമപഞ്ചായത്ത്,11.2478,76.19358,relation/11322146
+VIL_0231,KL_PANCH_0231,Nilambur,നിലമ്പൂർ,11.27674,76.24216,relation/11322195
+VIL_0232,KL_PANCH_0232,Kollam,കൊല്ലം,8.89641,76.59258,relation/11322518
+VIL_0233,KL_PANCH_0233,Kochi,കൊച്ചി,9.96834,76.28532,relation/11322588
+VIL_0234,KL_PANCH_0234,Thrissur,തൃശ്ശൂർ,10.51878,76.22481,relation/11322669
+VIL_0235,KL_PANCH_0235,Thiruvananthapuram,തിരുവനന്തപുരം,8.44822,76.96243,relation/11323735
+VIL_0236,KL_PANCH_0236,Edakkara,എടക്കര,11.38,76.29163,relation/11323801
+VIL_0237,KL_PANCH_0237,Vazhikkadavu,വഴിക്കടവ് ഗ്രാമപഞ്ചായത്ത്,11.38589,76.33775,relation/11323815
+VIL_0238,KL_PANCH_0238,Karulai,കരുളായി ഗ്രാമപഞ്ചായത്ത്,11.29818,76.35594,relation/11323862
+VIL_0239,KL_PANCH_0239,Moothedam,മൂത്തേടം ഗ്രാമപഞ്ചായത്ത്,11.33343,76.32083,relation/11323865
+VIL_0240,KL_PANCH_0240,Amarambalam,അമരമ്പലം,11.2526,76.34186,relation/11323888
+VIL_0241,KL_PANCH_0241,Chokkad,ചോക്കാട് ഗ്രാമപഞ്ചായത്ത്,11.21878,76.34473,relation/11324112
+VIL_0242,KL_PANCH_0242,Wandoor,വണ്ടൂർ ഗ്രാമപഞ്ചായത്ത്,11.21777,76.25359,relation/11324158
+VIL_0243,KL_PANCH_0243,Thiruvali,തിരുവാലി ഗ്രാമപഞ്ചായത്ത്,11.20138,76.19718,relation/11325414
+VIL_0244,KL_PANCH_0244,Porur,പോരൂർ ഗ്രാമപഞ്ചായത്ത്,11.16355,76.23306,relation/11325427
+VIL_0245,KL_PANCH_0245,Kalikavu,കാളികാവ് ഗ്രാമപഞ്ചായത്ത്,11.17319,76.31997,relation/11325449
+VIL_0246,KL_PANCH_0246,Thuvoor,തുവ്വൂർ ഗ്രാമപഞ്ചായത്ത്,11.13021,76.30763,relation/11325465
+VIL_0247,KL_PANCH_0247,Karuvarakundu,കരുവാരക്കുണ്ട് ഗ്രാമപഞ്ചായത്ത്,11.12756,76.34671,relation/11325478
+VIL_0248,KL_PANCH_0248,Urangattiri,ഊർങ്ങാട്ടിരി,11.27544,76.09424,relation/11326658
+VIL_0249,KL_PANCH_0249,Edavanna,എടവണ്ണ,11.21811,76.1297,relation/11326675
+VIL_0250,KL_PANCH_0250,Thrikkalangode,തൃക്കലങ്ങോട് ഗ്രാമപഞ്ചായത്ത്,11.1595,76.14486,relation/11326694
+VIL_0251,KL_PANCH_0251,Pandikkad,പാണ്ടിക്കാട് ഗ്രാമപഞ്ചായത്ത്,11.11555,76.23102,relation/11326703
+VIL_0252,KL_PANCH_0252,Anakayam,ആനക്കയം,11.08751,76.13857,relation/11326721
+VIL_0253,KL_PANCH_0253,Manjeri,മഞ്ചേരി,11.11528,76.1291,relation/11326725
+VIL_0254,KL_PANCH_0254,Malappuram,മലപ്പുറം,11.05047,76.0696,relation/11326745
+VIL_0255,KL_PANCH_0255,Pookkottur,പൂക്കോട്ടൂർ ഗ്രാമപഞ്ചായത്ത്,11.11527,76.05398,relation/11326929
+VIL_0256,KL_PANCH_0256,Pulpatta,പുൽപ്പറ്റ ഗ്രാമപഞ്ചായത്ത്,11.15489,76.06027,relation/11326939
+VIL_0257,KL_PANCH_0257,Kavanur,കാവനൂർ ഗ്രാമപഞ്ചായത്ത്,11.19609,76.07644,relation/11326941
+VIL_0258,KL_PANCH_0258,Areacode,അരീക്കോട്,11.22279,76.03532,relation/11326945
+VIL_0259,KL_PANCH_0259,Keezhuparamba,കീഴുപറമ്പ് ഗ്രാമപഞ്ചായത്ത്,11.25273,76.02668,relation/11326965
+VIL_0260,KL_PANCH_0260,Vazhakkad,വാഴക്കാട് ഗ്രാമപഞ്ചായത്ത്,11.23854,75.95485,relation/11326967
+VIL_0261,KL_PANCH_0261,Cheekkode,ചീക്കോട് ഗ്രാമപഞ്ചായത്ത്,11.22336,75.98991,relation/11326984
+VIL_0262,KL_PANCH_0262,Kuzhimanna,കുഴിമണ്ണ ഗ്രാമപഞ്ചായത്ത്,11.17873,76.00675,relation/11327001
+VIL_0263,KL_PANCH_0263,Muthuvallur,മുതുവല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,11.1865,75.98788,relation/11327009
+VIL_0264,KL_PANCH_0264,Pulikkal,പുളിക്കൽ ഗ്രാമപഞ്ചായത്ത്,11.18895,75.93991,relation/11327012
+VIL_0265,KL_PANCH_0265,Vazhayoor,വാഴയൂർ ഗ്രാമപഞ്ചായത്ത്,11.21384,75.88927,relation/11327025
+VIL_0266,KL_PANCH_0266,Cherukavu,ചെറുകാവ് ഗ്രാമപഞ്ചായത്ത്,11.18509,75.89724,relation/11327026
+VIL_0267,KL_PANCH_0267,Chelembra,ചേലേമ്പ്ര ഗ്രാമപഞ്ചായത്ത്,11.15792,75.87111,relation/11327043
+VIL_0268,KL_PANCH_0268,Pallikkal,പള്ളിക്കൽ ഗ്രാമപഞ്ചായത്ത്,11.13857,75.92879,relation/11327048
+VIL_0269,KL_PANCH_0269,Kondotty,കൊണ്ടോട്ടി,11.14151,75.97889,relation/11327061
+VIL_0270,KL_PANCH_0270,Morayur,മൊറയൂർ ഗ്രാമപഞ്ചായത്ത്,11.12889,76.01931,relation/11327063
+VIL_0271,KL_PANCH_0271,Vallikkunnu,വള്ളിക്കുന്ന് ഗ്രാമപഞ്ചായത്ത്,11.10359,75.85441,relation/11327131
+VIL_0272,KL_PANCH_0272,Thenhippalam,തേഞ്ഞിപ്പാലം ഗ്രാമപഞ്ചായത്ത്,11.1175,75.88785,relation/11327134
+VIL_0273,KL_PANCH_0273,Peruvalloor,പെരുവള്ളൂർ ഗ്രാമപഞ്ചായത്ത്,11.10381,75.92785,relation/11327137
+VIL_0274,KL_PANCH_0274,Moonniyur,മൂന്നിയൂർ ഗ്രാമപഞ്ചായത്ത്,11.07374,75.89022,relation/11327144
+VIL_0275,KL_PANCH_0275,Parappanangadi,പരപ്പനങ്ങാടി,11.05408,75.86717,relation/11327157
+VIL_0276,KL_PANCH_0276,Tirurangadi,തിരൂരങ്ങാടി,11.0324,75.92327,relation/11327161
+VIL_0277,KL_PANCH_0277,Abdurahiman Nagar,അബ്ദുറഹിമാൻ നഗർ,11.06831,75.9276,relation/11327177
+VIL_0278,KL_PANCH_0278,Kannamangalam,കണ്ണമംഗലം ഗ്രാമപഞ്ചായത്ത്,11.08801,75.97858,relation/11327180
+VIL_0279,KL_PANCH_0279,Oorakam,ഊരകം,11.06467,76.01148,relation/11327184
+VIL_0280,KL_PANCH_0280,Othukkungal,ഒതുക്കുങ്ങൽ ഗ്രാമപഞ്ചായത്ത്,11.02716,76.02136,relation/11327190
+VIL_0281,KL_PANCH_0281,Parappoor,പറപ്പൂർ ഗ്രാമപഞ്ചായത്ത്,11.02734,75.99297,relation/11327193
+VIL_0282,KL_PANCH_0282,Vengara,വേങ്ങര ഗ്രാമപഞ്ചായത്ത്,11.04907,75.95933,relation/11327196
+VIL_0283,KL_PANCH_0283,Edarikkode,എടരിക്കോട്,11.00107,75.97885,relation/11327201
+VIL_0284,KL_PANCH_0284,Thennela,തെന്നല ഗ്രാമപഞ്ചായത്ത്,11.01065,75.94767,relation/11327221
+VIL_0285,KL_PANCH_0285,Nannambra,നന്നമ്പ്ര ഗ്രാമപഞ്ചായത്ത്,11.01366,75.91137,relation/11327222
+VIL_0286,KL_PANCH_0286,Tanur,താനൂർ,10.98247,75.87738,relation/11330619
+VIL_0287,KL_PANCH_0287,Ozhoor,ഒഴൂർ ഗ്രാമപഞ്ചായത്ത്,10.97562,75.91726,relation/11330640
+VIL_0288,KL_PANCH_0288,Perumanna Klari,പെരുമണ്ണ ക്ലാരി ഗ്രാമപഞ്ചായത്ത്,10.98368,75.96241,relation/11330650
+VIL_0289,KL_PANCH_0289,Ponmundam,പൊന്മുണ്ടം ഗ്രാമപഞ്ചായത്ത്,10.96686,75.94746,relation/11330654
+VIL_0290,KL_PANCH_0290,Thanalur,താനാളൂർ ഗ്രാമപഞ്ചായത്ത്,10.95436,75.9071,relation/11330661
+VIL_0291,KL_PANCH_0291,Niramarutur,നിറമരുതൂർ ഗ്രാമപഞ്ചായത്ത്,10.92781,75.89452,relation/11330668
+VIL_0292,KL_PANCH_0292,Tirur,തിരൂർ,10.91658,75.92198,relation/11330686
+VIL_0293,KL_PANCH_0293,Cheriyamundam,ചെറിയമുണ്ടം ഗ്രാമപഞ്ചായത്ത്,10.93397,75.94951,relation/11330694
+VIL_0294,KL_PANCH_0294,Valavannur,വളവന്നൂർ ഗ്രാമപഞ്ചായത്ത്,10.92755,75.9704,relation/11330716
+VIL_0295,KL_PANCH_0295,Kalpakancheri,കൽപ്പകഞ്ചേരി,10.94446,75.98697,relation/11330722
+VIL_0296,KL_PANCH_0296,Kottakkal,കോട്ടക്കൽ,10.9908,76.02635,relation/11330736
+VIL_0297,KL_PANCH_0297,Ponmala,പൊന്മള ഗ്രാമപഞ്ചായത്ത്,11.00267,76.0545,relation/11330740
+VIL_0298,KL_PANCH_0298,Marakkara,മാറാക്കര ഗ്രാമപഞ്ചായത്ത്,10.94979,76.04588,relation/11330749
+VIL_0299,KL_PANCH_0299,Edayur,എടയൂർ,10.91804,76.08862,relation/11330756
+VIL_0300,KL_PANCH_0300,Irumbiliyum,ഇരിമ്പിളിയം,10.87837,76.09686,relation/11330764
+VIL_0301,KL_PANCH_0301,Valanchery,വളാഞ്ചേരി,10.89745,76.06313,relation/11330767
+VIL_0302,KL_PANCH_0302,Kuttippuram,കുറ്റിപ്പുറം ഗ്രാമപഞ്ചായത്ത്,10.86886,76.03556,relation/11330775
+VIL_0303,KL_PANCH_0303,Athavanad,ആതവനാട്,10.91007,76.02019,relation/11330779
+VIL_0304,KL_PANCH_0304,Thirunavaya,തിരുനാവായ ഗ്രാമപഞ്ചായത്ത്,10.88947,75.98476,relation/11330790
+VIL_0305,KL_PANCH_0305,Thrippengode,തൃപ്രങ്ങോട് ഗ്രാമപഞ്ചായത്ത്,10.85827,75.94485,relation/11330800
+VIL_0306,KL_PANCH_0306,Thalakkad,തലക്കാട് ഗ്രാമപഞ്ചായത്ത്,10.89209,75.94189,relation/11330808
+VIL_0307,KL_PANCH_0307,Vettom,വെട്ടം,10.89264,75.90412,relation/11330810
+VIL_0308,KL_PANCH_0308,Mangalam,മംഗലം ഗ്രാമപഞ്ചായത്ത്,10.85127,75.91664,relation/11330826
+VIL_0309,KL_PANCH_0309,Purathoor,പുറത്തൂർ ഗ്രാമപഞ്ചായത്ത്,10.82543,75.91946,relation/11330834
+VIL_0310,KL_PANCH_0310,Tavanur,തവനൂർ ഗ്രാമപഞ്ചായത്ത്,10.83236,75.9965,relation/11332227
+VIL_0311,KL_PANCH_0311,Kaladi,"കാലടി ഗ്രാമപഞ്ചായത്ത്, മലപ്പുറം ജില്ല",10.80877,75.99105,relation/11332233
+VIL_0312,KL_PANCH_0312,Vattamkulam,വട്ടംകുളം ഗ്രാമപഞ്ചായത്ത്,10.79101,76.01937,relation/11332249
+VIL_0313,KL_PANCH_0313,Edappal,എടപ്പാൾ,10.77472,75.9941,relation/11332260
+VIL_0314,KL_PANCH_0314,Maranchery,മാറഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,10.75394,75.96698,relation/11332276
+VIL_0315,KL_PANCH_0315,Ponnani,പൊന്നാനി,10.76872,75.95225,relation/11332279
+VIL_0316,KL_PANCH_0316,Veliyancode,വെളിയംകോട് ഗ്രാമപഞ്ചായത്ത്,10.74424,75.96103,relation/11332283
+VIL_0317,KL_PANCH_0317,Perumbadappu,പെരുമ്പടപ്പ് ഗ്രാമപഞ്ചായത്ത്,10.69907,75.97789,relation/11332310
+VIL_0318,KL_PANCH_0318,Nannamukku,നന്നംമുക്ക് ഗ്രാമപഞ്ചായത്ത്,10.72063,76.01789,relation/11332314
+VIL_0319,KL_PANCH_0319,Alamkode,ആലംകോട്,10.73929,76.04061,relation/11332322
+VIL_0320,KL_PANCH_0320,Kodur,കോഡൂർ ഗ്രാമപഞ്ചായത്ത്,11.02875,76.07186,relation/11332353
+VIL_0321,KL_PANCH_0321,Kuruva,കുറുവ ഗ്രാമപഞ്ചായത്ത്,10.99651,76.11238,relation/11332381
+VIL_0322,KL_PANCH_0322,Koottilangadi,കൂട്ടിലങ്ങാടി ഗ്രാമപഞ്ചായത്ത്,11.04671,76.11568,relation/11332408
+VIL_0323,KL_PANCH_0323,Makkaraparamba,മക്കരപ്പറമ്പ് ഗ്രാമപഞ്ചായത്ത്,11.01517,76.1284,relation/11332418
+VIL_0324,KL_PANCH_0324,Mankada,മങ്കട ഗ്രാമപഞ്ചായത്ത്,11.03203,76.1762,relation/11332498
+VIL_0325,KL_PANCH_0325,Keezhattur,കീഴാറ്റൂർ ഗ്രാമപഞ്ചായത്ത്,11.05716,76.23193,relation/11332505
+VIL_0326,KL_PANCH_0326,Melattur,മേലാറ്റൂർ ഗ്രാമപഞ്ചായത്ത്,11.0613,76.26407,relation/11332510
+VIL_0327,KL_PANCH_0327,Edapatta,എടപ്പറ്റ,11.07475,76.30051,relation/11332515
+VIL_0328,KL_PANCH_0328,Vettattur,വെട്ടത്തൂർ ഗ്രാമപഞ്ചായത്ത്,11.00846,76.27579,relation/11332519
+VIL_0329,KL_PANCH_0329,Tazhekkod,താഴേക്കോട് ഗ്രാമപഞ്ചായത്ത്,10.97061,76.30263,relation/11332529
+VIL_0330,KL_PANCH_0330,Aliparamba,ആലിപ്പറമ്പ് ഗ്രാമപഞ്ചായത്ത്,10.93675,76.27468,relation/11332547
+VIL_0331,KL_PANCH_0331,Elamkulam,ഏലംകുളം ഗ്രാമപഞ്ചായത്ത്,10.9211,76.23217,relation/11332559
+VIL_0332,KL_PANCH_0332,Perinthalmanna,പെരിന്തല്‍മണ്ണ,10.95877,76.23713,relation/11332744
+VIL_0333,KL_PANCH_0333,Angadippuram,അങ്ങാടിപ്പുറം,10.98498,76.19498,relation/11332754
+VIL_0334,KL_PANCH_0334,Puzhakkatiri,പുഴക്കാട്ടിരി ഗ്രാമപഞ്ചായത്ത്,10.98443,76.14173,relation/11332774
+VIL_0335,KL_PANCH_0335,Pulamanthole,പുലാമന്തോൾ ഗ്രാമപഞ്ചായത്ത്,10.93212,76.18063,relation/11332778
+VIL_0336,KL_PANCH_0336,Moorkanade,മൂർക്കനാട് ഗ്രാമപഞ്ചായത്ത്,10.93338,76.13701,relation/11332788
+VIL_0337,KL_PANCH_0337,Punnayoorkulam,പൂന്നയൂര്‍ക്കുളം,10.67371,75.99432,relation/11335944
+VIL_0338,KL_PANCH_0338,Vadakkekkad,വടക്കേക്കാട്,10.65052,76.01736,relation/11335952
+VIL_0339,KL_PANCH_0339,Punnayoor,പുന്നയൂര്‍,10.63621,75.99431,relation/11335955
+VIL_0340,KL_PANCH_0340,Guruvayoor,ഗുരുവായൂർ,10.60213,76.03611,relation/11335965
+VIL_0341,KL_PANCH_0341,Chavakkad,ചാവക്കാട്,10.59229,76.01678,relation/11335970
+VIL_0342,KL_PANCH_0342,Kadappuram,കടപ്പുറം,10.54294,76.0272,relation/11335976
+VIL_0343,KL_PANCH_0343,Orumanayoor,ഒരുമനയൂര്‍,10.56054,76.03383,relation/11335981
+VIL_0344,KL_PANCH_0344,Pavaratty,പാവറട്ടി,10.55834,76.07086,relation/11335985
+VIL_0345,KL_PANCH_0345,Elavally,എളവള്ളി,10.57644,76.10317,relation/11335991
+VIL_0346,KL_PANCH_0346,Mullassery,മുല്ലശ്ശേരി,10.54857,76.10072,relation/11336014
+VIL_0347,KL_PANCH_0347,Venkitangu,വെങ്കിടങ്ങ്,10.52408,76.10637,relation/11336021
+VIL_0348,KL_PANCH_0348,Engandiyoor,ഏങ്ങണ്ടിയൂര്‍,10.50286,76.05881,relation/11336032
+VIL_0349,KL_PANCH_0349,Vadanappilly,വാടാനപ്പിള്ളി,10.47862,76.06612,relation/11336052
+VIL_0350,KL_PANCH_0350,Thalikulam,തളിക്കുളം,10.44497,76.08282,relation/11336054
+VIL_0351,KL_PANCH_0351,Nattika,നാട്ടിക,10.41822,76.09945,relation/11336059
+VIL_0352,KL_PANCH_0352,Valappad,വലപ്പാട്,10.3844,76.1107,relation/11336073
+VIL_0353,KL_PANCH_0353,Kattakampal,കാട്ടകാമ്പാല്‍,10.6899,76.04409,relation/11336145
+VIL_0354,KL_PANCH_0354,Kadavalloor,കടവല്ലൂര്‍,10.70504,76.0893,relation/11336152
+VIL_0355,KL_PANCH_0355,Kadangode,കടങ്ങോട്,10.68204,76.12694,relation/11336173
+VIL_0356,KL_PANCH_0356,Porkulam,പോര്‍ക്കുളം,10.67705,76.07106,relation/11336179
+VIL_0357,KL_PANCH_0357,Chowannur,ചൊവ്വന്നൂര്‍,10.64681,76.09404,relation/11336185
+VIL_0358,KL_PANCH_0358,Kunnamkulam,കുന്നംകുളം,10.64826,76.06024,relation/11336191
+VIL_0359,KL_PANCH_0359,Kandanassery,കണ്ടാണശ്ശേരി,10.60451,76.09102,relation/11336201
+VIL_0360,KL_PANCH_0360,Choondal,ചൂണ്ടല്‍,10.62579,76.11211,relation/11336207
+VIL_0361,KL_PANCH_0361,Velur,വേലൂര്‍,10.65078,76.15852,relation/11336211
+VIL_0362,KL_PANCH_0362,Varavoor,വരവൂര്‍,10.7139,76.21235,relation/11338113
+VIL_0363,KL_PANCH_0363,Desamangalam,ദേശമംഗലം,10.74714,76.22455,relation/11338190
+VIL_0364,KL_PANCH_0364,Vallathole Nagar,വള്ളത്തോള്‍നഗര്‍,10.72534,76.26658,relation/11338197
+VIL_0365,KL_PANCH_0365,Panjal,പാഞ്ഞാള്‍,10.72274,76.32168,relation/11338204
+VIL_0366,KL_PANCH_0366,Chelakkara,ചേലക്കര,10.68871,76.35721,relation/11338237
+VIL_0367,KL_PANCH_0367,Kondazhy,കൊണ്ടാഴി,10.71358,76.38379,relation/11339431
+VIL_0368,KL_PANCH_0368,Thiruvilwamala,തിരുവില്ല്വാമല,10.72272,76.42442,relation/11339449
+VIL_0369,KL_PANCH_0369,Pazhayannur,പഴയന്നൂര്‍,10.6532,76.37974,relation/11339458
+VIL_0370,KL_PANCH_0370,Thekkumkara,തെക്കുംകര,10.63084,76.27311,relation/11339467
+VIL_0371,KL_PANCH_0371,Mullurkkara,മുള്ളൂര്‍ക്കര,10.68783,76.28084,relation/11339477
+VIL_0372,KL_PANCH_0372,Erumapetty,എരുമപ്പെട്ടി,10.68806,76.19748,relation/11339524
+VIL_0373,KL_PANCH_0373,Wadakanchery,വടക്കാഞ്ചേരി,10.65644,76.23221,relation/11339552
+VIL_0374,KL_PANCH_0374,Tholur,തോളൂർ,10.55923,76.12809,relation/11340360
+VIL_0375,KL_PANCH_0375,Kaiparambu,കയ്പറമ്പ്,10.58386,76.15338,relation/11340397
+VIL_0376,KL_PANCH_0376,Avanur,അവണൂർ,10.60288,76.18279,relation/11340405
+VIL_0377,KL_PANCH_0377,Mulamkunnathukavu,മുളങ്കുന്നത്തുകാവ്,10.58992,76.23037,relation/11340428
+VIL_0378,KL_PANCH_0378,Madakkathara,മാടക്കത്തറ,10.5685,76.27148,relation/11340442
+VIL_0379,KL_PANCH_0379,Pananchery,പാണഞ്ചേരി,10.54845,76.35202,relation/11340498
+VIL_0380,KL_PANCH_0380,Puthur,പൂത്തൂര്‍,10.49194,76.32445,relation/11340509
+VIL_0381,KL_PANCH_0381,Kolazhy,കോലഴി,10.56725,76.19654,relation/11340528
+VIL_0382,KL_PANCH_0382,Adat,അടാട്ട്,10.54801,76.15631,relation/11340532
+VIL_0383,KL_PANCH_0383,Nadathara,നടത്തറ,10.51768,76.29738,relation/11340542
+VIL_0384,KL_PANCH_0384,Manalur,മണലൂര്‍,10.47796,76.10825,relation/11340582
+VIL_0385,KL_PANCH_0385,Arimbur,അരി‍മ്പൂർ,10.49229,76.14936,relation/11340591
+VIL_0386,KL_PANCH_0386,Anthikkad,അന്തിക്കാട്,10.4603,76.11764,relation/11340613
+VIL_0387,KL_PANCH_0387,Thanniam,താന്ന്യം,10.42105,76.12961,relation/11340623
+VIL_0388,KL_PANCH_0388,Chazhur,ചാഴൂര്‍,10.43225,76.15852,relation/11340677
+VIL_0389,KL_PANCH_0389,Paralam,പാറളം,10.45818,76.18495,relation/11340694
+VIL_0390,KL_PANCH_0390,Avinissery,അവിണിശ്ശേരി,10.46842,76.22201,relation/11340715
+VIL_0391,KL_PANCH_0391,Cherpu,ചേര്‍പ്പ്,10.43538,76.204,relation/11340720
+VIL_0392,KL_PANCH_0392,Vallachira,വല്ലച്ചിറ,10.43528,76.22967,relation/11340729
+VIL_0393,KL_PANCH_0393,Varantharappilly,വരന്തരപ്പിള്ളി,10.43024,76.39573,relation/11341890
+VIL_0394,KL_PANCH_0394,Mattathur,മറ്റത്തൂര്‍,10.40226,76.40754,relation/11341891
+VIL_0395,KL_PANCH_0395,Athirappilly,അതിരപ്പിള്ളി,10.32103,76.7089,relation/11341892
+VIL_0396,KL_PANCH_0396,Kodassery,കോടശ്ശേരി,10.35804,76.4301,relation/11341911
+VIL_0397,KL_PANCH_0397,Pariyaram (Thrissur),പരിയാരം (തൃശ്ശൂർ),10.31686,76.40348,relation/11341913
+VIL_0398,KL_PANCH_0398,Meloor,മേലൂര്‍,10.29093,76.36416,relation/11341919
+VIL_0399,KL_PANCH_0399,Koratty,കൊരട്ടി,10.27067,76.36115,relation/11341923
+VIL_0400,KL_PANCH_0400,Kodakara,കൊടകര,10.36123,76.31583,relation/11341927
+VIL_0401,KL_PANCH_0401,Aloor,ആളൂര്‍,10.32224,76.28373,relation/11341930
+VIL_0402,KL_PANCH_0402,Chalakudy,ചാലക്കുടി,10.30845,76.32468,relation/11341936
+VIL_0403,KL_PANCH_0403,Kadukutty,കാടുകുറ്റി,10.26366,76.32105,relation/11342921
+VIL_0404,KL_PANCH_0404,Annamanada,അന്നമനട,10.24173,76.32011,relation/11342942
+VIL_0405,KL_PANCH_0405,Kuzhur,കുഴൂര്‍,10.20265,76.28881,relation/11342951
+VIL_0406,KL_PANCH_0406,Mala,മാള,10.26398,76.27825,relation/11342952
+VIL_0407,KL_PANCH_0407,Poyya,പൊയ്യ,10.22308,76.25622,relation/11342982
+VIL_0408,KL_PANCH_0408,Kodungallur,കൊടുങ്ങല്ലൂർ,10.23679,76.2108,relation/11343007
+VIL_0409,KL_PANCH_0409,Eriyad,എറിയാട്,10.21031,76.16599,relation/11343033
+VIL_0410,KL_PANCH_0410,Edavilangu,എടവിലങ്ങ്,10.23603,76.15865,relation/11343048
+VIL_0411,KL_PANCH_0411,Sree Narayanapuram,ശ്രീനാരായണപുരം,10.2595,76.15686,relation/11343059
+VIL_0412,KL_PANCH_0412,Mathilakam,മതിലകം,10.28465,76.14539,relation/11343074
+VIL_0413,KL_PANCH_0413,Perinjanam,പെരിഞ്ഞനം,10.30707,76.14126,relation/11343093
+VIL_0414,KL_PANCH_0414,Kaipamangalam,കയ്പമംഗലം,10.33097,76.13248,relation/11343096
+VIL_0415,KL_PANCH_0415,Edathiruthy,എടത്തിരുത്തി,10.36795,76.13503,relation/11343100
+VIL_0416,KL_PANCH_0416,Kattoor,കാട്ടൂര്‍,10.37933,76.16296,relation/11343386
+VIL_0417,KL_PANCH_0417,Vellangalur,വെള്ളാങ്കല്ലൂര്‍,10.28873,76.20928,relation/11343412
+VIL_0418,KL_PANCH_0418,Puthenchira,പുത്തന്‍ചിറ,10.26242,76.23529,relation/11343441
+VIL_0419,KL_PANCH_0419,Velookkara,വേളൂക്കര,10.31721,76.24129,relation/11343469
+VIL_0420,KL_PANCH_0420,Muriyad,മുരിയാട്,10.35937,76.25431,relation/11343489
+VIL_0421,KL_PANCH_0421,Irinjalakuda,ഇരിങ്ങാലക്കുട,10.37309,76.21728,relation/11343510
+VIL_0422,KL_PANCH_0422,Parappookkara,പറപ്പൂക്കര,10.39941,76.26528,relation/11343527
+VIL_0423,KL_PANCH_0423,Pudukkad,പൂതുക്കാട്,10.41087,76.28749,relation/11343558
+VIL_0424,KL_PANCH_0424,Nenmanikkara,നെന്മണിക്കര,10.43963,76.2573,relation/11343581
+VIL_0425,KL_PANCH_0425,Alagappanagar,അളഗപ്പനഗര്‍,10.43637,76.30182,relation/11343588
+VIL_0426,KL_PANCH_0426,Thrikkur,ത്യക്കൂര്‍,10.45465,76.30412,relation/11343590
+VIL_0427,KL_PANCH_0427,Karalam,കാറളം,10.38327,76.18725,relation/11343604
+VIL_0428,KL_PANCH_0428,Poomangalam,പൂമംഗലം,10.31526,76.19675,relation/11343615
+VIL_0429,KL_PANCH_0429,Agali,അഗളി,11.08405,76.61869,relation/11344236
+VIL_0430,KL_PANCH_0430,Sholayar,ഷോളയൂർ,11.07963,76.68559,relation/11347545
+VIL_0431,KL_PANCH_0431,Karimbah,കരിമ്പ ഗ്രാമപഞ്ചായത്ത്,10.92245,76.55546,relation/11347554
+VIL_0432,KL_PANCH_0432,Thachamparah,തച്ചമ്പാറ ഗ്രാമപഞ്ചായത്ത്,10.96645,76.54066,relation/11347558
+VIL_0433,KL_PANCH_0433,Kanhirapuzha,കാഞ്ഞിരപുഴ ഗ്രാമ പഞ്ചായത്ത്,11.00222,76.52126,relation/11347566
+VIL_0434,KL_PANCH_0434,Thenkarah,തെങ്കര ഗ്രാമപഞ്ചായത്ത്,11.02714,76.48443,relation/11347569
+VIL_0435,KL_PANCH_0435,Kumaramputhur gram panchayat,കുമരംപുത്തൂർ ഗ്രാമപഞ്ചായത്ത്,11.00482,76.43383,relation/11347574
+VIL_0436,KL_PANCH_0436,Mannarkad,മണ്ണാർക്കാട്,10.99465,76.46196,relation/11347583
+VIL_0437,KL_PANCH_0437,Kottappadamh,കോട്ടോപ്പാടം ഗ്രാമപഞ്ചായത്ത്,11.01989,76.40107,relation/11347613
+VIL_0438,KL_PANCH_0438,Alanallur,അലനല്ലൂർ,11.04589,76.34115,relation/11347620
+VIL_0439,KL_PANCH_0439,Thachanattukarah,തച്ചനാട്ടുകര ഗ്രാമപഞ്ചായത്ത്,10.94615,76.3563,relation/11347628
+VIL_0440,KL_PANCH_0440,Karakurussih,കാരാകുറുശ്ശി ഗ്രാമപഞ്ചായത്ത്,10.95109,76.48291,relation/11347629
+VIL_0441,KL_PANCH_0441,Puduppariyaramh,പുതുപ്പരിയാരം ഗ്രാമപഞ്ചായത്ത്,10.84857,76.60994,relation/11347639
+VIL_0442,KL_PANCH_0442,Malampuzhah,മലമ്പുഴ ഗ്രാമപഞ്ചായത്ത്,10.85605,76.69547,relation/11347652
+VIL_0443,KL_PANCH_0443,Pudusserrih,പുതുശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,10.83293,76.77935,relation/11347662
+VIL_0444,KL_PANCH_0444,Elappully,എലപ്പുള്ളി,10.76349,76.76692,relation/11347666
+VIL_0445,KL_PANCH_0445,Polppulli Grampanchayat,പൊൽപ്പുള്ളി ഗ്രാമപഞ്ചായത്ത്,10.72622,76.73673,relation/11347667
+VIL_0446,KL_PANCH_0446,Peruvembah,പെരുവെമ്പ് ഗ്രാമപഞ്ചായത്ത്,10.70782,76.68603,relation/11347669
+VIL_0447,KL_PANCH_0447,Kodumbuh,കൊടുമ്പ് ഗ്രാമപഞ്ചായത്ത്,10.74088,76.69418,relation/11347679
+VIL_0448,KL_PANCH_0448,Kannadih,കണ്ണാടി ഗ്രാമപഞ്ചായത്ത്,10.72897,76.65791,relation/11347743
+VIL_0449,KL_PANCH_0449,Palakkad,പാലക്കാട്,10.78012,76.65254,relation/11347763
+VIL_0450,KL_PANCH_0450,Marutharodeh,മരുതറോഡ് ഗ്രാമപഞ്ചായത്ത്,10.78396,76.69018,relation/11347769
+VIL_0451,KL_PANCH_0451,Pirayirih,പിരായിരി ഗ്രാമപഞ്ചായത്ത്,10.77561,76.60642,relation/11347808
+VIL_0452,KL_PANCH_0452,Akathethara,അകത്തേത്തറ,10.82662,76.64127,relation/11347809
+VIL_0453,KL_PANCH_0453,Mundurh,മുണ്ടൂർ ഗ്രാമപഞ്ചായത്ത്,10.85227,76.56548,relation/11347841
+VIL_0454,KL_PANCH_0454,Nelliyampathyh,നെല്ലിയാമ്പതി ഗ്രാമപഞ്ചായത്ത്,10.49313,76.63413,relation/11350357
+VIL_0455,KL_PANCH_0455,Muthalamadah,മുതലമട ഗ്രാമപഞ്ചായത്ത്,10.50487,76.76789,relation/11350363
+VIL_0456,KL_PANCH_0456,Kollengode,കൊല്ലങ്കോട് ഗ്രാമപഞ്ചായത്ത്,10.59801,76.69993,relation/11350372
+VIL_0457,KL_PANCH_0457,Elavancheryh,എലവഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,10.58383,76.65669,relation/11350378
+VIL_0458,KL_PANCH_0458,Nemmara Grampanchayat,നെന്മാറ ഗ്രാമപഞ്ചായത്ത്,10.57565,76.60707,relation/11350598
+VIL_0459,KL_PANCH_0459,Ayiloor,അയിലൂർ,10.54289,76.57614,relation/11350600
+VIL_0460,KL_PANCH_0460,Pallassena Grampanchayat,പല്ലശ്ശന ഗ്രാമപഞ്ചായത്ത്,10.62967,76.63933,relation/11350614
+VIL_0461,KL_PANCH_0461,Vadavannur gramapanchayat,വടവന്നൂർ ഗ്രാമപഞ്ചായത്ത്,10.63531,76.69917,relation/11350616
+VIL_0462,KL_PANCH_0462,Pattancheryh,പട്ടഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,10.65695,76.73527,relation/11350632
+VIL_0463,KL_PANCH_0463,Perumattyh,പെരുമാട്ടി ഗ്രാമപഞ്ചായത്ത്,10.66448,76.80885,relation/11350634
+VIL_0464,KL_PANCH_0464,Pudunagaramh,പുതുനഗരം ഗ്രാമപഞ്ചായത്ത്,10.67051,76.68081,relation/11351044
+VIL_0465,KL_PANCH_0465,Koduvayurh,കൊടുവായൂർ ഗ്രാമപഞ്ചായത്ത്,10.66937,76.6493,relation/11351049
+VIL_0466,KL_PANCH_0466,ChitturThathamangalam,ചിറ്റൂർ-തത്തമംഗലം,10.69216,76.72259,relation/11351053
+VIL_0467,KL_PANCH_0467,Nalleppillyh,നല്ലേപ്പിള്ളി ഗ്രാമപഞ്ചായത്ത്,10.72024,76.78328,relation/11351066
+VIL_0468,KL_PANCH_0468,Kozhinjamparah,കൊഴിഞ്ഞാമ്പാറ ഗ്രാമപഞ്ചായത്ത്,10.70965,76.8362,relation/11351081
+VIL_0469,KL_PANCH_0469,Eruthampathyh,എരുത്തേമ്പതി ഗ്രാമപഞ്ചായത്ത്,10.72895,76.86153,relation/11351090
+VIL_0470,KL_PANCH_0470,Vadakarapathy Grampanchayat,വടകരപ്പതി ഗ്രാമപഞ്ചായത്ത്,10.78951,76.84961,relation/11351092
+VIL_0471,KL_PANCH_0471,Kizhakkancheryh,കിഴക്കഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,10.52592,76.49925,relation/11351225
+VIL_0472,KL_PANCH_0472,Vandazhyh,വണ്ടാഴി ഗ്രാമപഞ്ചായത്ത്,10.53761,76.54422,relation/11351239
+VIL_0473,KL_PANCH_0473,Melarcode Grampanchayat,മേലാർകോട് ഗ്രാമപഞ്ചായത്ത്,10.60287,76.56617,relation/11351266
+VIL_0474,KL_PANCH_0474,Vadakkencheryh,വടക്കഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,10.59434,76.47936,relation/11351279
+VIL_0475,KL_PANCH_0475,Kannambrah,കണ്ണമ്പ്ര ഗ്രാമപഞ്ചായത്ത്,10.60238,76.45002,relation/11351295
+VIL_0476,KL_PANCH_0476,Puthukodeh,പുതുക്കോട് ഗ്രാമപഞ്ചായത്ത്,10.63973,76.44639,relation/11355527
+VIL_0477,KL_PANCH_0477,Kavassery,കാവശ്ശേരി,10.65779,76.50146,relation/11355536
+VIL_0478,KL_PANCH_0478,Alathur,ആലത്തൂർ,10.63721,76.54034,relation/11355546
+VIL_0479,KL_PANCH_0479,Erimayur,എരിമയൂർ,10.64799,76.57838,relation/11355557
+VIL_0480,KL_PANCH_0480,Thenkurissi Grampanchayat,തേങ്കുറിശ്ശി ഗ്രാമപഞ്ചായത്ത്,10.68028,76.61465,relation/11355568
+VIL_0481,KL_PANCH_0481,Kuzhalmannamh,കുഴൽമന്ദം ഗ്രാമപഞ്ചായത്ത്,10.70586,76.58674,relation/11355586
+VIL_0482,KL_PANCH_0482,Kuthanur Grampanchayat,കുത്തന്നൂർ ഗ്രാമപഞ്ചായത്ത്,10.71303,76.53034,relation/11355599
+VIL_0483,KL_PANCH_0483,Tarur Grampanchayat,തരൂർ ഗ്രാമപഞ്ചായത്ത്,10.68265,76.5033,relation/11355604
+VIL_0484,KL_PANCH_0484,Peringottukurissih,പെരിങ്ങോട്ടുകുറിശ്ശി ഗ്രാമപഞ്ചായത്ത്,10.74163,76.50481,relation/11355610
+VIL_0485,KL_PANCH_0485,Kottayih,കോട്ടായി ഗ്രാമപഞ്ചായത്ത്,10.75848,76.54201,relation/11355653
+VIL_0486,KL_PANCH_0486,Mathoor Grampanchayat,മാത്തൂർ ഗ്രാമപഞ്ചായത്ത്,10.74927,76.57566,relation/11355655
+VIL_0487,KL_PANCH_0487,Lakkidi Peroor Gram,ലക്കിടിപേരൂർ ഗ്രാമപഞ്ചായത്ത്,10.78026,76.44923,relation/11355805
+VIL_0488,KL_PANCH_0488,Ottappalam,ഒറ്റപ്പാലം,10.78694,76.38162,relation/11355811
+VIL_0489,KL_PANCH_0489,Vaniyamkulamh,വാണിയംകുളം ഗ്രാമപഞ്ചായത്ത്,10.78446,76.32909,relation/11355813
+VIL_0490,KL_PANCH_0490,Shoranur,ഷൊർണ്ണൂർ,10.78733,76.27368,relation/11355820
+VIL_0491,KL_PANCH_0491,Chalavarah,ചളവറ ഗ്രാമപഞ്ചായത്ത്,10.83109,76.29806,relation/11355835
+VIL_0492,KL_PANCH_0492,Ananganadi,അനങ്ങനടി,10.81841,76.33693,relation/11355844
+VIL_0493,KL_PANCH_0493,Ambalapara,അമ്പലപ്പാറ,10.82246,76.42264,relation/11355848
+VIL_0494,KL_PANCH_0494,Kadampazhipuramh,കടമ്പഴിപ്പുറം ഗ്രാമപഞ്ചായത്ത്,10.8814,76.46968,relation/11355862
+VIL_0495,KL_PANCH_0495,Karimpuzhah,കരിമ്പുഴ ഗ്രാമപഞ്ചായത്ത്,10.92812,76.4278,relation/11355867
+VIL_0496,KL_PANCH_0496,Vellinezhih,വെള്ളിനേഴി ഗ്രാമപഞ്ചായത്ത്,10.89989,76.36618,relation/11355883
+VIL_0497,KL_PANCH_0497,Sreekrishnapuram Grampanchayat,ശ്രീകൃഷ്ണപുരം ഗ്രാമപഞ്ചായത്ത്,10.89858,76.42017,relation/11355904
+VIL_0498,KL_PANCH_0498,Pookottukavuh,പൂക്കോട്ടുകാവ് ഗ്രാമപഞ്ചായത്ത്,10.86748,76.3865,relation/11355972
+VIL_0499,KL_PANCH_0499,Thrikkadeeri Grampanchayat,തൃക്കടീരി ഗ്രാമപഞ്ചായത്ത്,10.85724,76.34696,relation/11355980
+VIL_0500,KL_PANCH_0500,Cherpulassery,ചെർപ്പുളശ്ശേരി,10.8887,76.30562,relation/11355989
+VIL_0501,KL_PANCH_0501,Nellayah,നെല്ലായ ഗ്രാമപഞ്ചായത്ത്,10.87248,76.27935,relation/11355990
+VIL_0502,KL_PANCH_0502,Parlih,പറളി ഗ്രാമപഞ്ചായത്ത്,10.80861,76.55799,relation/11356009
+VIL_0503,KL_PANCH_0503,Mankarah,മങ്കര ഗ്രാമപഞ്ചായത്ത്,10.80331,76.508,relation/11356011
+VIL_0504,KL_PANCH_0504,Keralasserih,കേരളശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,10.82902,76.49478,relation/11356020
+VIL_0505,KL_PANCH_0505,Mannoor Grampanchayat,മണ്ണൂർ ഗ്രാമപഞ്ചായത്ത്,10.80763,76.47892,relation/11356029
+VIL_0506,KL_PANCH_0506,Kongadh,കോങ്ങാട് ഗ്രാമപഞ്ചായത്ത്,10.86238,76.51442,relation/11356032
+VIL_0507,KL_PANCH_0507,Ongallurh,ഓങ്ങല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,10.81091,76.22301,relation/11361621
+VIL_0508,KL_PANCH_0508,Vallapuzha,വല്ലപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,10.83954,76.23559,relation/11361626
+VIL_0509,KL_PANCH_0509,Kulukkallurh,കുലുക്കല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,10.87905,76.22287,relation/11361627
+VIL_0510,KL_PANCH_0510,Vilayurh,വിളയൂർ ഗ്രാമപഞ്ചായത്ത്,10.88713,76.17428,relation/11361631
+VIL_0511,KL_PANCH_0511,Koppamh,കൊപ്പം ഗ്രാമപഞ്ചായത്ത്,10.86679,76.18684,relation/11361635
+VIL_0512,KL_PANCH_0512,Pattambi,പട്ടാമ്പി,10.81301,76.18806,relation/11361637
+VIL_0513,KL_PANCH_0513,Thiruvegappurah,തിരുവേഗപ്പുറ ഗ്രാമപഞ്ചായത്ത്,10.86691,76.13602,relation/11361641
+VIL_0514,KL_PANCH_0514,Muthuthalah,മുതുതല ഗ്രാമപഞ്ചായത്ത്,10.82158,76.15462,relation/11361654
+VIL_0515,KL_PANCH_0515,Parathurh,പരുതൂർ ഗ്രാമപഞ്ചായത്ത്,10.83246,76.11963,relation/11361677
+VIL_0516,KL_PANCH_0516,Thrithala Grampanchayat,തൃത്താല ഗ്രാമപഞ്ചായത്ത്,10.78951,76.14666,relation/11361684
+VIL_0517,KL_PANCH_0517,Thirumittacodeh,തിരുമിറ്റക്കോട് ഗ്രാമപഞ്ചായത്ത്,10.75149,76.16272,relation/11361686
+VIL_0518,KL_PANCH_0518,Nagalassery Grampanchayat,നാഗലശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,10.75089,76.13514,relation/11361697
+VIL_0519,KL_PANCH_0519,Chalisseryh,ചാലിശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,10.7479,76.09036,relation/11361707
+VIL_0520,KL_PANCH_0520,Kappoorh,കപ്പൂർ ഗ്രാമപഞ്ചായത്ത്,10.77429,76.05731,relation/11361715
+VIL_0521,KL_PANCH_0521,Pattitharah,പട്ടിത്തറ ഗ്രാമപഞ്ചായത്ത്,10.79067,76.09485,relation/11361719
+VIL_0522,KL_PANCH_0522,Anakkara,ആനക്കര,10.82045,76.06385,relation/11361736
+VIL_0523,KL_PANCH_0523,Edamalakkudi,ഇടമലക്കുടി,10.20217,76.95066,relation/11362895
+VIL_0524,KL_PANCH_0524,Kuttampuzhah,കുട്ടമ്പുഴ ഗ്രാമപഞ്ചായത്ത്,10.11181,76.82341,relation/11362952
+VIL_0525,KL_PANCH_0525,Ayyampuzha,അയ്യമ്പുഴ,10.23095,76.52053,relation/11363679
+VIL_0526,KL_PANCH_0526,Kavalangadh,കവളങ്ങാട് ഗ്രാമപഞ്ചായത്ത്,10.04992,76.72337,relation/11363691
+VIL_0527,KL_PANCH_0527,Keerampaarah,കീരംപാറ ഗ്രാമപഞ്ചായത്ത്,10.09511,76.68222,relation/11363708
+VIL_0528,KL_PANCH_0528,Pindimanah,പിണ്ടിമന,10.10703,76.62289,relation/11363733
+VIL_0529,KL_PANCH_0529,Kottappadyh,കോട്ടപ്പടി ഗ്രാമപഞ്ചായത്ത്,10.1095,76.60114,relation/11363735
+VIL_0530,KL_PANCH_0530,Vengoorh,വേങ്ങൂർ ഗ്രാമപഞ്ചായത്ത്,10.15553,76.56435,relation/11363753
+VIL_0531,KL_PANCH_0531,Koovappadyh,കൂവപ്പടി ഗ്രാമപഞ്ചായത്ത്,10.15871,76.49622,relation/11363773
+VIL_0532,KL_PANCH_0532,Mudakkuzhah,മുടക്കുഴ ഗ്രാമപഞ്ചായത്ത്,10.14977,76.52259,relation/11363776
+VIL_0533,KL_PANCH_0533,Malayattoor-Neeleswaramh,മലയാറ്റൂർ-നീലീശ്വരം ഗ്രാമപഞ്ചായത്ത്,10.2064,76.49565,relation/11363781
+VIL_0534,KL_PANCH_0534,Kaladyh,കാലടി ഗ്രാമപഞ്ചായത്ത്,10.17897,76.43004,relation/11365648
+VIL_0535,KL_PANCH_0535,Manjaprah,മഞ്ഞപ്ര ഗ്രാമപഞ്ചായത്ത്,10.21424,76.44725,relation/11365659
+VIL_0536,KL_PANCH_0536,Thuravoor,തുറവൂർ,10.21826,76.42158,relation/11365684
+VIL_0537,KL_PANCH_0537,Mookkannoorh,മൂക്കന്നൂർ,10.24533,76.42168,relation/11365706
+VIL_0538,KL_PANCH_0538,Karukuttyh,കറുകുറ്റി ഗ്രാമപഞ്ചായത്ത്,10.2481,76.40279,relation/11365709
+VIL_0539,KL_PANCH_0539,Parakkadavuh,പാറക്കടവ് ഗ്രാമപഞ്ചായത്ത്,10.195,76.34194,relation/11366131
+VIL_0540,KL_PANCH_0540,Angamaly,അങ്കമാലി,10.18674,76.38438,relation/11366136
+VIL_0541,KL_PANCH_0541,Nedumbasseryh,നെടുമ്പാശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,10.16929,76.35939,relation/11366156
+VIL_0542,KL_PANCH_0542,Sreemoolanagaram,ശ്രീമൂലനഗരം,10.13619,76.39773,relation/11366181
+VIL_0543,KL_PANCH_0543,Chengamanaduh,ചെങ്ങമനാട് ഗ്രാമപഞ്ചായത്ത്,10.14361,76.35636,relation/11366185
+VIL_0544,KL_PANCH_0544,Okkalh,ഒക്കൽ ഗ്രാമപഞ്ചായത്ത്,10.15545,76.46149,relation/11366188
+VIL_0545,KL_PANCH_0545,Perumbavoor,പെരുമ്പാവൂർ,10.11836,76.48087,relation/11366203
+VIL_0546,KL_PANCH_0546,Rayamangalamh,രായമംഗലം ഗ്രാമപഞ്ചായത്ത്,10.08445,76.51905,relation/11366243
+VIL_0547,KL_PANCH_0547,Asamannur,അശമന്നൂർ,10.0888,76.54689,relation/11366284
+VIL_0548,KL_PANCH_0548,Nellikuzhyh,നെല്ലിക്കുഴി ഗ്രാമപഞ്ചായത്ത്,10.07624,76.59587,relation/11366287
+VIL_0549,KL_PANCH_0549,Kothamangalam,കോതമംഗലം,10.06258,76.63776,relation/11366291
+VIL_0550,KL_PANCH_0550,Varapettyh,വാരപ്പെട്ടി ഗ്രാമപഞ്ചായത്ത്,10.03472,76.63378,relation/11366505
+VIL_0551,KL_PANCH_0551,Pallarimangalamh,പല്ലാരിമംഗലം ഗ്രാമപഞ്ചായത്ത്,10.03711,76.67955,relation/11366516
+VIL_0552,KL_PANCH_0552,Pothanikkadh,പോത്താനിക്കാട് ഗ്രാമപഞ്ചായത്ത്,10.01238,76.67683,relation/11366525
+VIL_0553,KL_PANCH_0553,Paingottoorh,പൈങ്ങോട്ടൂർ ഗ്രാമപഞ്ചായത്ത്,10.0033,76.72902,relation/11366540
+VIL_0554,KL_PANCH_0554,Kalloorkaadh,കല്ലൂർക്കാട് ഗ്രാമപഞ്ചായത്ത്,9.96444,76.68404,relation/11366557
+VIL_0555,KL_PANCH_0555,Ayavana,ആയവന,9.98441,76.6527,relation/11366577
+VIL_0556,KL_PANCH_0556,Manjalloorh,മഞ്ഞള്ളൂർ ഗ്രാമപഞ്ചായത്ത്,9.9346,76.66567,relation/11366578
+VIL_0557,KL_PANCH_0557,Avoly,ആവോലി,9.95033,76.6194,relation/11366629
+VIL_0558,KL_PANCH_0558,Muvattupuzha,മൂവാറ്റുപുഴ,9.98746,76.58007,relation/11366634
+VIL_0559,KL_PANCH_0559,Paiprah,പായിപ്ര ഗ്രാമപഞ്ചായത്ത്,10.01367,76.57232,relation/11366649
+VIL_0560,KL_PANCH_0560,Valakomh,വാളകം ഗ്രാമപഞ്ചായത്ത്,9.9765,76.53991,relation/11366663
+VIL_0561,KL_PANCH_0561,Mazhuvanoorh,മഴുവന്നൂർ ഗ്രാമപഞ്ചായത്ത്,10.03263,76.50483,relation/11366669
+VIL_0562,KL_PANCH_0562,Kizhakkambalamh,കിഴക്കമ്പലം ഗ്രാമപഞ്ചായത്ത്,10.0496,76.42608,relation/11366686
+VIL_0563,KL_PANCH_0563,Vengola,വെങ്ങോല,10.07999,76.46411,relation/11366720
+VIL_0564,KL_PANCH_0564,Vazhakkulamh,വാഴക്കുളം ഗ്രാമപഞ്ചായത്ത്,10.09585,76.43461,relation/11366748
+VIL_0565,KL_PANCH_0565,Kanjoorh,കാഞ്ഞൂർ ഗ്രാമപഞ്ചായത്ത്,10.14722,76.42768,relation/11366754
+VIL_0566,KL_PANCH_0566,Keezhmaduh,കീഴ്മാട് ഗ്രാമപഞ്ചായത്ത്,10.09944,76.38067,relation/11369162
+VIL_0567,KL_PANCH_0567,Aluva,ആലുവ,10.11172,76.3504,relation/11369167
+VIL_0568,KL_PANCH_0568,Kunnukarah,കുന്നുകര ഗ്രാമപഞ്ചായത്ത്,10.16603,76.30053,relation/11369171
+VIL_0569,KL_PANCH_0569,Karumalloorh,കരുമാല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,10.13565,76.29754,relation/11369189
+VIL_0570,KL_PANCH_0570,Puthenvelikkarah,പുത്തൻവേലിക്കര ഗ്രാമപഞ്ചായത്ത്,10.18555,76.24519,relation/11369196
+VIL_0571,KL_PANCH_0571,Chendamangalamh,ചേന്ദമംഗലം ഗ്രാമപഞ്ചായത്ത്,10.17678,76.23104,relation/11369201
+VIL_0572,KL_PANCH_0572,North Paravur,വടക്കൻ പറവൂർ,10.14574,76.22878,relation/11369214
+VIL_0573,KL_PANCH_0573,Chittattukarah,ചിറ്റാട്ടുകര ഗ്രാമപഞ്ചായത്ത്,10.16265,76.20949,relation/11369226
+VIL_0574,KL_PANCH_0574,Pallippuramh,പള്ളിപ്പുറം ഗ്രാമപഞ്ചായത്ത്,10.15753,76.17913,relation/11369235
+VIL_0575,KL_PANCH_0575,Kottuvallyh,കോട്ടുവള്ളി ഗ്രാമപഞ്ചായത്ത്,10.12725,76.25124,relation/11369266
+VIL_0576,KL_PANCH_0576,Kuzhuppillyh,കുഴുപ്പിള്ളി ഗ്രാമപഞ്ചായത്ത്,10.1125,76.19863,relation/11369271
+VIL_0577,KL_PANCH_0577,Edavanakad,എടവനക്കാട്,10.09084,76.20129,relation/11369272
+VIL_0578,KL_PANCH_0578,Nayarambalamh,നായരമ്പലം ഗ്രാമപഞ്ചായത്ത്,10.06427,76.21456,relation/11369278
+VIL_0579,KL_PANCH_0579,Ezhikkarah,ഏഴിക്കര ഗ്രാമപഞ്ചായത്ത്,10.11065,76.22759,relation/11369282
+VIL_0580,KL_PANCH_0580,Alangadh,ആലങ്ങാട് ഗ്രാമപഞ്ചായത്ത്,10.11188,76.28684,relation/11369297
+VIL_0581,KL_PANCH_0581,Kadungalloor,കടുങ്ങല്ലൂർ,10.10417,76.32457,relation/11369304
+VIL_0582,KL_PANCH_0582,Njarackalh,ഞാറക്കല് ഗ്രാമപഞ്ചായത്ത്,10.04767,76.22188,relation/11369321
+VIL_0583,KL_PANCH_0583,Elamkunnapuzhah,എളങ്കുന്നപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,9.99536,76.22734,relation/11369332
+VIL_0584,KL_PANCH_0584,Mulavukaduh,മുളവുകാട് ഗ്രാമപഞ്ചായത്ത്,10.01579,76.2561,relation/11369358
+VIL_0585,KL_PANCH_0585,Kadamakkudyh,കടമക്കുടി ഗ്രാമപഞ്ചായത്ത്,10.04954,76.26953,relation/11369365
+VIL_0586,KL_PANCH_0586,Cherannalloor,ചേരാനല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,10.05976,76.28842,relation/11369392
+VIL_0587,KL_PANCH_0587,Varapuzhah,വരാപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,10.07621,76.26873,relation/11369570
+VIL_0588,KL_PANCH_0588,Vadakkekkarah,വടക്കേക്കര ഗ്രാമപഞ്ചായത്ത്,10.17398,76.20226,relation/11370256
+VIL_0589,KL_PANCH_0589,Eloor,ഏലൂർ,10.06933,76.30275,relation/11370914
+VIL_0590,KL_PANCH_0590,Choornikkarah,ചൂർണ്ണിക്കര ഗ്രാമപഞ്ചായത്ത്,10.08302,76.34484,relation/11370918
+VIL_0591,KL_PANCH_0591,Kalamassery,കളമശ്ശേരി,10.03646,76.33364,relation/11370935
+VIL_0592,KL_PANCH_0592,Thrikkakara,തൃക്കാക്കര,10.01218,76.32892,relation/11370937
+VIL_0593,KL_PANCH_0593,Edathala,എടത്തല,10.06991,76.37884,relation/11370940
+VIL_0594,KL_PANCH_0594,Kunnathunadh,കുന്നത്തുനാട് ഗ്രാമപഞ്ചായത്ത്,10.02219,76.42724,relation/11370952
+VIL_0595,KL_PANCH_0595,Vadavukode-Puthencruz Gramapanachayath,വടവുകോട്-പുത്തൻകുരിശ് ഗ്രാമപഞ്ചായത്ത്,9.98641,76.39629,relation/11370960
+VIL_0596,KL_PANCH_0596,Maradu,മരട്,9.94189,76.32692,relation/11370962
+VIL_0597,KL_PANCH_0597,Thrippunithura,തൃപ്പൂണിത്തുറ,9.96185,76.34204,relation/11370965
+VIL_0598,KL_PANCH_0598,Kumbalamh,കുമ്പളം ഗ്രാമപഞ്ചായത്ത്,9.90441,76.32608,relation/11370979
+VIL_0599,KL_PANCH_0599,Chellanamh,ചെല്ലാനം ഗ്രാമപഞ്ചായത്ത്,9.86576,76.26438,relation/11371079
+VIL_0600,KL_PANCH_0600,Kumbalanghyh,കുമ്പളങ്ങി ഗ്രാമപഞ്ചായത്ത്,9.87779,76.28449,relation/11371080
+VIL_0601,KL_PANCH_0601,Udayamperoor,ഉദയംപേരൂർ,9.88938,76.37263,relation/11371135
+VIL_0602,KL_PANCH_0602,Chottanikarah,ചോറ്റാനിക്കര ഗ്രാമപഞ്ചായത്ത്,9.92688,76.38592,relation/11371145
+VIL_0603,KL_PANCH_0603,Mulamthuruthyh,മുളന്തുരുത്തി ഗ്രാമപഞ്ചായത്ത്,9.89357,76.40223,relation/11371169
+VIL_0604,KL_PANCH_0604,Amballur,ആമ്പല്ലൂർ,9.8568,76.40924,relation/11371179
+VIL_0605,KL_PANCH_0605,Edakkattuvayal,എടക്കാട്ടുവയൽ,9.86564,76.42847,relation/11371180
+VIL_0606,KL_PANCH_0606,Piravom,പിറവം,9.87913,76.49563,relation/11371372
+VIL_0607,KL_PANCH_0607,Maneeduh,മണീട് ഗ്രാമപഞ്ചായത്ത്,9.91291,76.45675,relation/11371378
+VIL_0608,KL_PANCH_0608,Thiruvaniyoorh,തിരുവാണിയൂർ ഗ്രാമപഞ്ചായത്ത്,9.94666,76.41353,relation/11371382
+VIL_0609,KL_PANCH_0609,Poothrikah,പൂതൃക്ക ഗ്രാമപഞ്ചായത്ത്,9.96562,76.45977,relation/11371388
+VIL_0610,KL_PANCH_0610,Aikkaranaduh,ഐക്കരനാട് ഗ്രാമപഞ്ചായത്ത്,9.99776,76.45796,relation/11371393
+VIL_0611,KL_PANCH_0611,Ramamangalamh,രാമമംഗലം ഗ്രാമപഞ്ചായത്ത്,9.93224,76.49915,relation/11371400
+VIL_0612,KL_PANCH_0612,Pampakudah,പാമ്പാക്കുട ഗ്രാമപഞ്ചായത്ത്,9.90648,76.51908,relation/11371415
+VIL_0613,KL_PANCH_0613,Thirumaradih,തിരുമാറാടി ഗ്രാമപഞ്ചായത്ത്,9.89658,76.55673,relation/11371446
+VIL_0614,KL_PANCH_0614,Koothattukulam,കൂത്താട്ടുകുളം,9.8664,76.57718,relation/11371492
+VIL_0615,KL_PANCH_0615,Palakuzhah,പാലക്കുഴ ഗ്രാമപഞ്ചായത്ത്,9.8891,76.60442,relation/11371495
+VIL_0616,KL_PANCH_0616,Arakkuzha,ആരക്കുഴ,9.93127,76.598,relation/11371500
+VIL_0617,KL_PANCH_0617,Maradyh,മാറാടി ഗ്രാമപഞ്ചായത്ത്,9.95172,76.55669,relation/11371504
+VIL_0618,KL_PANCH_0618,Elanji,ഇലഞ്ഞി,9.84243,76.54645,relation/11371506
+VIL_0619,KL_PANCH_0619,Marayoor,മറയൂർ ഗ്രാമപഞ്ചായത്ത്,10.28176,77.15511,relation/11373177
+VIL_0620,KL_PANCH_0620,Kanthalloorh,കാന്തല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,10.25543,77.20183,relation/11373178
+VIL_0621,KL_PANCH_0621,Vattavadah,വട്ടവട ഗ്രാമപഞ്ചായത്ത്,10.19491,77.25393,relation/11373179
+VIL_0622,KL_PANCH_0622,Devikulamh,ദേവികുളം ഗ്രാമപഞ്ചായത്ത്,10.13274,77.1493,relation/11373183
+VIL_0623,KL_PANCH_0623,Munnar Grampanchayat,മൂന്നാർ ഗ്രാമപഞ്ചായത്ത്,10.12147,77.05035,relation/11373191
+VIL_0624,KL_PANCH_0624,Mankulamh,മാങ്കുളം ഗ്രാമപഞ്ചായത്ത്,10.12902,76.93429,relation/11373266
+VIL_0625,KL_PANCH_0625,Adimali,അടിമാലി,10.06135,76.85035,relation/11373270
+VIL_0626,KL_PANCH_0626,Pallivasal,പള്ളിവാസൽ ഗ്രാമപഞ്ചായത്ത്,10.04217,77.01211,relation/11373818
+VIL_0627,KL_PANCH_0627,Vellathooval,വെള്ളത്തൂവൽ,9.9984,77.01466,relation/11373829
+VIL_0628,KL_PANCH_0628,Baisonvalley,ബൈസൺ വാലി ഗ്രാമപഞ്ചായത്ത്,10.01003,77.10529,relation/11373845
+VIL_0629,KL_PANCH_0629,Chinnakkanal Grampanchayat,ചിന്നക്കനാൽ ഗ്രാമപഞ്ചായത്ത്,10.0339,77.18857,relation/11373851
+VIL_0630,KL_PANCH_0630,Santhanpara,ശാന്തൻപാറ ഗ്രാമപഞ്ചായത്ത്,9.97344,77.21335,relation/11373854
+VIL_0631,KL_PANCH_0631,Rajakumary,രാജകുമാരി ഗ്രാമപഞ്ചായത്ത്,9.9786,77.15971,relation/11373860
+VIL_0632,KL_PANCH_0632,Rajakkadh,രാജാക്കാട് ഗ്രാമപഞ്ചായത്ത്,9.96292,77.08348,relation/11373864
+VIL_0633,KL_PANCH_0633,Konnathadyh,കൊന്നത്തടി ഗ്രാമപഞ്ചായത്ത്,9.94137,77.04846,relation/11373878
+VIL_0634,KL_PANCH_0634,Senapathyh,സേനാപതി ഗ്രാമപഞ്ചായത്ത്,9.94428,77.15133,relation/11373897
+VIL_0635,KL_PANCH_0635,Udumbanchola,ഉടുമ്പൻചോല,9.90555,77.15963,relation/11373899
+VIL_0636,KL_PANCH_0636,Nedumkandomh,നെടുങ്കണ്ടം ഗ്രാമപഞ്ചായത്ത്,9.84861,77.16778,relation/11373964
+VIL_0637,KL_PANCH_0637,Vathikudyh,വാത്തിക്കുടി ഗ്രാമപഞ്ചായത്ത്,9.88633,77.0404,relation/11374084
+VIL_0638,KL_PANCH_0638,Kanjikkuzhyh,"കഞ്ഞിക്കുഴി ഗ്രാമപഞ്ചായത്ത്, ഇടുക്കി ജില്ല",9.94957,76.90739,relation/11374276
+VIL_0639,KL_PANCH_0639,Vannappuramh,വണ്ണപ്പുറം ഗ്രാമപഞ്ചായത്ത്,9.98962,76.79804,relation/11374345
+VIL_0640,KL_PANCH_0640,Karimannoorh,കരിമണ്ണൂർ ഗ്രാമപഞ്ചായത്ത്,9.94255,76.81065,relation/11374411
+VIL_0641,KL_PANCH_0641,Kodikulamh,കോടിക്കുളം ഗ്രാമപഞ്ചായത്ത്,9.96107,76.76276,relation/11374477
+VIL_0642,KL_PANCH_0642,Vazhathopeh,വാഴത്തോപ്പ് ഗ്രാമപഞ്ചായത്ത്,9.86985,76.94679,relation/11374663
+VIL_0643,KL_PANCH_0643,Udumbannoor,ഉടുമ്പന്നൂർ,9.91093,76.8512,relation/11374664
+VIL_0644,KL_PANCH_0644,Mariyapuramh,മരിയാപുരം ഗ്രാമപഞ്ചായത്ത്,9.86705,76.98542,relation/11374850
+VIL_0645,KL_PANCH_0645,Kamakshyh,കാമാക്ഷി ഗ്രാമപഞ്ചായത്ത്,9.83888,77.03528,relation/11374854
+VIL_0646,KL_PANCH_0646,Erattayar,ഇരട്ടയാർ,9.81765,77.08258,relation/11374861
+VIL_0647,KL_PANCH_0647,Pampadumparah,പാമ്പാടുംപാറ ഗ്രാമപഞ്ചായത്ത്,9.79092,77.16224,relation/11374868
+VIL_0648,KL_PANCH_0648,Karunapuramh,കരുണാപുരം ഗ്രാമപഞ്ചായത്ത്,9.77825,77.20314,relation/11374878
+VIL_0649,KL_PANCH_0649,Vandanmedu,വണ്ടൻമേട് ഗ്രാമപഞ്ചായത്ത്,9.70801,77.15001,relation/11374886
+VIL_0650,KL_PANCH_0650,Chakkupallamh,ചക്കുപള്ളം ഗ്രാമപഞ്ചായത്ത്,9.66855,77.12436,relation/11374888
+VIL_0651,KL_PANCH_0651,Ayyappankovil,അയ്യപ്പൻകോവിൽ,9.68102,77.03977,relation/11374920
+VIL_0652,KL_PANCH_0652,Kattappana,കട്ടപ്പന നഗരസഭ,9.75496,77.09858,relation/11374936
+VIL_0653,KL_PANCH_0653,Kanchiyarh,കാഞ്ചിയാർ ഗ്രാമപഞ്ചായത്ത്,9.73685,77.0616,relation/11374950
+VIL_0654,KL_PANCH_0654,Upputhara,ഉപ്പുതറ,9.71293,76.9813,relation/11374980
+VIL_0655,KL_PANCH_0655,Kumilyh,കുമിളി ഗ്രാമപഞ്ചായത്ത്,9.50123,77.18988,relation/11375000
+VIL_0656,KL_PANCH_0656,Vandiperiyar Grampanchayat,വണ്ടിപ്പെരിയാർ ഗ്രാമപഞ്ചായത്ത്,9.5736,77.09364,relation/11377523
+VIL_0657,KL_PANCH_0657,Peruvanthanamh,പെരുവന്താനം ഗ്രാമപഞ്ചായത്ത്,9.51772,76.95607,relation/11377528
+VIL_0658,KL_PANCH_0658,Kokkayarh,കൊക്കയാർ ഗ്രാമപഞ്ചായത്ത്,9.5824,76.90587,relation/11377566
+VIL_0659,KL_PANCH_0659,Peermadeh,പീരുമേട് ഗ്രാമപഞ്ചായത്ത്,9.56523,77.00024,relation/11377572
+VIL_0660,KL_PANCH_0660,Elapparah,ഏലപ്പാറ ഗ്രാമപഞ്ചായത്ത്,9.65068,76.96767,relation/11377581
+VIL_0661,KL_PANCH_0661,Arakulam,അറക്കുളം,9.8017,76.87688,relation/11377610
+VIL_0662,KL_PANCH_0662,Velliyamattom,വെളളിയാമറ്റം ഗ്രാമപഞ്ചായത്ത്,9.85528,76.82367,relation/11377625
+VIL_0663,KL_PANCH_0663,Kudayathoor Grampanchayat,കുടയത്തൂർ ഗ്രാമപഞ്ചായത്ത്,9.82059,76.79821,relation/11377643
+VIL_0664,KL_PANCH_0664,Muttomh,മുട്ടം ഗ്രാമപഞ്ചായത്ത്,9.83648,76.73659,relation/11377728
+VIL_0665,KL_PANCH_0665,Karimkunnamh,കരിങ്കുന്നം ഗ്രാമപഞ്ചായത്ത്,9.85693,76.70208,relation/11377741
+VIL_0666,KL_PANCH_0666,Purapuzhah,പുറപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,9.86897,76.65981,relation/11377748
+VIL_0667,KL_PANCH_0667,Manakkadh,മണക്കാട് ഗ്രാമപഞ്ചായത്ത്,9.90194,76.66051,relation/11377767
+VIL_0668,KL_PANCH_0668,Edavettyh,ഇടവെട്ടി ഗ്രാമപഞ്ചായത്ത്,9.8901,76.74356,relation/11377768
+VIL_0669,KL_PANCH_0669,Kumaramangalamh,കുമാരമംഗലം ഗ്രാമപഞ്ചായത്ത്,9.93882,76.71753,relation/11377776
+VIL_0670,KL_PANCH_0670,Thodupuzha,തൊടുപുഴ നഗരസഭ,9.90565,76.71941,relation/11377788
+VIL_0671,KL_PANCH_0671,Chempuh,ചെമ്പ് ഗ്രാമപഞ്ചായത്ത്,9.81362,76.41039,relation/11378027
+VIL_0672,KL_PANCH_0672,Aroor,അരൂർ,9.85599,76.30839,relation/11381176
+VIL_0673,KL_PANCH_0673,Arukutty,അരൂകുറ്റി,9.84508,76.33247,relation/11381318
+VIL_0674,KL_PANCH_0674,Perumbalam,പെരുമ്പളം ഗ്രാമപഞ്ചായത്ത്,9.85007,76.3557,relation/11381320
+VIL_0675,KL_PANCH_0675,Panavalli grama panchayat,പാണാവള്ളി ഗ്രാമപഞ്ചായത്ത്,9.82194,76.34243,relation/11381347
+VIL_0676,KL_PANCH_0676,Ezhupunna gram panchayat,എഴുപുന്ന ഗ്രാമപഞ്ചായത്ത്,9.82452,76.31018,relation/11381352
+VIL_0677,KL_PANCH_0677,Kodamthuruthu gram panchayat,കോടംതുരുത്ത് ഗ്രാമപഞ്ചായത്ത്,9.80409,76.30571,relation/11381431
+VIL_0678,KL_PANCH_0678,Thaikkattusseryh,തൈക്കാട്ടുശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,9.7864,76.34545,relation/11381441
+VIL_0679,KL_PANCH_0679,Kuthiyathodu grama panchayat,കുത്തിയോടോട്,9.7805,76.30602,relation/11381467
+VIL_0680,KL_PANCH_0680,Thuravoor grama panchayat,തുറവൂർ ഗ്രാമപഞ്ചായത്ത് (ആലപ്പുഴ ജില്ല),9.76433,76.30775,relation/11381474
+VIL_0681,KL_PANCH_0681,Chennam Pallipuram grama panchayat,ചേന്നംപള്ളിപ്പുറം ഗ്രാമപഞ്ചായത്ത്,9.7408,76.35396,relation/11381483
+VIL_0682,KL_PANCH_0682,Vayalarh,വയലാർ ഗ്രാമപഞ്ചായത്ത്,9.72581,76.33221,relation/11381522
+VIL_0683,KL_PANCH_0683,Pattanakkad,പട്ടണക്കാട് ഗ്രാമപഞ്ചായത്ത്,9.73223,76.30186,relation/11381526
+VIL_0684,KL_PANCH_0684,Kadakarappally,കടക്കരപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.70267,76.30389,relation/11383528
+VIL_0685,KL_PANCH_0685,Cherthala south,ചേർത്തല തെക്ക് ഗ്രാമപഞ്ചായത്ത്,9.66582,76.30615,relation/11383536
+VIL_0686,KL_PANCH_0686,Cherthala,ചേർത്തല,9.68666,76.34031,relation/11383590
+VIL_0687,KL_PANCH_0687,Thanneermukkam grama panchayat,തണ്ണീർമുക്കം ഗ്രാമപഞ്ചായത്ത്,9.665,76.35886,relation/11383772
+VIL_0688,KL_PANCH_0688,Muhamma gram panchayat,മുഹമ്മ ഗ്രാമപഞ്ചായത്ത്,9.62376,76.35969,relation/11383783
+VIL_0689,KL_PANCH_0689,Kanjikuzhi grama panchayat,"കഞ്ഞിക്കുഴി ഗ്രാമപഞ്ചായത്ത്, ആലപ്പുഴ ജില്ല",9.62577,76.34635,relation/11383793
+VIL_0690,KL_PANCH_0690,Mararikulam North,മാരാരിക്കുളം വടക്ക് ഗ്രാമപഞ്ചായത്ത്,9.62463,76.30878,relation/11383813
+VIL_0691,KL_PANCH_0691,Mararikulam South,മാരാരിക്കുളം തെക്ക് ഗ്രാമ പഞ്ചായത്ത്,9.55352,76.31219,relation/11383837
+VIL_0692,KL_PANCH_0692,Mannancherry,മണ്ണഞ്ചരി ഗ്രാമ പഞ്ചായത്ത്,9.56406,76.35245,relation/11383848
+VIL_0693,KL_PANCH_0693,Aryad,ആര്യാട്,9.52812,76.3332,relation/11383854
+VIL_0694,KL_PANCH_0694,Alappuzha,ആലപ്പുഴ,9.50913,76.34223,relation/11383873
+VIL_0695,KL_PANCH_0695,Punnapra North grama panchayat,പുന്നപ്ര വടക്ക് ഗ്രാമ പഞ്ചായത്ത്,9.45091,76.34719,relation/11383926
+VIL_0696,KL_PANCH_0696,Punnapra South grama panchayat,പുന്നപ്ര തെക്ക് ഗ്രാമ പഞ്ചായത്ത്,9.43031,76.35017,relation/11383927
+VIL_0697,KL_PANCH_0697,Ambalapuzha North,അമ്പലപ്പുഴ വടക്ക്,9.40622,76.35626,relation/11383964
+VIL_0698,KL_PANCH_0698,Ambalapuzha South,അമ്പലപ്പുഴ തെക്ക്,9.38031,76.37215,relation/11383977
+VIL_0699,KL_PANCH_0699,Purakkad,പുറക്കാട് ഗ്രാമ പഞ്ചായത്ത്,9.3346,76.3791,relation/11384001
+VIL_0700,KL_PANCH_0700,Kainakari gram panchayat,കൈനകരി ഗ്രാമപഞ്ചായത്ത്,9.48251,76.39072,relation/11384353
+VIL_0701,KL_PANCH_0701,Pulinkunnu grama panchayat,പുളിങ്കുന്ന് ഗ്രാമപഞ്ചായത്ത്,9.46335,76.43219,relation/11384361
+VIL_0702,KL_PANCH_0702,Kavalam gram panchayat,കാവാലം ഗ്രാമപഞ്ചായത്ത്,9.48068,76.45811,relation/11384376
+VIL_0703,KL_PANCH_0703,Neelamperoor gram panchayat,നീലംപേരൂർ ഗ്രാമപഞ്ചായത്ത്,9.47983,76.48218,relation/11384381
+VIL_0704,KL_PANCH_0704,Nedumudi village panchayat,നെടുമുടി ഗ്രാമപഞ്ചായത്ത്,9.43648,76.39356,relation/11384402
+VIL_0705,KL_PANCH_0705,Champakulamh,ചമ്പക്കുളം ഗ്രാമപഞ്ചായത്ത്,9.42411,76.42886,relation/11384406
+VIL_0706,KL_PANCH_0706,Ramankari,രാമങ്കരി ഗ്രാമപഞ്ചായത്ത്,9.41462,76.46662,relation/11384413
+VIL_0707,KL_PANCH_0707,Veliyanadu grama panchayat,വെളിയനാട് ഗ്രാമപഞ്ചായത്ത്,9.44134,76.48219,relation/11384421
+VIL_0708,KL_PANCH_0708,Muttar,മുട്ടാർ ഗ്രാമപഞ്ചായത്ത്,9.40497,76.49058,relation/11384529
+VIL_0709,KL_PANCH_0709,Thakazhy,തകഴി ഗ്രാമ പഞ്ചായത്ത്,9.36735,76.42543,relation/11384559
+VIL_0710,KL_PANCH_0710,Edathwa grama panchayat,എടത്വ ഗ്രാമപഞ്ചായത്ത്,9.36897,76.46614,relation/11384570
+VIL_0711,KL_PANCH_0711,Thalavady,തലവടി ഗ്രാമപഞ്ചായത്ത്,9.36731,76.49438,relation/11384575
+VIL_0712,KL_PANCH_0712,Veeyapuramh,വീയപുരം ഗ്രാമപഞ്ചായത്ത്,9.31602,76.47178,relation/11384615
+VIL_0713,KL_PANCH_0713,Cheruthanah,ചെറുതന ഗ്രാമപഞ്ചായത്ത്,9.32022,76.44692,relation/11384634
+VIL_0714,KL_PANCH_0714,Karuvattah,കരുവാറ്റ ഗ്രാമപഞ്ചായത്ത്,9.30971,76.42097,relation/11384640
+VIL_0715,KL_PANCH_0715,Trikkunnappuzha grama panchayath,തൃക്കുന്നപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,9.26726,76.40872,relation/11384647
+VIL_0716,KL_PANCH_0716,Kumarapuram gram panchayat,കുമാരപുരം ഗ്രാമപഞ്ചായത്ത്,9.27985,76.42926,relation/11384649
+VIL_0717,KL_PANCH_0717,Haripad,ഹരിപ്പാട്,9.28555,76.46027,relation/11384687
+VIL_0718,KL_PANCH_0718,Pallippadu panchayat,പള്ളിപ്പാട്,9.27404,76.48409,relation/11384696
+VIL_0719,KL_PANCH_0719,Karthikapally gram panchayat,കാർത്തികപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.25618,76.43412,relation/11477839
+VIL_0720,KL_PANCH_0720,Arattupuzha,ആറാട്ടുപുഴ,9.19107,76.44163,relation/11477849
+VIL_0721,KL_PANCH_0721,Chingoli gram panchayat,ചിങ്ങോലി ഗ്രാമപഞ്ചായത്ത്,9.24718,76.45417,relation/11477926
+VIL_0722,KL_PANCH_0722,Muthukulam gram panchayat,മുതുകുളം ഗ്രാമപഞ്ചായത്ത്,9.21502,76.45967,relation/11477969
+VIL_0723,KL_PANCH_0723,Kandalloor,കണ്ടല്ലൂർ,9.1719,76.46888,relation/11477972
+VIL_0724,KL_PANCH_0724,Cheppad,ചേപ്പാട് ഗ്രാമപഞ്ചായത്ത്,9.24474,76.4808,relation/11477983
+VIL_0725,KL_PANCH_0725,Pathiyoor gram panchayat,പത്തിയൂർ ഗ്രാമപഞ്ചായത്ത്,9.2093,76.48705,relation/11477992
+VIL_0726,KL_PANCH_0726,Kayamkulam,കായംകുളം,9.16908,76.50656,relation/11478008
+VIL_0727,KL_PANCH_0727,Devikulangara,ദേവികുളങ്ങര ഗ്രാമപഞ്ചായത്ത്,9.14297,76.48958,relation/11478041
+VIL_0728,KL_PANCH_0728,Krishnapuram Gram panchayat,കൃഷ്ണപുരം ഗ്രാമപഞ്ചായത്ത്,9.15282,76.5238,relation/11478053
+VIL_0729,KL_PANCH_0729,Mannar grama panchayat,മാന്നാർ ഗ്രാമപഞ്ചായത്ത്,9.30994,76.52616,relation/11478064
+VIL_0730,KL_PANCH_0730,Budhanoor,ബുധനൂർ ഗ്രാമപഞ്ചായത്ത്,9.30098,76.55922,relation/11478108
+VIL_0731,KL_PANCH_0731,Thiruvnavandoor,തിരുവൻവണ്ടൂർ ഗ്രാമപഞ്ചായത്ത്,9.3447,76.58687,relation/11478351
+VIL_0732,KL_PANCH_0732,Pandanad grama panchayat,പാണ്ടനാട് ഗ്രാമപഞ്ചായത്ത്,9.32722,76.57875,relation/11478388
+VIL_0733,KL_PANCH_0733,Chengannur,ചെങ്ങന്നൂർ,9.32083,76.61859,relation/11478394
+VIL_0734,KL_PANCH_0734,Mulakkuzha grama panchayat,മുളക്കുഴ ഗ്രാമപഞ്ചായത്ത്,9.28517,76.63979,relation/11478406
+VIL_0735,KL_PANCH_0735,Ala,ആല,9.28801,76.60732,relation/11478413
+VIL_0736,KL_PANCH_0736,Puliyoor panchayath,പുലിയൂർ ഗ്രാമപഞ്ചായത്ത്,9.29963,76.58794,relation/11478435
+VIL_0737,KL_PANCH_0737,Cheriyanadu panchayat,ചെറിയനാട് ഗ്രാമപഞ്ചായത്ത്,9.27386,76.59215,relation/11478442
+VIL_0738,KL_PANCH_0738,Venmony,വെണ്മണി,9.25209,76.62668,relation/11478466
+VIL_0739,KL_PANCH_0739,Chennithala Thripperumthura gram panchayat,ചെന്നിത്തല-തൃപ്പെരുന്തുറ ഗ്രാമപഞ്ചായത്ത്,9.27696,76.51961,relation/11478467
+VIL_0740,KL_PANCH_0740,Chettikulangara,ചെട്ടികുളങ്ങര ഗ്രാമപഞ്ചായത്ത്,9.23193,76.51795,relation/11478897
+VIL_0741,KL_PANCH_0741,Mavelikkara,മാവേലിക്കര,9.24692,76.54044,relation/11478901
+VIL_0742,KL_PANCH_0742,Thazhakkara grama panchayat,തഴക്കര ഗ്രാമപഞ്ചായത്ത്,9.23652,76.58147,relation/11478911
+VIL_0743,KL_PANCH_0743,Mavelikkara Thekkakkara,മാവേലിക്കര തെക്കേക്കര ഗ്രാമപഞ്ചായത്ത്,9.21576,76.55538,relation/11478914
+VIL_0744,KL_PANCH_0744,Bharanikkavu Gram,ഭരണിക്കാവ് ഗ്രാമപഞ്ചായത്ത്,9.17714,76.55784,relation/11478922
+VIL_0745,KL_PANCH_0745,Vallikkunnam grama panchayat,വള്ളിക്കുന്നം ഗ്രാമപഞ്ചായത്ത്,9.14121,76.57365,relation/11478926
+VIL_0746,KL_PANCH_0746,Thamarakkulamh,താമരക്കുളം ഗ്രാമപഞ്ചായത്ത്,9.158,76.59712,relation/11478937
+VIL_0747,KL_PANCH_0747,Palamel gram panchayat,പാലമേൽ ഗ്രാമപഞ്ചായത്ത്,9.18218,76.64982,relation/11478938
+VIL_0748,KL_PANCH_0748,Nooranadu grama panchayat,നൂറനാട് ഗ്രാമപഞ്ചായത്ത്,9.1992,76.62702,relation/11478944
+VIL_0749,KL_PANCH_0749,Chunakkara grama panchayat,ചുനക്കര ഗ്രാമപഞ്ചായത്ത്,9.19322,76.59143,relation/11478952
+VIL_0750,KL_PANCH_0750,Velloor,വെള്ളൂര്‍ ഗ്രാമ പഞ്ചായത്ത്,9.81436,76.4541,relation/11479965
+VIL_0751,KL_PANCH_0751,Mulakkulamh,മുളക്കുളം ഗ്രാമപഞ്ചായത്ത്,9.81078,76.49174,relation/11479978
+VIL_0752,KL_PANCH_0752,Njeezhoor,ഞീഴൂർ ഗ്രാമപഞ്ചായത്ത്,9.79033,76.52802,relation/11480016
+VIL_0753,KL_PANCH_0753,Maravanthuruthu,മറവൻതുരുത്ത് ഗ്രാമപഞ്ചായത്ത്,9.79344,76.41269,relation/11480032
+VIL_0754,KL_PANCH_0754,Udayanapuram,ഉദയനാപുരം,9.76721,76.41175,relation/11480034
+VIL_0755,KL_PANCH_0755,Vaikom,വൈക്കം,9.75155,76.39901,relation/11480040
+VIL_0756,KL_PANCH_0756,Thalayolaparambuh,തലയോലപ്പറമ്പ് ഗ്രാമപഞ്ചായത്ത്,9.77685,76.44885,relation/11480049
+VIL_0757,KL_PANCH_0757,Kaduthuruthy,കടുത്തുരുത്തി,9.76546,76.49237,relation/11480067
+VIL_0758,KL_PANCH_0758,Manjoorh,മാഞ്ഞൂർ ഗ്രാമപഞ്ചായത്ത്,9.72932,76.50614,relation/11480068
+VIL_0759,KL_PANCH_0759,Kallara Grampanchayat,കല്ലറ ഗ്രാമപഞ്ചായത്ത് (കോട്ടയം),9.71591,76.4692,relation/11480070
+VIL_0760,KL_PANCH_0760,TV Puram,ടി.വി. പുരം ഗ്രാമപഞ്ചായത്ത്,9.71089,76.39981,relation/11480077
+VIL_0761,KL_PANCH_0761,Thalayazhamh,തലയാഴം ഗ്രാമപഞ്ചായത്ത്,9.71818,76.4173,relation/11480087
+VIL_0762,KL_PANCH_0762,Vechoor Grampanchayat,വെച്ചൂർ ഗ്രാമപഞ്ചായത്ത്,9.67171,76.43439,relation/11480090
+VIL_0763,KL_PANCH_0763,Veliyannoor Grampanchayath,വെളിയന്നൂർ ഗ്രാമപഞ്ചായത്ത്,9.82625,76.61383,relation/11481083
+VIL_0764,KL_PANCH_0764,Uzhavoor,ഉഴവൂർ,9.79639,76.60152,relation/11481086
+VIL_0765,KL_PANCH_0765,Ramapuramh,രാമപുരം ഗ്രാമപഞ്ചായത്ത്,9.79704,76.65523,relation/11481104
+VIL_0766,KL_PANCH_0766,Kadanaduh,കടനാട് ഗ്രാമപഞ്ചായത്ത്,9.78584,76.71309,relation/11481267
+VIL_0767,KL_PANCH_0767,Melukavuh,മേലുകാവ് ഗ്രാമപഞ്ചായത്ത്,9.7638,76.76584,relation/11481271
+VIL_0768,KL_PANCH_0768,Moonnilavuh,മൂന്നിലവ് ഗ്രാമപഞ്ചായത്ത്,9.75973,76.79367,relation/11481278
+VIL_0769,KL_PANCH_0769,Thalappalamh,തലപ്പലം ഗ്രാമപഞ്ചായത്ത്,9.7147,76.75445,relation/11481283
+VIL_0770,KL_PANCH_0770,Bharananganamh,ഭരണങ്ങാനം ഗ്രാമപഞ്ചായത്ത്,9.7389,76.72009,relation/11481288
+VIL_0771,KL_PANCH_0771,Pala,പാല,9.71375,76.68532,relation/11481298
+VIL_0772,KL_PANCH_0772,Karoor Grampanchayath,കരൂർ ഗ്രാമപഞ്ചായത്ത്,9.74894,76.66391,relation/11481308
+VIL_0773,KL_PANCH_0773,Marangattupallyh,മരങ്ങാട്ടുപിള്ളി ഗ്രാമപഞ്ചായത്ത്,9.76345,76.59675,relation/11481319
+VIL_0774,KL_PANCH_0774,Kuravilangaduh,കുറവിലങ്ങാട് ഗ്രാമപഞ്ചായത്ത്,9.7522,76.56044,relation/11481341
+VIL_0775,KL_PANCH_0775,Kanakkaryh,കാണക്കാരി ഗ്രാമപഞ്ചായത്ത്,9.70347,76.56024,relation/11481359
+VIL_0776,KL_PANCH_0776,Kadaplamattomh,കടപ്ലാമറ്റം ഗ്രാമപഞ്ചായത്ത്,9.72366,76.59755,relation/11481364
+VIL_0777,KL_PANCH_0777,Kidangoorh,കിടങ്ങൂർ ഗ്രാമപഞ്ചായത്ത്,9.69435,76.6102,relation/11481367
+VIL_0778,KL_PANCH_0778,Mutholyh,മുത്തോലി ഗ്രാമപഞ്ചായത്ത്,9.70063,76.66055,relation/11481373
+VIL_0779,KL_PANCH_0779,Kozhuvanalh,കൊഴുവനാൽ ഗ്രാമപഞ്ചായത്ത്,9.66961,76.66898,relation/11481375
+VIL_0780,KL_PANCH_0780,Meenachil gramapanchayath,മീനച്ചിൽ ഗ്രാമപഞ്ചായത്ത്,9.68558,76.71434,relation/11481383
+VIL_0781,KL_PANCH_0781,Thidanaduh,തിടനാട് ഗ്രാമപഞ്ചായത്ത്,9.66119,76.77096,relation/11481385
+VIL_0782,KL_PANCH_0782,Poonjar Grampanchayath,പൂഞ്ഞാർ ഗ്രാമപഞ്ചായത്ത്,9.66768,76.81773,relation/11481402
+VIL_0783,KL_PANCH_0783,Poonjar Thekkekara,പൂഞ്ഞാർ തെക്കേക്കര ഗ്രാമപഞ്ചായത്ത്,9.65499,76.86292,relation/11481409
+VIL_0784,KL_PANCH_0784,Erattupetta,ഈരാറ്റുപേട്ട,9.69287,76.78132,relation/11481417
+VIL_0785,KL_PANCH_0785,Teekoyh,തീക്കോയി ഗ്രാമപഞ്ചായത്ത്,9.70159,76.84117,relation/11481506
+VIL_0786,KL_PANCH_0786,Thalanaduh,തലനാട് ഗ്രാമപഞ്ചായത്ത്,9.72229,76.83958,relation/11481508
+VIL_0787,KL_PANCH_0787,Arpookkara,ആർപ്പൂക്കര,9.63917,76.47885,relation/11481894
+VIL_0788,KL_PANCH_0788,Neendoor,നീണ്ടൂർ ഗ്രാമപഞ്ചായത്ത്,9.67685,76.4942,relation/11481899
+VIL_0789,KL_PANCH_0789,Athirampuzha,അതിരമ്പുഴ,9.66469,76.5343,relation/11481927
+VIL_0790,KL_PANCH_0790,Ettumanoor,ഏറ്റുമാനൂർ,9.65927,76.56774,relation/11481935
+VIL_0791,KL_PANCH_0791,Ayarkunnam,അയർക്കുന്നം,9.63011,76.59693,relation/11481938
+VIL_0792,KL_PANCH_0792,Akalakkunnam,അകലക്കുന്നം,9.63113,76.66567,relation/11481948
+VIL_0793,KL_PANCH_0793,Pallickathoduh,പള്ളിക്കത്തോട് ഗ്രാമപഞ്ചായത്ത്,9.59792,76.68386,relation/11481961
+VIL_0794,KL_PANCH_0794,Kooroppadah,കൂരോപ്പട ഗ്രാമപഞ്ചായത്ത്,9.59531,76.64889,relation/11481967
+VIL_0795,KL_PANCH_0795,Manarcaduh,മണര്‍കാട് ഗ്രാമ പഞ്ചായത്ത്,9.60159,76.60002,relation/11481976
+VIL_0796,KL_PANCH_0796,Pampadyh,പാമ്പാടി ഗ്രാമപഞ്ചായത്ത്,9.56816,76.63044,relation/11481979
+VIL_0797,KL_PANCH_0797,Meenadomh,മീനടം ഗ്രാമപഞ്ചായത്ത്,9.55426,76.61099,relation/11481981
+VIL_0798,KL_PANCH_0798,Puthuppallyh,പുതുപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.55515,76.58954,relation/11481992
+VIL_0799,KL_PANCH_0799,Panachikaduh,പനച്ചിക്കാട് ഗ്രാമപഞ്ചായത്ത്,9.54252,76.54099,relation/11482035
+VIL_0800,KL_PANCH_0800,Vijayapuramh,വിജയപുരം ഗ്രാമപഞ്ചായത്ത്,9.59969,76.55906,relation/11482050
+VIL_0801,KL_PANCH_0801,Aymanam,അയ്മനം,9.61849,76.47392,relation/11482068
+VIL_0802,KL_PANCH_0802,Kumarakomh,കുമരകം ഗ്രാമപഞ്ചായത്ത്,9.60426,76.43975,relation/11482079
+VIL_0803,KL_PANCH_0803,Kurichyh,കുറിച്ചി ഗ്രാമപഞ്ചായത്ത്,9.49589,76.52819,relation/11482309
+VIL_0804,KL_PANCH_0804,Vazhapally gram panchayat,വാഴപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.46846,76.54034,relation/11482311
+VIL_0805,KL_PANCH_0805,Changanassery,ചങ്ങനാശ്ശേരി,9.45098,76.54057,relation/11482339
+VIL_0806,KL_PANCH_0806,Paippaduh,പായിപ്പാട് ഗ്രാമപഞ്ചായത്ത്,9.42548,76.54765,relation/11482349
+VIL_0807,KL_PANCH_0807,Thrikkodithanamh,തൃക്കൊടിത്താനം ഗ്രാമപഞ്ചായത്ത്,9.45152,76.57485,relation/11482362
+VIL_0808,KL_PANCH_0808,Madappallyh,മാടപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.47985,76.59269,relation/11482371
+VIL_0809,KL_PANCH_0809,Vakathanamh,വാകത്താനം ഗ്രാമപഞ്ചായത്ത്,9.51563,76.59088,relation/11482374
+VIL_0810,KL_PANCH_0810,Karukachalh,കറുകച്ചാൽ ഗ്രാമപഞ്ചായത്ത്,9.49859,76.62305,relation/11482529
+VIL_0811,KL_PANCH_0811,Nedumkunnam Grampanchayath,നെടുംകുന്നം ഗ്രാമപഞ്ചായത്ത്,9.50228,76.66844,relation/11482556
+VIL_0812,KL_PANCH_0812,Kangazhah,കങ്ങഴ ഗ്രാമപഞ്ചായത്ത്,9.52249,76.69915,relation/11482563
+VIL_0813,KL_PANCH_0813,Vellavoor,വെള്ളാവൂര്‍ ഗ്രാമ പഞ്ചായത്ത്,9.48985,76.72133,relation/11482581
+VIL_0814,KL_PANCH_0814,Manimalah,മണിമല ഗ്രാമപഞ്ചായത്ത്,9.47033,76.78049,relation/11482586
+VIL_0815,KL_PANCH_0815,Erumely,എരുമേലി,9.47769,76.85667,relation/11482602
+VIL_0816,KL_PANCH_0816,Koruthodeh,കോരുത്തോട് ഗ്രാമപഞ്ചായത്ത്,9.4864,76.95647,relation/11482605
+VIL_0817,KL_PANCH_0817,Mundakayamh,മുണ്ടക്കയം ഗ്രാമപഞ്ചായത്ത്,9.50185,76.88176,relation/11482634
+VIL_0818,KL_PANCH_0818,Kanjirappally Grampanchayath,കാഞ്ഞിരപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.54263,76.80637,relation/11482637
+VIL_0819,KL_PANCH_0819,Parathoduh,പാറത്തോട് ഗ്രാമപഞ്ചായത്ത്,9.57309,76.83344,relation/11482639
+VIL_0820,KL_PANCH_0820,Koottickalh,കൂട്ടിക്കൽ ഗ്രാമപഞ്ചായത്ത്,9.61191,76.88661,relation/11482655
+VIL_0821,KL_PANCH_0821,Chirakkadavuh,ചിറക്കടവ് ഗ്രാമപഞ്ചായത്ത് ടൗൺ ഹാൾ,9.54479,76.75925,relation/11482665
+VIL_0822,KL_PANCH_0822,Elikkulamh,എലിക്കുളം ഗ്രാമപഞ്ചായത്ത്,9.6146,76.74247,relation/11482674
+VIL_0823,KL_PANCH_0823,Vazhoor Grampanchayat,വാഴൂർ ഗ്രാമപഞ്ചായത്ത്,9.54802,76.7091,relation/11482686
+VIL_0824,KL_PANCH_0824,Thiruvarppu,തിരുവാർപ്പ് ഗ്രാമപഞ്ചായത്ത്,9.58287,76.4838,relation/11482808
+VIL_0825,KL_PANCH_0825,Alappad,ആലപ്പാട്,9.06681,76.4975,relation/11483796
+VIL_0826,KL_PANCH_0826,Kulasekharapuram,കുലശേഖരപുരം ഗ്രാമ പഞ്ചായത്ത്,9.08772,76.51635,relation/11483797
+VIL_0827,KL_PANCH_0827,Oachira,ഓച്ചിറ,9.11839,76.52691,relation/11483798
+VIL_0828,KL_PANCH_0828,Clappana,ക്ലാപ്പന ഗ്രാമപഞ്ചായത്ത്,9.10868,76.49421,relation/11483799
+VIL_0829,KL_PANCH_0829,Karunagappally,കരുനാഗപ്പള്ളി,9.04821,76.52327,relation/11483805
+VIL_0830,KL_PANCH_0830,Thodiyoor,തൊടിയൂർ ഗ്രാമപഞ്ചായത്ത്,9.06433,76.56097,relation/11483806
+VIL_0831,KL_PANCH_0831,Thazhava,തഴവ ഗ്രാമ പഞ്ചായത്ത്,9.10102,76.56626,relation/11483807
+VIL_0832,KL_PANCH_0832,Panmanah,പന്‍മന ഗ്രാമ പഞ്ചായത്ത്,9.01723,76.5377,relation/11483810
+VIL_0833,KL_PANCH_0833,Thevalakkara,തേവലക്കര ഗ്രാമപഞ്ചായത്ത്,9.01017,76.57756,relation/11483811
+VIL_0834,KL_PANCH_0834,Chavarah,ചവറ ഗ്രാമപഞ്ചായത്ത്,8.9849,76.54293,relation/11483812
+VIL_0835,KL_PANCH_0835,Thekkumbhagamh,തെക്കുംഭാഗം ഗ്രാമപഞ്ചായത്ത്,8.96429,76.55751,relation/11483814
+VIL_0836,KL_PANCH_0836,Neendakara,നീണ്ടകര ഗ്രാമപഞ്ചായത്ത്,8.94988,76.53588,relation/11483815
+VIL_0837,KL_PANCH_0837,Sooranad North,ശൂരനാട് നോര്‍ത്ത് ഗ്രാമ പഞ്ചായത്ത്,9.1084,76.61835,relation/11483838
+VIL_0838,KL_PANCH_0838,Sooranad South,ശൂരനാട് സൌത്ത് ഗ്രാമ പഞ്ചായത്ത്,9.0765,76.6099,relation/11483841
+VIL_0839,KL_PANCH_0839,Sasthamcottah,ശാസ്താംകോട്ട ഗ്രാമപഞ്ചായത്ത്,9.04999,76.64121,relation/11483872
+VIL_0840,KL_PANCH_0840,Mynagappally,മൈനാഗപ്പള്ളി ഗ്രാമ പഞ്ചായത്ത്,9.03777,76.58684,relation/11483876
+VIL_0841,KL_PANCH_0841,West Kallada,പടിഞ്ഞാറെ കല്ലട ഗ്രാമപഞ്ചായത്ത്,9.02235,76.62334,relation/11483880
+VIL_0842,KL_PANCH_0842,East Kallada,കിഴക്കേ കല്ലട ഗ്രാമപഞ്ചായത്ത്,9.0033,76.64612,relation/11484254
+VIL_0843,KL_PANCH_0843,Munroethuruth,മണ്‍റോതുരുത്ത് ഗ്രാമ പഞ്ചായത്ത്,8.98975,76.60948,relation/11484255
+VIL_0844,KL_PANCH_0844,Perayamh,പേരയം ഗ്രാമപഞ്ചായത്ത്,8.98772,76.6495,relation/11484257
+VIL_0845,KL_PANCH_0845,Kundarah,കുണ്ടറ ഗ്രാമപഞ്ചായത്ത്,8.98125,76.67874,relation/11484260
+VIL_0846,KL_PANCH_0846,Thrikkaruvah,തൃക്കരുവ ഗ്രാമപഞ്ചായത്ത്,8.94218,76.59096,relation/11484261
+VIL_0847,KL_PANCH_0847,Panayamh,പനയം ഗ്രാമപഞ്ചായത്ത്,8.94757,76.61807,relation/11484263
+VIL_0848,KL_PANCH_0848,Perinadh,പെരിനാട് ഗ്രാമപഞ്ചായത്ത്,8.95173,76.64231,relation/11484264
+VIL_0849,KL_PANCH_0849,Elampalloor,ഇളംപള്ളൂർ,8.94647,76.68225,relation/11484265
+VIL_0850,KL_PANCH_0850,Kottamkara,കൊറ്റങ്കര ഗ്രാമ പഞ്ചായത്ത്,8.91947,76.65742,relation/11484268
+VIL_0851,KL_PANCH_0851,Thrikkovilvattom,തൃക്കോവിൽവട്ടം ഗ്രാമപഞ്ചായത്ത്,8.89593,76.65793,relation/11484272
+VIL_0852,KL_PANCH_0852,Nedumbanah,നെടുമ്പന ഗ്രാമപഞ്ചായത്ത്,8.90928,76.70124,relation/11484284
+VIL_0853,KL_PANCH_0853,Adichanalloor,ആദിച്ചനല്ലൂർ,8.87359,76.7018,relation/11484288
+VIL_0854,KL_PANCH_0854,Mayyanad,മയ്യനാട് ഗ്രാമ പഞ്ചായത്ത്,8.85426,76.6482,relation/11484292
+VIL_0855,KL_PANCH_0855,Paravoor,പരവൂർ,8.81822,76.6719,relation/11484297
+VIL_0856,KL_PANCH_0856,Poothakkulamh,പൂതക്കുളം ഗ്രാമപഞ്ചായത്ത്,8.80787,76.69564,relation/11484298
+VIL_0857,KL_PANCH_0857,Chirakkarah,ചിറക്കര ഗ്രാമപഞ്ചായത്ത്,8.83258,76.71602,relation/11484303
+VIL_0858,KL_PANCH_0858,Chathanoor Grampanchayat,ചാത്തന്നൂർ ഗ്രാമപഞ്ചായത്ത്,8.85908,76.71453,relation/11484334
+VIL_0859,KL_PANCH_0859,Kalluvaathukkalh,കല്ലുവാതുക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.83454,76.75168,relation/11484340
+VIL_0860,KL_PANCH_0860,Kulakkadah,കുളക്കട ഗ്രാമപഞ്ചായത്ത്,9.05488,76.74059,relation/11486151
+VIL_0861,KL_PANCH_0861,Mylomh,മൈലം ഗ്രാമപഞ്ചായത്ത്,9.03513,76.775,relation/11486839
+VIL_0862,KL_PANCH_0862,Neduvathoor,നെടുവത്തൂര്‍ ഗ്രാമ പഞ്ചായത്ത്,9.00827,76.73371,relation/11486841
+VIL_0863,KL_PANCH_0863,Pavithreswaramh,പവിത്രേശ്വരം ഗ്രാമപഞ്ചായത്ത്,9.02955,76.69996,relation/11486854
+VIL_0864,KL_PANCH_0864,Ezhukoneh,എഴുകോൺ ഗ്രാമപഞ്ചായത്ത്,8.98409,76.71538,relation/11486857
+VIL_0865,KL_PANCH_0865,Kottarakara,കൊട്ടാരക്കര,8.99067,76.77328,relation/11486862
+VIL_0866,KL_PANCH_0866,Melilah,മേലില ഗ്രാമപഞ്ചായത്ത്,9.00587,76.82683,relation/11486866
+VIL_0867,KL_PANCH_0867,Vettikavalah,വെട്ടിക്കവല ഗ്രാമപഞ്ചായത്ത്,8.98409,76.83631,relation/11486868
+VIL_0868,KL_PANCH_0868,Ummannoorh,ഉമ്മന്നൂർ ഗ്രാമപഞ്ചായത്ത്,8.95085,76.81172,relation/11486870
+VIL_0869,KL_PANCH_0869,Kareeprah,കരീപ്ര ഗ്രാമപഞ്ചായത്ത്,8.9486,76.72444,relation/11486871
+VIL_0870,KL_PANCH_0870,Veliyamh,വെളിയം ഗ്രാമപഞ്ചായത്ത്,8.93653,76.76952,relation/11486872
+VIL_0871,KL_PANCH_0871,Elamadu,എലമാട് ഗ്രാമപഞ്ചായത്ത്,8.90024,76.81696,relation/11486877
+VIL_0872,KL_PANCH_0872,Pooyappallyh,പൂയപ്പള്ളി ഗ്രാമ പഞ്ചായത്ത്,8.89312,76.75716,relation/11486893
+VIL_0873,KL_PANCH_0873,Velinalloor,വെളിനല്ലൂര്‍ ഗ്രാമ പഞ്ചായത്ത്,8.87906,76.79614,relation/11486896
+VIL_0874,KL_PANCH_0874,Chadayamangalamh,ചടയമംഗലം ഗ്രാമപഞ്ചായത്ത്,8.85994,76.85817,relation/11486907
+VIL_0875,KL_PANCH_0875,Nilamel,നിലമേൽ ഗ്രാമപഞ്ചായത്ത്,8.83017,76.86997,relation/11486911
+VIL_0876,KL_PANCH_0876,Ittiva,ഇട്ടിവ,8.87549,76.91704,relation/11486913
+VIL_0877,KL_PANCH_0877,Kadakkalh,കടയ്ക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.83555,76.91733,relation/11486917
+VIL_0878,KL_PANCH_0878,Kummilh,കുമ്മിൾ ഗ്രാമപഞ്ചായത്ത്,8.79733,76.92467,relation/11486919
+VIL_0879,KL_PANCH_0879,Chitharah,ചിതറ ഗ്രാമപഞ്ചായത്ത്,8.80477,76.98317,relation/11486920
+VIL_0880,KL_PANCH_0880,Pattazhih,പട്ടാഴി ഗ്രാമപഞ്ചായത്ത്,9.07417,76.81091,relation/11487791
+VIL_0881,KL_PANCH_0881,Talavoor,തലവൂർ ഗ്രാമപഞ്ചായത്ത്,9.05482,76.85251,relation/11487809
+VIL_0882,KL_PANCH_0882,Vilakkudy,വിളക്കുടി ഗ്രാമ പഞ്ചായത്ത്,9.02979,76.88155,relation/11487814
+VIL_0883,KL_PANCH_0883,Pathanapuramh,പത്തനാപുരം ഗ്രാമപഞ്ചായത്ത്,9.09509,76.87775,relation/11487821
+VIL_0884,KL_PANCH_0884,Piravanthur,പിറവന്തൂർ ഗ്രാമപഞ്ചായത്ത്,9.08633,76.94006,relation/11487823
+VIL_0885,KL_PANCH_0885,Punalur,പുനലൂർ,9.01223,76.93109,relation/11487840
+VIL_0886,KL_PANCH_0886,Karavaloorh,കരവാളൂർ ഗ്രാമപഞ്ചായത്ത്,8.98234,76.91834,relation/11487841
+VIL_0887,KL_PANCH_0887,Edamulakkalh,ഇടമുളയ്ക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.92631,76.87035,relation/11487842
+VIL_0888,KL_PANCH_0888,Anchal,അഞ്ചൽ,8.94845,76.91347,relation/11487847
+VIL_0889,KL_PANCH_0889,Yeroorh,ഏരൂർ ഗ്രാമപഞ്ചായത്ത്,8.94568,76.95805,relation/11487870
+VIL_0890,KL_PANCH_0890,Alayaman,അലയമൺ,8.89514,76.96041,relation/11487879
+VIL_0891,KL_PANCH_0891,Kulathupuzhah,കുളത്തുപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,8.92416,77.07838,relation/11487890
+VIL_0892,KL_PANCH_0892,Thenmalah,തെന്മല ഗ്രാമപഞ്ചായത്ത്,9.0344,77.03577,relation/11487895
+VIL_0893,KL_PANCH_0893,Aryankavu,ആര്യങ്കാവ്,9.04058,77.11858,relation/11487896
+VIL_0894,KL_PANCH_0894,Poruvazhih,പോരുവഴി ഗ്രാമപഞ്ചായത്ത്,9.0895,76.65438,relation/11487984
+VIL_0895,KL_PANCH_0895,Pattazhi Vadakkekarah,പട്ടാഴി വടക്കേക്കര ഗ്രാമപഞ്ചായത്ത്,9.09032,76.81424,relation/11488047
+VIL_0896,KL_PANCH_0896,Kunnathoor,കുന്നത്തൂർ ഗ്രാമപഞ്ചായത്ത്,9.06652,76.68754,relation/11488057
+VIL_0897,KL_PANCH_0897,Pallikkal (Thiruvananthapuram),പള്ളിയ്ക്കൽ (തിരുവനന്തപുരം),8.83608,76.80048,relation/11490199
+VIL_0898,KL_PANCH_0898,Madavoor Grampanchayat,മടവൂർ ഗ്രാമപഞ്ചായത്ത് (തിരുവനന്തപുരം),8.81427,76.81809,relation/11490222
+VIL_0899,KL_PANCH_0899,Navaikulamh,നാവായിക്കുളം ഗ്രാമപഞ്ചായത്ത്,8.78806,76.78848,relation/11490240
+VIL_0900,KL_PANCH_0900,Karavaramh,കരവാരം ഗ്രാമപഞ്ചായത്ത്,8.74134,76.82221,relation/11490246
+VIL_0901,KL_PANCH_0901,Chemmaruthyh,ചെമ്മരുതി ഗ്രാമപഞ്ചായത്ത്,8.76074,76.7495,relation/11490258
+VIL_0902,KL_PANCH_0902,Elakamon,ഇലകമൺ,8.77912,76.71871,relation/11490260
+VIL_0903,KL_PANCH_0903,Edava,ഇടവ,8.76548,76.69217,relation/11490263
+VIL_0904,KL_PANCH_0904,Varkala,വർക്കല,8.74445,76.71459,relation/11490272
+VIL_0905,KL_PANCH_0905,Vettoorh,വെട്ടൂർ ഗ്രാമപഞ്ചായത്ത്,8.71592,76.73446,relation/11490278
+VIL_0906,KL_PANCH_0906,Cherunniyoor Grampanchayat,ചെറുന്നിയൂർ ഗ്രാമപഞ്ചായത്ത്,8.7214,76.75377,relation/11490282
+VIL_0907,KL_PANCH_0907,Ottoor Grampachayat,ഒറ്റൂർ ഗ്രാമപഞ്ചായത്ത്,8.73874,76.77498,relation/11490286
+VIL_0908,KL_PANCH_0908,Manampoor,മണമ്പൂർ ഗ്രാമപഞ്ചായത്ത്,8.72107,76.77601,relation/11490288
+VIL_0909,KL_PANCH_0909,Kilimanoorh,കിളിമാനൂർ ഗ്രാമപഞ്ചായത്ത്,8.77625,76.86154,relation/11490437
+VIL_0910,KL_PANCH_0910,Pazhayakunnummelh,പഴയകുന്നുമ്മേൽ ഗ്രാമപഞ്ചായത്ത്,8.78534,76.89322,relation/11490444
+VIL_0911,KL_PANCH_0911,Pulimathh,പുളിമാത്ത് ഗ്രാമപഞ്ചായത്ത്,8.74187,76.89022,relation/11490447
+VIL_0912,KL_PANCH_0912,Nagaroor Grampanchayat,നഗരൂർ ഗ്രാമപഞ്ചായത്ത്,8.75356,76.84092,relation/11490457
+VIL_0913,KL_PANCH_0913,Mudakkalh,മുദാക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.69169,76.86044,relation/11490461
+VIL_0914,KL_PANCH_0914,Attingal,ആറ്റിങ്ങൽ,8.69662,76.81824,relation/11490465
+VIL_0915,KL_PANCH_0915,Kizhuvilam,കീഴുവിലം ഗ്രാമപഞ്ചായത്ത്,8.66927,76.80757,relation/11490488
+VIL_0916,KL_PANCH_0916,Vakkomh,വക്കം ഗ്രാമ പഞ്ചായത്ത്,8.68992,76.76038,relation/11490492
+VIL_0917,KL_PANCH_0917,Chirayinkeezhuh,ചിറയിൻകീഴ് ഗ്രാമപഞ്ചായത്ത്,8.65539,76.78467,relation/11490499
+VIL_0918,KL_PANCH_0918,Azhoor,അഴൂർ,8.63733,76.8114,relation/11490508
+VIL_0919,KL_PANCH_0919,Kadakkavoorh,കടയ്ക്കാവൂർ ഗ്രാമപഞ്ചായത്ത്,8.68728,76.78409,relation/11490521
+VIL_0920,KL_PANCH_0920,Anjuthengu,അഞ്ചുതെങ്ങ്,8.68733,76.75004,relation/11490802
+VIL_0921,KL_PANCH_0921,Mangalapuramh,മംഗലപുരം ഗ്രാമപഞ്ചായത്ത്,8.63636,76.8419,relation/11490835
+VIL_0922,KL_PANCH_0922,Pothencodeh,പോത്തൻകോട് ഗ്രാമപഞ്ചായത്ത്,8.62934,76.88129,relation/11490841
+VIL_0923,KL_PANCH_0923,Andoorkonam,അണ്ടൂർക്കോണം,8.60784,76.85632,relation/11490871
+VIL_0924,KL_PANCH_0924,Kadinamkulam,കഠിനംകുളം,8.5838,76.83824,relation/11490878
+VIL_0925,KL_PANCH_0925,Pangodeh,പാങ്ങോട് ഗ്രാമപഞ്ചായത്ത്,8.75077,76.9881,relation/11490932
+VIL_0926,KL_PANCH_0926,Peringamalah,പെരിങ്ങമ്മല ഗ്രാമപഞ്ചായത്ത്,8.73337,77.07595,relation/11490938
+VIL_0927,KL_PANCH_0927,Vithurah,വിതുര ഗ്രാമപഞ്ചായത്ത്,8.67915,77.09534,relation/11490940
+VIL_0928,KL_PANCH_0928,Aryanad,ആര്യനാട്,8.60388,77.10671,relation/11490943
+VIL_0929,KL_PANCH_0929,Vellanad,വെള്ളനാട്,8.56643,77.0509,relation/11490955
+VIL_0930,KL_PANCH_0930,Uzhamalakkal,ഉഴമലയ്ക്കൽ,8.60993,77.05961,relation/11490956
+VIL_0931,KL_PANCH_0931,Tholicodeh,തൊളിക്കോട് ഗ്രാമപഞ്ചായത്ത്,8.64403,77.06271,relation/11490961
+VIL_0932,KL_PANCH_0932,Nanniyodeh,നന്ദിയോട് ഗ്രാമപഞ്ചായത്ത്,8.70678,77.02217,relation/11490966
+VIL_0933,KL_PANCH_0933,Vamanapuramh,വാമനപുരം ഗ്രാമപഞ്ചായത്ത്,8.71901,76.92117,relation/11490983
+VIL_0934,KL_PANCH_0934,Nellanadh,നെല്ലനാട് ഗ്രാമപഞ്ചായത്ത്,8.69558,76.90474,relation/11490991
+VIL_0935,KL_PANCH_0935,Pullamparah,പുല്ലമ്പാറ ഗ്രാമപഞ്ചായത്ത്,8.69074,76.94965,relation/11490994
+VIL_0936,KL_PANCH_0936,Manickalh,മാണിക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.65504,76.91362,relation/11490996
+VIL_0937,KL_PANCH_0937,Vembayam,വെമ്പായം ഗ്രാമപഞ്ചായത്ത്,8.62458,76.94149,relation/11491006
+VIL_0938,KL_PANCH_0938,Panavoor,പനവൂർ ഗ്രാമപഞ്ചായത്ത്,8.67466,76.99389,relation/11491011
+VIL_0939,KL_PANCH_0939,Anad,ആനാട്,8.6418,77.00449,relation/11491017
+VIL_0940,KL_PANCH_0940,Nedumangad,നെടുമങ്ങാട്,8.61349,77.00022,relation/11491027
+VIL_0941,KL_PANCH_0941,Karakulamh,കരകുളം ഗ്രാമപഞ്ചായത്ത്,8.57718,76.96822,relation/11491030
+VIL_0942,KL_PANCH_0942,Aruvikkara,അരുവിക്കര,8.56909,77.01625,relation/11491031
+VIL_0943,KL_PANCH_0943,Kuttichal Grampanchayat,കുറ്റിച്ചല്‍ ഗ്രാമപഞ്ചായത്ത്,8.57748,77.16882,relation/11492277
+VIL_0944,KL_PANCH_0944,Kallikkaduh,കള്ളിക്കാട് ഗ്രാമപഞ്ചായത്ത്,8.53782,77.17671,relation/11492287
+VIL_0945,KL_PANCH_0945,Amboori,അമ്പൂരി,8.51083,77.18022,relation/11492290
+VIL_0946,KL_PANCH_0946,Ottasekaramangalamh,ഒറ്റശേഖരമംഗലം ഗ്രാമപഞ്ചായത്ത്,8.49497,77.14167,relation/11492292
+VIL_0947,KL_PANCH_0947,Vellaradah,വെള്ളറട ഗ്രാമപഞ്ചായത്ത്,8.45238,77.18182,relation/11492294
+VIL_0948,KL_PANCH_0948,Aryancode,ആര്യങ്കോട്,8.47063,77.12975,relation/11492299
+VIL_0949,KL_PANCH_0949,Kattakadah,കാട്ടാക്കട ഗ്രാമപഞ്ചായത്ത്,8.49418,77.09083,relation/11492592
+VIL_0950,KL_PANCH_0950,Poovachalh,പൂവച്ചൽ ഗ്രാമപഞ്ചായത്ത്,8.53195,77.0897,relation/11492595
+VIL_0951,KL_PANCH_0951,Vilappil,വിളപ്പിൽ ഗ്രാമപഞ്ചായത്ത്,8.52311,77.03186,relation/11492598
+VIL_0952,KL_PANCH_0952,Vilavoorkkal,വിളവൂർക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.49676,77.01505,relation/11492600
+VIL_0953,KL_PANCH_0953,Maranalloor,മാറനെല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,8.46825,77.07504,relation/11492604
+VIL_0954,KL_PANCH_0954,Malayinkeezhu Grampanchayat,മലയിൻകീഴ് ഗ്രാമപഞ്ചായത്ത്,8.48545,77.0376,relation/11492632
+VIL_0955,KL_PANCH_0955,Pallichal,പള്ളിച്ചൽ ഗ്രാമപഞ്ചായത്ത്,8.4471,77.0281,relation/11492669
+VIL_0956,KL_PANCH_0956,Kalliyoorh,കല്ലിയൂർ ഗ്രാമപഞ്ചായത്ത്,8.43408,76.99789,relation/11492671
+VIL_0957,KL_PANCH_0957,Venganoor,വെങ്ങാനൂർ ഗ്രാമപഞ്ചായത്ത്,8.40329,77.00199,relation/11492679
+VIL_0958,KL_PANCH_0958,Kottukal,കോട്ടുക്കൽ ഗ്രാമപഞ്ചായത്ത്,8.37456,77.02827,relation/11492682
+VIL_0959,KL_PANCH_0959,Balaramapuramh,ബാലരാമപുരം ഗ്രാമപഞ്ചായത്ത്,8.42322,77.04817,relation/11492686
+VIL_0960,KL_PANCH_0960,Neyyattinkara,നെയ്യാറ്റിൻകര,8.4123,77.08587,relation/11492688
+VIL_0961,KL_PANCH_0961,"Athiyannur, Thiruvananthapuram",അതിയന്നൂർ ഗ്രാമപഞ്ചായത്ത്,8.39582,77.06226,relation/11492690
+VIL_0962,KL_PANCH_0962,Kanjiramkulamh,കാഞ്ഞിരംകുളം ഗ്രാമപഞ്ചായത്ത്,8.35491,77.04804,relation/11492698
+VIL_0963,KL_PANCH_0963,Thirupuramh,തിരുപുറം ഗ്രാമപഞ്ചായത്ത്,8.36079,77.07393,relation/11492702
+VIL_0964,KL_PANCH_0964,Poovar Grampanchayat,പൂവാർ ഗ്രാമപഞ്ചായത്ത്,8.33395,77.0753,relation/11492725
+VIL_0965,KL_PANCH_0965,Karumkulamh,കരുംകുളം ഗ്രാമപഞ്ചായത്ത്,8.33737,77.04726,relation/11492741
+VIL_0966,KL_PANCH_0966,Kulathoor Grampanchayat,കുളത്തൂർ ഗ്രാമപഞ്ചായത്ത്,8.32729,77.09351,relation/11492756
+VIL_0967,KL_PANCH_0967,Karodeh,കാരോട് ഗ്രാമപഞ്ചായത്ത്,8.3275,77.11746,relation/11492766
+VIL_0968,KL_PANCH_0968,Parassalah,പാറശാല,8.36057,77.14692,relation/11492768
+VIL_0969,KL_PANCH_0969,Chenkal,ചെങ്കൽ ഗ്രാമപഞ്ചായത്ത്,8.36284,77.10889,relation/11492781
+VIL_0970,KL_PANCH_0970,Kollayilh,കൊല്ലയിൽ ഗ്രാമപഞ്ചായത്ത്,8.39665,77.12993,relation/11492790
+VIL_0971,KL_PANCH_0971,Kunnathukal,കുന്നത്തുകാൽ ഗ്രാമപഞ്ചായത്ത്,8.42426,77.15403,relation/11492791
+VIL_0972,KL_PANCH_0972,Perumkadavilah,പെരുങ്കടവിള ഗ്രാമപഞ്ചായത്ത്,8.42655,77.12161,relation/11492796
+VIL_0973,KL_PANCH_0973,Niranamh,നിരണം ഗ്രാമപഞ്ചായത്ത്,9.34294,76.50855,relation/11495393
+VIL_0974,KL_PANCH_0974,Kadaprah,കടപ്ര ഗ്രാമപഞ്ചായത്ത്,9.34249,76.52542,relation/11495403
+VIL_0975,KL_PANCH_0975,Nedumpramh,നെടുമ്പ്രം ഗ്രാമപഞ്ചായത്ത്,9.36956,76.54006,relation/11495407
+VIL_0976,KL_PANCH_0976,Peringarah,പെരിങ്ങര ഗ്രാമപഞ്ചായത്ത്,9.39746,76.54206,relation/11495412
+VIL_0977,KL_PANCH_0977,Thiruvalla,തിരുവല്ല,9.38485,76.57262,relation/11495415
+VIL_0978,KL_PANCH_0978,Kuttoorh,കുറ്റൂർ ഗ്രാമപഞ്ചായത്ത്,9.36111,76.58914,relation/11495420
+VIL_0979,KL_PANCH_0979,Eraviperoor,ഇരവിപേരൂർ,9.36745,76.62132,relation/11495422
+VIL_0980,KL_PANCH_0980,Kaviyoorh,കവിയൂർ ഗ്രാമപഞ്ചായത്ത്,9.40498,76.61379,relation/11495428
+VIL_0981,KL_PANCH_0981,Kunnanthanamh,കുന്നന്താനം ഗ്രാമപഞ്ചായത്ത്,9.4436,76.61106,relation/11495433
+VIL_0982,KL_PANCH_0982,Kalloopparah,കല്ലൂപ്പാറ ഗ്രാമപഞ്ചായത്ത്,9.41412,76.64611,relation/11495441
+VIL_0983,KL_PANCH_0983,Anikkadu,ആനിക്കാട്,9.46402,76.67817,relation/11496501
+VIL_0984,KL_PANCH_0984,Mallappallyh,മല്ലപ്പള്ളി ഗ്രാമപഞ്ചായത്ത്,9.44288,76.66034,relation/11496505
+VIL_0985,KL_PANCH_0985,Puramattamh,പുറമറ്റം ഗ്രാമപഞ്ചായത്ത്,9.39931,76.66357,relation/11496512
+VIL_0986,KL_PANCH_0986,Ezhumattoorh,എഴുമറ്റൂർ ഗ്രാമപഞ്ചായത്ത്,9.41616,76.70593,relation/11496521
+VIL_0987,KL_PANCH_0987,Kottangalh,കോട്ടാങ്ങൽ ഗ്രാമപഞ്ചായത്ത്,9.44849,76.72312,relation/11496530
+VIL_0988,KL_PANCH_0988,Kottanadh,കൊറ്റനാട് ഗ്രാമപഞ്ചായത്ത്,9.42115,76.74912,relation/11496535
+VIL_0989,KL_PANCH_0989,Koipramh,കോയിപ്രം ഗ്രാമപഞ്ചായത്ത്,9.35655,76.66243,relation/11496537
+VIL_0990,KL_PANCH_0990,Thottappuzhasseryh,തോട്ടപ്പുഴശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,9.35377,76.69564,relation/11496539
+VIL_0991,KL_PANCH_0991,Ayiroor,അയിരൂർ,9.37286,76.73607,relation/11496549
+VIL_0992,KL_PANCH_0992,Cherukoleh,ചെറുകോൽ ഗ്രാമപഞ്ചായത്ത്,9.34044,76.76118,relation/11496553
+VIL_0993,KL_PANCH_0993,Rannih,റാന്നി ഗ്രാമപഞ്ചായത്ത്,9.34813,76.79484,relation/11496566
+VIL_0994,KL_PANCH_0994,Ranni Angadih,റാന്നി അങ്ങാടി ഗ്രാമ പഞ്ചായത്ത്,9.4001,76.77253,relation/11496569
+VIL_0995,KL_PANCH_0995,Ranni Pazhavangadih,റാന്നി പഴവങ്ങാടി ഗ്രാമ പഞ്ചായത്ത്,9.40646,76.80385,relation/11496576
+VIL_0996,KL_PANCH_0996,Naranammuzhih,നാറാണംമൂഴി ഗ്രാമപഞ്ചായത്ത്,9.40077,76.84271,relation/11496586
+VIL_0997,KL_PANCH_0997,Vechoochirah,വെച്ചൂച്ചിറ ഗ്രാമപഞ്ചായത്ത് ഓഫീസ്,9.43068,76.85546,relation/11496603
+VIL_0998,KL_PANCH_0998,Chittarh,ചിറ്റാര്‍ ഗ്രാമ പഞ്ചായത്ത്,9.31512,76.92349,relation/11498957
+VIL_0999,KL_PANCH_0999,Ranni Perunadu,റാന്നി പെരുനാട് ഗ്രാമ പഞ്ചായത്ത്,9.39338,76.92389,relation/11498969
+VIL_1000,KL_PANCH_1000,Vadasserikkarah,വടശ്ശേരിക്കര ഗ്രാമപഞ്ചായത്ത്,9.34013,76.83759,relation/11498970
+VIL_1001,KL_PANCH_1001,Mylaprah,മൈലപ്ര ഗ്രാമപഞ്ചായത്ത്,9.3125,76.79686,relation/11498980
+VIL_1002,KL_PANCH_1002,Malayalapuzhah,മലയാലപ്പുഴ ഗ്രാമപഞ്ചായത്ത്,9.28675,76.84403,relation/11498983
+VIL_1003,KL_PANCH_1003,Seethathodu,സീതത്തോട്,9.31622,77.12131,relation/11498988
+VIL_1004,KL_PANCH_1004,Aruvappulam,അരുവാപ്പുലം,9.16153,77.0516,relation/11499019
+VIL_1005,KL_PANCH_1005,Thannithoduh,തണ്ണിത്തോട് ഗ്രാമപഞ്ചായത്ത്,9.26444,76.94439,relation/11499022
+VIL_1006,KL_PANCH_1006,Kalanjoorh,കലഞ്ഞൂർ ഗ്രാമപഞ്ചായത്ത്,9.13567,76.88352,relation/11499023
+VIL_1007,KL_PANCH_1007,Pramadamh,പ്രമാടം ഗ്രാമപഞ്ചായത്ത്,9.22913,76.81428,relation/11499043
+VIL_1008,KL_PANCH_1008,Konnih,കോന്നി ഗ്രാമപഞ്ചായത്ത്,9.23221,76.86002,relation/11499050
+VIL_1009,KL_PANCH_1009,Vallikkoduh,വള്ളിക്കോട് ഗ്രാമപഞ്ചായത്ത്,9.22809,76.76809,relation/11499053
+VIL_1010,KL_PANCH_1010,Omalloorh,ഓമല്ലൂർ ഗ്രാമപഞ്ചായത്ത്,9.2444,76.76445,relation/11499055
+VIL_1011,KL_PANCH_1011,Pathanamthitta,പത്തനംതിട്ട,9.26505,76.79845,relation/11499059
+VIL_1012,KL_PANCH_1012,Naranganamh,നാരങ്ങാനം ഗ്രാമപഞ്ചായത്ത്,9.31436,76.7538,relation/11499062
+VIL_1013,KL_PANCH_1013,Elanthoor,ഇലന്തൂർ,9.28776,76.73953,relation/11499063
+VIL_1014,KL_PANCH_1014,Chenneerkarah,ചെന്നീർക്കര ഗ്രാമപഞ്ചായത്ത്,9.25451,76.73271,relation/11499070
+VIL_1015,KL_PANCH_1015,Kulanadah,കുളനട ഗ്രാമപഞ്ചായത്ത്,9.25087,76.68087,relation/11499114
+VIL_1016,KL_PANCH_1016,Mezhuvelyh,മെഴുവേലി ഗ്രാമപഞ്ചായത്ത്,9.26604,76.69989,relation/11499140
+VIL_1017,KL_PANCH_1017,Mallappuzhasseryh,മല്ലപ്പുഴശ്ശേരി ഗ്രാമപഞ്ചായത്ത്,9.30856,76.71241,relation/11499144
+VIL_1018,KL_PANCH_1018,Kozhancheryh,കോഴഞ്ചേരി ഗ്രാമപഞ്ചായത്ത്,9.3296,76.71726,relation/11499147
+VIL_1019,KL_PANCH_1019,Aranmula,ആറന്മുള,9.30995,76.67459,relation/11499151
+VIL_1020,KL_PANCH_1020,Pandalam,പന്തളം,9.21252,76.67777,relation/11499264
+VIL_1021,KL_PANCH_1021,Thumpamon Grampanchayat,തുമ്പമൺ ഗ്രാമപഞ്ചായത്ത്,9.21828,76.71194,relation/11499276
+VIL_1022,KL_PANCH_1022,Panthalam Thekkekkara Grampanchayat,പന്തളം തെക്കേക്കര ഗ്രാമപഞ്ചായത്ത്,9.19731,76.72941,relation/11499282
+VIL_1023,KL_PANCH_1023,Kodumonh,കൊടുമൺ ഗ്രാമപഞ്ചായത്ത്,9.17369,76.80333,relation/11499294
+VIL_1024,KL_PANCH_1024,Adoor,അടൂർ,9.16173,76.73945,relation/11499300
+VIL_1025,KL_PANCH_1025,Pallikkal Grampanchayat,പള്ളിയ്ക്കൽ (പത്തനംതിട്ട),9.14146,76.68159,relation/11499304
+VIL_1026,KL_PANCH_1026,Kadambanadh,കടമ്പനാട് ഗ്രാമപഞ്ചായത്ത്,9.10136,76.71077,relation/11499310
+VIL_1027,KL_PANCH_1027,Earathuh,ഏറത്ത് ഗ്രാമപഞ്ചായത്ത്,9.12236,76.73796,relation/11499343
+VIL_1028,KL_PANCH_1028,Ezhamkulamh,ഏഴംകുളം ഗ്രാമപഞ്ചായത്ത്,9.12866,76.77271,relation/11499346
+VIL_1029,KL_PANCH_1029,Enadimangalamh,ഏനാദിമംഗലം ഗ്രാമപഞ്ചായത്ത്,9.12948,76.80924,relation/11499354
+VIL_1030,KL_PANCH_1030,Edamalakkudy,ഇടമലക്കുടി,10.26189,77.06586,relation/12922470
+VIL_1031,KL_PANCH_1031,Marancherryh Boundary,,10.76329,75.9628,way/984913965

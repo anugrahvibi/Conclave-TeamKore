@@ -32,9 +32,14 @@ def main():
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
 
-    # 1. Phase 0
-    from mldev1.scripts.generate_synthetic_data import main as phase0_main
-    run_phase("Phase 0 — Environment & Data Setup", phase0_main)
+    # 1. Phase 0: Real Data Ingestion (with synthetic fallback)
+    geojson_path = "mldev1/data/raw/kerala.geojson"
+    if os.path.exists(geojson_path):
+        from mldev1.scripts.ingest_real_data import main as phase0_main
+        run_phase("Phase 0 — Real Kerala Data Ingestion (OSM & Open-Meteo)", phase0_main)
+    else:
+        from mldev1.scripts.generate_synthetic_data import main as phase0_main
+        run_phase("Phase 0 — Environment & Data Setup (Synthetic Fallback)", phase0_main)
 
     # 2. Phase 1
     from mldev1.models.idw_baseline import IDWBaselineModel
