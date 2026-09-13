@@ -1,0 +1,5 @@
+Variable,Baseline RMSE,Corrected RMSE,RMSE Improvement (%),Baseline MAE,Corrected MAE,MAE Improvement (%)
+Temp,3.746,1.701,54.6,3.054,1.101,63.9
+Rainfall,5.858,4.733,19.2,3.035,2.56,15.7
+Humidity,3.936,3.176,19.3,3.123,2.283,26.9
+Wind,1.702,1.489,12.5,1.307,1.098,16.0
