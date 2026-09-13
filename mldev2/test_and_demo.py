@@ -10,6 +10,7 @@ Run this to:
 import json
 from correction_and_advisory import (
     generate_mock_training_data,
+    load_training_data,
     CorrectionModel,
     AgroAdvisoryEngine,
     WeatherCorrectionAndAdvisory
@@ -24,6 +25,7 @@ def test_correction_model():
     
     # Generate data
     X, y = generate_mock_training_data(n_samples=200)
+    assert X.shape == (200, 6), f"Expected X shape (200, 6), got {X.shape}"
     
     # Train
     model = CorrectionModel()
@@ -32,19 +34,19 @@ def test_correction_model():
     # Predict on a few examples
     test_cases = [
         {
-            "name": "High elevation, far from water",
+            "name": "High elevation, far from water, forest",
             "forecast": {"temp_c": 25.0, "rain_mm": 5.0, "humidity_pct": 60},
-            "features": {"elevation_m": 400, "dist_to_water_km": 8.0}
+            "features": {"elevation_m": 400, "dist_to_water_km": 8.0, "land_cover": "forest"}
         },
         {
-            "name": "Low elevation, near water",
+            "name": "Low elevation, near water, agriculture",
             "forecast": {"temp_c": 25.0, "rain_mm": 5.0, "humidity_pct": 60},
-            "features": {"elevation_m": 100, "dist_to_water_km": 1.0}
+            "features": {"elevation_m": 100, "dist_to_water_km": 1.0, "land_cover": "agriculture"}
         },
         {
-            "name": "Very humid (bias toward overestimating rain)",
+            "name": "Very humid urban (bias toward overestimating rain)",
             "forecast": {"temp_c": 25.0, "rain_mm": 5.0, "humidity_pct": 85},
-            "features": {"elevation_m": 300, "dist_to_water_km": 5.0}
+            "features": {"elevation_m": 300, "dist_to_water_km": 5.0, "land_cover": "urban"}
         }
     ]
     
@@ -101,25 +103,25 @@ def test_full_pipeline():
         {
             "name": "Rice, seedling stage, dry spell",
             "forecast": {"temp_c": 28.0, "rain_mm": 0.5, "humidity_pct": 45},
-            "features": {"elevation_m": 150, "dist_to_water_km": 5.0},
+            "features": {"elevation_m": 150, "dist_to_water_km": 5.0, "land_cover": "agriculture"},
             "crop": "seedling"
         },
         {
             "name": "Wheat, flowering, rain coming",
             "forecast": {"temp_c": 22.0, "rain_mm": 25.0, "humidity_pct": 75},
-            "features": {"elevation_m": 300, "dist_to_water_km": 2.0},
+            "features": {"elevation_m": 300, "dist_to_water_km": 2.0, "land_cover": "agriculture"},
             "crop": "flowering"
         },
         {
             "name": "Chickpea, pod formation, heatwave",
             "forecast": {"temp_c": 35.0, "rain_mm": 1.0, "humidity_pct": 40},
-            "features": {"elevation_m": 200, "dist_to_water_km": 7.0},
+            "features": {"elevation_m": 200, "dist_to_water_km": 7.0, "land_cover": "barren"},
             "crop": "pod_formation"
         },
         {
             "name": "Mustard, early stage, frost risk",
             "forecast": {"temp_c": 3.0, "rain_mm": 2.0, "humidity_pct": 70},
-            "features": {"elevation_m": 400, "dist_to_water_km": 3.0},
+            "features": {"elevation_m": 400, "dist_to_water_km": 3.0, "land_cover": "forest"},
             "crop": "young_seedling"
         }
     ]
@@ -170,7 +172,8 @@ def test_backend_integration():
         },
         "static_features": {
             "elevation_m": 250,
-            "dist_to_water_km": 3.5
+            "dist_to_water_km": 3.5,
+            "land_cover": "agriculture"
         },
         "crop": "spraying_window"
     })
@@ -198,7 +201,8 @@ def test_backend_integration():
         },
         "static_features": {
             "elevation_m": 250,
-            "dist_to_water_km": 3.5
+            "dist_to_water_km": 3.5,
+            "land_cover": "agriculture"
         },
         "crop": "spraying_window"
     }
@@ -212,6 +216,19 @@ def test_backend_integration():
     print(f"\n    Request: {json.dumps(request, indent=6)}")
     print(f"\n    Response: {json.dumps(response, indent=6)}")
     print(f"\n  ✓ Backend integration looks good!")
+
+
+def test_load_real_training_data():
+    """Load CSV from ML Dev #1, split X/y, confirm 6-feature shape."""
+    print("\n" + "="*70)
+    print("TEST 5: Load real training CSV")
+    print("="*70)
+
+    X, y = load_training_data("data/training_data.csv")
+    assert X.shape[1] == 6, f"Expected 6 features, got {X.shape}"
+    assert len(X) == len(y)
+    print(f"\n  Loaded {len(X)} rows, X shape {X.shape}")
+    print("  ✓ CSV loader splits features vs correction_delta")
 
 
 def interactive_demo():
@@ -238,11 +255,12 @@ def interactive_demo():
             humidity = float(input("Humidity (%): ") or "65")
             elevation = float(input("Elevation (m): ") or "300")
             dist_water = float(input("Distance to water (km): ") or "5")
+            land_cover = input("Land cover (agriculture/forest/urban/water/barren): ") or "agriculture"
             crop = input("Crop stage (seedling/spraying_window/flowering/pod_formation): ") or "seedling"
             
             result = pipeline.forecast_and_advise(
                 {"temp_c": temp, "rain_mm": rain, "humidity_pct": humidity},
-                {"elevation_m": elevation, "dist_to_water_km": dist_water},
+                {"elevation_m": elevation, "dist_to_water_km": dist_water, "land_cover": land_cover},
                 crop
             )
             
@@ -269,6 +287,7 @@ if __name__ == "__main__":
         test_advisory_engine()
         test_full_pipeline()
         test_backend_integration()
+        test_load_real_training_data()
         
         print("\n" + "="*70)
         print("All tests passed! ✓")

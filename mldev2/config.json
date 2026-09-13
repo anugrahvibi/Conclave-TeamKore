@@ -15,7 +15,8 @@
       "block_rain",
       "block_humidity",
       "elevation",
-      "dist_to_water"
+      "dist_to_water",
+      "land_cover"
     ]
   },
   "weather_codes": {

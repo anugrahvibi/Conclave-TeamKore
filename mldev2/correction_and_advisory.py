@@ -5,12 +5,52 @@ AI/ML Developer #2: Correction Model + Advisory Engine
 This is a complete, hackathon-ready module. No external dependencies beyond sklearn & numpy.
 """
 
+import csv
 import json
 import numpy as np
 import pickle
+from collections import defaultdict
 from pathlib import Path
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
+
+
+# Land cover is a word ("forest"), the model needs a number (1).
+# agriculture=0, forest=1, urban=2, water=3, barren=4
+LAND_COVER_MAP = {
+    "agriculture": 0,
+    "forest": 1,
+    "urban": 2,
+    "water": 3,
+    "barren": 4,
+}
+
+# ML Dev #1 uses Kerala-specific labels. Map them onto the 5 classes above.
+LAND_COVER_ALIASES = {
+    "evergreen_forest": "forest",
+    "plantation_rubber_tea_spices": "agriculture",
+    "plantation": "agriculture",
+    "mixed_agroforestry": "agriculture",
+    "paddy_wetland": "agriculture",
+    "coastal_urban": "urban",
+}
+
+MODULE_DIR = Path(__file__).resolve().parent
+DEFAULT_TRAINING_CSV = MODULE_DIR / "data" / "training_data.csv"
+MLDEV1_HANDOFF_CSV = MODULE_DIR.parent / "mldev1" / "data" / "training_dataset.csv"
+
+
+def encode_land_cover(value):
+    """Turn a land_cover word (or already-numeric code) into 0-4."""
+    if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, bool):
+        return int(value)
+    if value is None:
+        return LAND_COVER_MAP["agriculture"]
+    key = str(value).strip().lower()
+    key = LAND_COVER_ALIASES.get(key, key)
+    if key not in LAND_COVER_MAP:
+        return LAND_COVER_MAP["agriculture"]
+    return LAND_COVER_MAP[key]
 
 
 # ============================================================================
@@ -27,8 +67,9 @@ def generate_mock_training_data(n_samples=500):
     learns to fix it.
     
     Returns:
-        X (features): array of shape (n_samples, 5)
-                      [block_temp, block_rain, block_humidity, elevation, dist_to_water]
+        X (features): array of shape (n_samples, 6)
+                      [block_temp, block_rain, block_humidity, elevation, dist_to_water, land_cover]
+                      land_cover is numeric: agriculture=0, forest=1, urban=2, water=3, barren=4
         y (corrections): array of shape (n_samples,)
                          Correction delta to add to block forecast
     """
@@ -42,22 +83,160 @@ def generate_mock_training_data(n_samples=500):
     # Generate static features (same for all samples, but vary slightly per "village")
     elevation = np.random.uniform(100, 500, n_samples)  # 100-500m
     dist_to_water = np.random.uniform(0.5, 10, n_samples)  # 0.5-10km
+    land_cover = np.random.choice([0, 1, 2, 3, 4], size=n_samples)
     
     # Combine into feature matrix
-    X = np.column_stack([block_temp, block_rain, block_humidity, elevation, dist_to_water])
+    X = np.column_stack([
+        block_temp, block_rain, block_humidity, elevation, dist_to_water, land_cover
+    ])
     
     # Generate corrections: Simulate real bias patterns
     # Higher elevation → cooler (negative correction)
     # Far from water → hotter & drier (positive temp correction, negative rain correction)
     # High humidity block forecast → tends to overestimate (negative rain correction)
+    # Urban heat island → warmer; forest/water → cooler
+    
+    land_cover_effect = np.select(
+        [land_cover == 1, land_cover == 2, land_cover == 3, land_cover == 4],
+        [-0.6, 1.0, -0.4, 0.5],
+        default=0.0,
+    )
     
     y = (
         -0.05 * (elevation - 300) +  # Elevation effect
         0.1 * (dist_to_water - 5) +   # Distance to water effect
         -0.02 * (block_humidity - 65)  # Humidity effect
+        + land_cover_effect
         + np.random.normal(0, 0.3, n_samples)  # Small noise
     )
     
+    return X, y
+
+
+def load_training_data(csv_path=None):
+    """
+    Load real training pairs from CSV and split into X (features) and y (delta).
+
+    Expected wide CSV columns:
+        block_temp, block_rain, block_humidity, elevation, dist_to_water, correction_delta
+        optional: land_cover
+
+    Also accepts ML Dev #1 long-format handoff
+    (village_id, timestamp, variable, baseline_pred, elevation, land_cover,
+     dist_to_water, correction_delta) and converts it to the wide layout above.
+
+    Returns:
+        X: array of shape (n_samples, 6)
+        y: array of shape (n_samples,)
+    """
+    path = Path(csv_path) if csv_path else DEFAULT_TRAINING_CSV
+    if not path.is_absolute():
+        path = MODULE_DIR / path
+
+    if not path.exists() and MLDEV1_HANDOFF_CSV.exists():
+        print(f"  {path} not found. Building it from ML Dev #1 handoff...")
+        _write_wide_training_csv_from_mldev1(MLDEV1_HANDOFF_CSV, path)
+
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Training CSV not found: {path}. "
+            "Ask ML Dev #1 for training_dataset.csv or put a wide CSV at data/training_data.csv"
+        )
+
+    X, y = _load_wide_or_long_csv(path)
+    print(f"✓ Loaded {len(X)} training rows from {path}")
+    print(f"  X shape: {X.shape}  (6 features: temp, rain, humidity, elevation, dist_to_water, land_cover)")
+    return X, y
+
+
+def _load_wide_or_long_csv(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames or []
+        rows = list(reader)
+
+    if "block_temp" in fieldnames and "correction_delta" in fieldnames:
+        return _rows_to_xy(rows)
+
+    if "variable" in fieldnames and "baseline_pred" in fieldnames:
+        wide_rows = _long_rows_to_wide_rows(rows)
+        return _rows_to_xy(wide_rows)
+
+    raise ValueError(
+        f"{path} needs either wide columns "
+        "(block_temp, block_rain, block_humidity, elevation, dist_to_water, correction_delta) "
+        "or ML Dev #1 long format (variable, baseline_pred, correction_delta)."
+    )
+
+
+def _long_rows_to_wide_rows(rows):
+    """One weather variable per row → one village+time row with temp/rain/humidity."""
+    grouped = defaultdict(dict)
+    for row in rows:
+        if row.get("split") == "test":
+            continue
+        key = (row.get("village_id", ""), row.get("timestamp", ""))
+        grouped[key][row["variable"]] = row
+
+    wide = []
+    for vars_by_name in grouped.values():
+        temp_row = vars_by_name.get("temp")
+        if not temp_row:
+            continue
+        rain_row = vars_by_name.get("rainfall") or {}
+        humidity_row = vars_by_name.get("humidity") or {}
+        wide.append({
+            "block_temp": temp_row["baseline_pred"],
+            "block_rain": rain_row.get("baseline_pred", 5),
+            "block_humidity": humidity_row.get("baseline_pred", 65),
+            "elevation": temp_row["elevation"],
+            "dist_to_water": temp_row["dist_to_water"],
+            "land_cover": temp_row.get("land_cover", "agriculture"),
+            "correction_delta": temp_row["correction_delta"],
+        })
+    return wide
+
+
+def _write_wide_training_csv_from_mldev1(src_path, dest_path):
+    dest_path = Path(dest_path)
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(src_path, newline="") as f:
+        wide_rows = _long_rows_to_wide_rows(list(csv.DictReader(f)))
+
+    fieldnames = [
+        "block_temp", "block_rain", "block_humidity",
+        "elevation", "dist_to_water", "land_cover", "correction_delta",
+    ]
+    with open(dest_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(wide_rows)
+    print(f"✓ Wrote {len(wide_rows)} rows to {dest_path}")
+
+
+def _maybe_meters_to_km(dist_values):
+    """ML Dev #1 stores dist_to_water in meters. predict() uses km."""
+    dist = np.asarray(dist_values, dtype=float)
+    if len(dist) and np.nanmedian(np.abs(dist)) > 100:
+        return dist / 1000.0
+    return dist
+
+
+def _rows_to_xy(rows):
+    if not rows:
+        raise ValueError("Training CSV has no usable rows.")
+
+    block_temp = np.array([float(r["block_temp"]) for r in rows])
+    block_rain = np.array([float(r["block_rain"]) for r in rows])
+    block_humidity = np.array([float(r["block_humidity"]) for r in rows])
+    elevation = np.array([float(r["elevation"]) for r in rows])
+    dist_to_water = _maybe_meters_to_km([float(r["dist_to_water"]) for r in rows])
+    land_cover = np.array([encode_land_cover(r.get("land_cover", "agriculture")) for r in rows], dtype=float)
+    y = np.array([float(r["correction_delta"]) for r in rows])
+
+    X = np.column_stack([
+        block_temp, block_rain, block_humidity, elevation, dist_to_water, land_cover
+    ])
     return X, y
 
 
@@ -99,8 +278,8 @@ class CorrectionModel:
         Train the model on (features, corrections) pairs.
         
         Args:
-            X: array of shape (n_samples, 5)
-               Columns: [block_temp, block_rain, block_humidity, elevation, dist_to_water]
+            X: array of shape (n_samples, 6)
+               Columns: [block_temp, block_rain, block_humidity, elevation, dist_to_water, land_cover]
             y: array of shape (n_samples,)
                Correction deltas (what to add to the baseline)
         """
@@ -122,8 +301,9 @@ class CorrectionModel:
             block_forecast: dict with keys: temp_c, rain_mm, humidity_pct
                            Example: {"temp_c": 25.2, "rain_mm": 30.5, "humidity_pct": 70}
             
-            static_features: dict with keys: elevation_m, dist_to_water_km
-                            Example: {"elevation_m": 150, "dist_to_water_km": 2.5}
+            static_features: dict with keys: elevation_m, dist_to_water_km, land_cover
+                            land_cover: "agriculture"|"forest"|"urban"|"water"|"barren" (or 0-4)
+                            Example: {"elevation_m": 150, "dist_to_water_km": 2.5, "land_cover": "agriculture"}
         
         Returns:
             float: Correction delta (e.g., +1.2 means add 1.2°C to baseline)
@@ -140,7 +320,8 @@ class CorrectionModel:
             block_forecast.get("rain_mm", 5),
             block_forecast.get("humidity_pct", 65),
             static_features.get("elevation_m", 300),
-            static_features.get("dist_to_water_km", 5)
+            static_features.get("dist_to_water_km", 5),
+            encode_land_cover(static_features.get("land_cover", "agriculture")),
         ]).reshape(1, -1)
         
         # Normalize using the fitted scaler
@@ -171,7 +352,7 @@ class CorrectionModel:
     
     def _get_feature_names_and_importance(self):
         """Helper to show which features matter most."""
-        names = ['block_temp', 'block_rain', 'block_humidity', 'elevation', 'dist_to_water']
+        names = ['block_temp', 'block_rain', 'block_humidity', 'elevation', 'dist_to_water', 'land_cover']
         importances = self.model.feature_importances_
         return {name: f"{imp:.3f}" for name, imp in zip(names, importances)}
 
@@ -373,7 +554,7 @@ class WeatherCorrectionAndAdvisory:
                 {"temp_c": 25.2, "rain_mm": 30.5, "humidity_pct": 70}
             
             static_features: dict
-                {"elevation_m": 150, "dist_to_water_km": 2.5}
+                {"elevation_m": 150, "dist_to_water_km": 2.5, "land_cover": "agriculture"}
             
             crop_stage: str
                 "seedling", "spraying_window", "flowering", etc.
@@ -445,10 +626,10 @@ if __name__ == "__main__":
     print("QUICK START: Village-Level Weather Downscaling & Agro-Advisory")
     print("=" * 70)
     
-    # Generate mock training data
-    print("\n[1] Generating mock training data...")
-    X, y = generate_mock_training_data(n_samples=300)
-    print(f"    Generated {len(X)} training samples")
+    # Load real training data from ML Dev #1 (falls back to building data/training_data.csv)
+    print("\n[1] Loading training data from CSV...")
+    X, y = load_training_data("data/training_data.csv")
+    print(f"    Loaded {len(X)} training samples")
     
     # Create and train the correction model
     print("\n[2] Training correction model...")
@@ -464,7 +645,8 @@ if __name__ == "__main__":
     }
     static_features = {
         "elevation_m": 250,
-        "dist_to_water_km": 3.5
+        "dist_to_water_km": 3.5,
+        "land_cover": "agriculture",
     }
     crop_stage = "spraying_window"
     
@@ -483,7 +665,7 @@ if __name__ == "__main__":
     
     # Save artifacts
     print("\n[4] Saving artifacts for backend...")
-    pipeline.save_artifacts("correction_model.pkl", "advisory_rules.json")
+    pipeline.save_artifacts(str(MODULE_DIR / "model.pkl"), str(MODULE_DIR / "advisory_rules.json"))
     
     print("\n" + "=" * 70)
     print("✓ Ready to integrate with backend dev!")

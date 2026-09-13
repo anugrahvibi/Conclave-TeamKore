@@ -32,8 +32,9 @@ pipeline.save_artifacts("model.pkl", "rules.json")
 - Or when new training data is available
 
 ### Inputs
-- `X`: numpy array of shape `(n_samples, 5)`
-  - Columns: `[block_temp, block_rain, block_humidity, elevation, dist_to_water]`
+- `X`: numpy array of shape `(n_samples, 6)`
+  - Columns: `[block_temp, block_rain, block_humidity, elevation, dist_to_water, land_cover]`
+  - `land_cover` numeric codes: agriculture=0, forest=1, urban=2, water=3, barren=4
   - dtype: float
 - `y`: numpy array of shape `(n_samples,)`
   - Correction deltas (what to add to baseline forecast)
@@ -48,9 +49,9 @@ import numpy as np
 
 # From ML Dev #1, we get:
 block_forecasts = np.array([
-    [25.2, 30.5, 70, 150, 2.5],
-    [24.8, 15.2, 65, 300, 5.0],
-    [26.1, 0.5, 55, 400, 8.0]
+    [25.2, 30.5, 70, 150, 2.5, 0],
+    [24.8, 15.2, 65, 300, 5.0, 1],
+    [26.1, 0.5, 55, 400, 8.0, 2]
 ])
 
 ground_truth_deltas = np.array([1.2, -0.5, -1.8])
@@ -95,7 +96,8 @@ Village-specific unchanging features
 ```python
 {
     "elevation_m": 250,         # Elevation above sea level in meters (int/float)
-    "dist_to_water_km": 3.5     # Distance to nearest water body in km (float)
+    "dist_to_water_km": 3.5,    # Distance to nearest water body in km (float)
+    "land_cover": "agriculture" # agriculture|forest|urban|water|barren (or 0-4)
 }
 ```
 
@@ -137,7 +139,8 @@ request = {
     },
     "static_features": {
         "elevation_m": 250,
-        "dist_to_water_km": 3.5
+        "dist_to_water_km": 3.5,
+        "land_cover": "agriculture"
     },
     "crop": "spraying_window"
 }
@@ -235,6 +238,7 @@ advisory = pipeline.advisory_engine.get_advisory("unknown_weather", "seedling")
 | `humidity_pct` | float | 0 to 100 | 72 |
 | `elevation_m` | float | 0 to 3000 | 250 |
 | `dist_to_water_km` | float | 0 to 100 | 3.5 |
+| `land_cover` | string or 0-4 | agriculture, forest, urban, water, barren | "agriculture" |
 | `crop_stage` | string | (list above) | "spraying_window" |
 
 ---

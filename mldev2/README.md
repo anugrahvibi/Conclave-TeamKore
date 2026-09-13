@@ -68,10 +68,10 @@ Type in your own values, see what the system outputs in real-time.
 
 ### Step 1: Train the Model (Once, at startup)
 ```python
-from correction_and_advisory import WeatherCorrectionAndAdvisory, generate_mock_training_data
+from correction_and_advisory import WeatherCorrectionAndAdvisory, load_training_data
 
-# Generate training data (or load from ML Dev #1)
-X, y = generate_mock_training_data(n_samples=500)
+# Load training data from ML Dev #1
+X, y = load_training_data("data/training_data.csv")
 
 # Create pipeline
 pipeline = WeatherCorrectionAndAdvisory()
@@ -80,21 +80,21 @@ pipeline = WeatherCorrectionAndAdvisory()
 pipeline.train_correction_model(X, y)
 
 # Save for later
-pipeline.save_artifacts("correction_model.pkl", "advisory_rules.json")
+pipeline.save_artifacts("model.pkl", "advisory_rules.json")
 ```
 
 ### Step 2: Use at Runtime (When answering API requests)
 ```python
 # Load the trained pipeline
 pipeline = WeatherCorrectionAndAdvisory(
-    model_path="correction_model.pkl",
+    model_path="model.pkl",
     rules_path="advisory_rules.json"
 )
 
 # Someone requests forecast for village 42
 result = pipeline.forecast_and_advise(
     block_forecast={"temp_c": 25.5, "rain_mm": 22.0, "humidity_pct": 72},
-    static_features={"elevation_m": 250, "dist_to_water_km": 3.5},
+    static_features={"elevation_m": 250, "dist_to_water_km": 3.5, "land_cover": "agriculture"},
     crop_stage="spraying_window"
 )
 
