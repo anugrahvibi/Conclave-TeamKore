@@ -1,0 +1,92 @@
+[
+  {
+    "condition": {
+      "weather": "rain_24h",
+      "crop_stage": "spraying_window"
+    },
+    "advisory": {
+      "text": "\u26a0\ufe0f Rain expected in next 24 hours. Delay pesticide spray until soil dries.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "rain_24h",
+      "crop_stage": "flowering"
+    },
+    "advisory": {
+      "text": "\u2713 Good news! Rain during flowering supports pollination. No action needed.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "no_rain_7d",
+      "crop_stage": "seedling"
+    },
+    "advisory": {
+      "text": "\u26a0\ufe0f No rain expected for 7 days. Increase irrigation frequency (daily if possible).",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "frost_risk",
+      "crop_stage": "young_seedling"
+    },
+    "advisory": {
+      "text": "\u2744\ufe0f Frost risk tonight. Irrigate fields to raise soil temperature. Monitor temps after sunset.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "frost_risk",
+      "crop_stage": "mature"
+    },
+    "advisory": {
+      "text": "\u2744\ufe0f Frost risk, but mature crop can tolerate. Monitor; irrigate only if temps drop below -2\u00b0C.",
+      "confidence": "medium"
+    }
+  },
+  {
+    "condition": {
+      "weather": "high_temp_dry",
+      "crop_stage": "flowering"
+    },
+    "advisory": {
+      "text": "\ud83c\udf21\ufe0f High heat + low humidity during flowering. Increase irrigation to 1.5x normal. Mulch to retain soil moisture.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "high_temp_dry",
+      "crop_stage": "pod_formation"
+    },
+    "advisory": {
+      "text": "\ud83c\udf21\ufe0f Critical: Heat stress during pod formation reduces yield. Irrigate 2x daily if possible.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "high_wind",
+      "crop_stage": "flowering"
+    },
+    "advisory": {
+      "text": "\ud83d\udca8 Strong winds expected during flowering. Avoid spraying; pollen dispersal may be affected.",
+      "confidence": "medium"
+    }
+  },
+  {
+    "condition": {
+      "weather": "normal",
+      "crop_stage": "any"
+    },
+    "advisory": {
+      "text": "\u2713 Conditions normal. Follow standard management practices.",
+      "confidence": "high"
+    }
+  }
+]
