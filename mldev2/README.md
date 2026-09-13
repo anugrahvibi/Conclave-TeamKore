@@ -62,6 +62,12 @@ python test_and_demo.py interactive
 
 Type in your own values, see what the system outputs in real-time.
 
+### Feature Importance & Farmer Interpretability Analysis
+```bash
+python debug_feature_importance.py
+```
+Analyzes the retrained Random Forest model, computes percentage importances, displays an in-terminal bar chart, generates a publication-quality chart at `outputs/feature_importance.png`, and explains what each feature means for farmers on the ground.
+
 ---
 
 ## How to Use (For Backend Dev)

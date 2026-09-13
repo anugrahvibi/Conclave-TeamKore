@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+# Quick helper to run debug_feature_importance with the project virtual environment
