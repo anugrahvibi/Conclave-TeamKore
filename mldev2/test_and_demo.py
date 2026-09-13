@@ -75,6 +75,9 @@ def test_advisory_engine():
         ("frost_risk", "young_seedling"),
         ("high_temp_dry", "flowering"),
         ("no_rain_7d", "seedling"),
+        ("high_wind", "flowering"),
+        ("heavy_rain", "pod_formation"),
+        ("normal", "mature"),
         ("normal", "any")
     ]
     

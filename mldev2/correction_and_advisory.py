@@ -460,8 +460,27 @@ class AgroAdvisoryEngine:
             {
                 "condition": {"weather": "high_wind", "crop_stage": "flowering"},
                 "advisory": {
-                    "text": "💨 Strong winds expected during flowering. Avoid spraying; pollen dispersal may be affected.",
+                    "text": "Strong winds during flowering. Avoid spraying; pollen dispersal affected.",
                     "confidence": "medium"
+                }
+            },
+
+            # Heavy rain
+            {
+                "condition": {"weather": "heavy_rain", "crop_stage": "pod_formation"},
+                "advisory": {
+                    "text": "Heavy rain during pod formation causes pod rot. Improve drainage.",
+                    "confidence": "high"
+                }
+            },
+
+            # Specific normal-stage rule MUST sit before weather=normal + crop_stage=any,
+            # or the "any" catch-all matches first and this never runs.
+            {
+                "condition": {"weather": "normal", "crop_stage": "mature"},
+                "advisory": {
+                    "text": "Conditions normal. Harvest when pods are dry.",
+                    "confidence": "high"
                 }
             },
             

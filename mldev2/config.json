@@ -51,6 +51,12 @@
         "wind_speed_threshold": 20
       }
     },
+    "heavy_rain": {
+      "description": "Heavy rain that can cause pod rot",
+      "triggers": {
+        "rain_mm_threshold": 40
+      }
+    },
     "normal": {
       "description": "Normal conditions"
     }

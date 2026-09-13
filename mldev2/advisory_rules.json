@@ -75,8 +75,28 @@
       "crop_stage": "flowering"
     },
     "advisory": {
-      "text": "\ud83d\udca8 Strong winds expected during flowering. Avoid spraying; pollen dispersal may be affected.",
+      "text": "Strong winds during flowering. Avoid spraying; pollen dispersal affected.",
       "confidence": "medium"
+    }
+  },
+  {
+    "condition": {
+      "weather": "heavy_rain",
+      "crop_stage": "pod_formation"
+    },
+    "advisory": {
+      "text": "Heavy rain during pod formation causes pod rot. Improve drainage.",
+      "confidence": "high"
+    }
+  },
+  {
+    "condition": {
+      "weather": "normal",
+      "crop_stage": "mature"
+    },
+    "advisory": {
+      "text": "Conditions normal. Harvest when pods are dry.",
+      "confidence": "high"
     }
   },
   {
