@@ -48,6 +48,29 @@ class GeoJSONFeatureCollection(BaseModel):
 # Forecast Schemas
 # ============================================================================
 
+class BlockForecastPayload(BaseModel):
+    temp_c: float
+    rain_mm: float
+    humidity_pct: float
+
+class StaticFeaturesPayload(BaseModel):
+    elevation_m: float
+    dist_to_water_km: float
+    land_cover: str = "agriculture"
+
+class ForecastRequestPayload(BaseModel):
+    village_id: Any
+    block_forecast: BlockForecastPayload
+    static_features: StaticFeaturesPayload
+    crop_stage: str
+
+class ForecastContractResponse(BaseModel):
+    village_id: Any
+    corrected_temp_c: float
+    correction_delta: float
+    weather_inferred: str
+    advisory: Dict[str, Any]
+
 class ForecastStep(BaseModel):
     timestamp: str
     baseline_temp_c: float

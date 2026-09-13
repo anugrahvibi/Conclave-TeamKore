@@ -8,6 +8,8 @@ from fastapi import APIRouter, HTTPException, Query, Path
 from backend.app.config import settings
 from backend.app.schemas import (
     ForecastResponse,
+    ForecastRequestPayload,
+    ForecastContractResponse,
     AdvisoryResponse,
     BlockSummaryResponse,
     HealthResponse,
@@ -40,6 +42,31 @@ def health_check():
         "loaded_blocks": len(KERALA_BLOCK_STATIONS),
         "model_trained": model_trained,
         "spatial_engine": "In-Memory KDTree + OSM GeoJSON Polygons"
+    }
+
+
+@router.post("/forecast", response_model=ForecastContractResponse, summary="ML Dev #2 Contract: Predict Downscaled Forecast + Advisory from Payload")
+def post_forecast(req: ForecastRequestPayload):
+    """
+    Direct ML Dev #2 Contract Endpoint (from BACKEND_CONTRACT.md):
+    Caller sends block_forecast, static_features, crop_stage.
+    Returns corrected_temp_c, correction_delta, weather_inferred, and advisory.
+    """
+    static_features = req.static_features.model_dump()
+    static_features.setdefault("land_cover", "agriculture")
+
+    result = forecast_service.pipeline.forecast_and_advise(
+        block_forecast=req.block_forecast.model_dump(),
+        static_features=static_features,
+        crop_stage=req.crop_stage,
+    )
+
+    return {
+        "village_id": req.village_id,
+        "corrected_temp_c": result["corrected_temp_c"],
+        "correction_delta": result["correction_delta"],
+        "weather_inferred": result["weather_inferred"],
+        "advisory": result["advisory"],
     }
 
 

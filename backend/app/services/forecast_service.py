@@ -91,7 +91,8 @@ class ForecastService:
             }
             static_feat_input = {
                 "elevation_m": static_features["elevation_m"],
-                "dist_to_water_km": static_features["dist_to_water_km"]
+                "dist_to_water_km": static_features["dist_to_water_km"],
+                "land_cover": static_features.get("land_cover", "agriculture")
             }
 
             if self.pipeline and self.pipeline.correction_model.is_trained:

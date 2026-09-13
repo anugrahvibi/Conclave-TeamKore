@@ -94,6 +94,27 @@ def test_forecast_404():
     assert response.status_code == 404
 
 
+def test_post_forecast_contract():
+    """Verify POST /forecast handles the exact ML Dev #2 contract payload."""
+    payload = {
+        "village_id": 42,
+        "block_forecast": {"temp_c": 25.5, "rain_mm": 22.0, "humidity_pct": 72},
+        "static_features": {"elevation_m": 250, "dist_to_water_km": 3.5, "land_cover": "agriculture"},
+        "crop_stage": "spraying_window"
+    }
+    response = client.post("/forecast", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["village_id"] == 42
+    assert "corrected_temp_c" in data
+    assert "correction_delta" in data
+    assert "weather_inferred" in data
+    assert data["weather_inferred"] == "rain_24h"
+    assert "advisory" in data
+    assert "text" in data["advisory"]
+    assert data["advisory"]["confidence"] == "high"
+
+
 def test_advisory_endpoint():
     """Verify /advisory/{panchayat_id} returns advisory text, risk level, confidence."""
     response = client.get("/advisory/KL_PANCH_0001?crop_stage=spraying_window")
