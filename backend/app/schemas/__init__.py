@@ -9,6 +9,8 @@ from .models import (
     StaticFeaturesPayload,
     ForecastRequestPayload,
     ForecastContractResponse,
+    FeatureImportanceItem,
+    ModelInfoResponse,
     ForecastStep,
     ForecastSummary,
     ForecastResponse,

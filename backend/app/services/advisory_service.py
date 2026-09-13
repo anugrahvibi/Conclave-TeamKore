@@ -65,7 +65,9 @@ class AdvisoryService:
         }
 
         # Weather condition inference
-        if total_24h_rain >= 15.0 or curr_step["rainfall_mm"] >= 10.0:
+        if total_24h_rain >= 35.0 or curr_step["rainfall_mm"] >= 25.0:
+            weather_code = "heavy_rain"
+        elif total_24h_rain >= 15.0 or curr_step["rainfall_mm"] >= 10.0:
             weather_code = "rain_24h"
         elif total_24h_rain <= 1.0 and forecast_data["summary"]["total_rainfall_mm"] <= 3.0:
             weather_code = "no_rain_7d"
@@ -122,7 +124,22 @@ class AdvisoryService:
         """Determines categorical risk level and practical recommendations."""
         actions = []
 
-        if weather_code == "rain_24h":
+        if weather_code == "heavy_rain":
+            if crop_stage == "pod_formation":
+                risk = "critical"
+                actions.extend([
+                    "Heavy rain during pod formation causes pod rot. Immediately open field drainage channels.",
+                    "Clear field bunds to prevent soil erosion and waterlogging.",
+                    "Halt fertilizer top-dressing to prevent nutrient leaching."
+                ])
+            else:
+                risk = "critical" if crop_stage in ["seedling", "spraying_window"] else "high"
+                actions.extend([
+                    "Heavy downpour expected. Inspect drainage channels to prevent field inundation.",
+                    "Postpone all chemical spraying and harvesting until conditions improve."
+                ])
+
+        elif weather_code == "rain_24h":
             if crop_stage == "spraying_window":
                 risk = "critical"
                 actions.extend([
@@ -183,10 +200,16 @@ class AdvisoryService:
 
         else:
             risk = "low"
-            actions.extend([
-                "Conditions optimal for field activities, fertilization, and crop weeding.",
-                "Continue standard agricultural calendar routines."
-            ])
+            if crop_stage == "mature":
+                actions.extend([
+                    "Conditions normal. Harvest when pods and grains are dry.",
+                    "Ensure clean storage and threshing facilities are prepared."
+                ])
+            else:
+                actions.extend([
+                    "Conditions optimal for field activities, fertilization, and crop weeding.",
+                    "Continue standard agricultural calendar routines."
+                ])
 
         return risk, actions
 

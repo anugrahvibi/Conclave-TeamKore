@@ -49,20 +49,20 @@ class GeoJSONFeatureCollection(BaseModel):
 # ============================================================================
 
 class BlockForecastPayload(BaseModel):
-    temp_c: float
-    rain_mm: float
-    humidity_pct: float
+    temp_c: float = Field(..., ge=-40.0, le=60.0, description="Temperature in Celsius (-40 to 60°C)")
+    rain_mm: float = Field(..., ge=0.0, le=1000.0, description="Rainfall in mm (0 to 1000mm)")
+    humidity_pct: float = Field(..., ge=0.0, le=100.0, description="Relative humidity (0 to 100%)")
 
 class StaticFeaturesPayload(BaseModel):
-    elevation_m: float
-    dist_to_water_km: float
-    land_cover: str = "agriculture"
+    elevation_m: float = Field(default=300.0, ge=-500.0, le=9000.0, description="Elevation in meters above sea level")
+    dist_to_water_km: float = Field(default=5.0, ge=0.0, le=500.0, description="Distance to nearest recognized water body / coastline (km)")
+    land_cover: str = Field(default="agriculture", description="Land cover type (agriculture, forest, urban, water, barren)")
 
 class ForecastRequestPayload(BaseModel):
-    village_id: Any
+    village_id: Any = Field(..., description="Village or Panchayat identifier (integer or string)")
     block_forecast: BlockForecastPayload
-    static_features: StaticFeaturesPayload
-    crop_stage: str
+    static_features: Optional[StaticFeaturesPayload] = Field(default_factory=StaticFeaturesPayload)
+    crop_stage: str = Field(default="spraying_window", description="Crop growth stage")
 
 class ForecastContractResponse(BaseModel):
     village_id: Any
@@ -70,6 +70,22 @@ class ForecastContractResponse(BaseModel):
     correction_delta: float
     weather_inferred: str
     advisory: Dict[str, Any]
+
+class FeatureImportanceItem(BaseModel):
+    feature: str
+    importance_pct: float
+    unit: str
+    category: str
+    description: str
+    farmer_impact: str
+
+class ModelInfoResponse(BaseModel):
+    model_type: str
+    n_features: int
+    features: List[str]
+    feature_importances: List[FeatureImportanceItem]
+    default_static_features: Dict[str, Any]
+    feature_ranges: Dict[str, List[float]]
 
 class ForecastStep(BaseModel):
     timestamp: str
@@ -165,4 +181,5 @@ class HealthResponse(BaseModel):
     loaded_villages: int
     loaded_blocks: int
     model_trained: bool
+    features_count: int = 6
     spatial_engine: str

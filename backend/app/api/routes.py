@@ -10,6 +10,8 @@ from backend.app.schemas import (
     ForecastResponse,
     ForecastRequestPayload,
     ForecastContractResponse,
+    ModelInfoResponse,
+    FeatureImportanceItem,
     AdvisoryResponse,
     BlockSummaryResponse,
     HealthResponse,
@@ -41,7 +43,109 @@ def health_check():
         "loaded_villages": spatial_service.total_villages,
         "loaded_blocks": len(KERALA_BLOCK_STATIONS),
         "model_trained": model_trained,
+        "features_count": 6,
         "spatial_engine": "In-Memory KDTree + OSM GeoJSON Polygons"
+    }
+
+
+@router.get("/model/info", response_model=ModelInfoResponse, summary="ML Model Metadata & Feature Importance")
+def get_model_info():
+    """
+    Returns trained Random Forest model architecture, 6-feature importance distribution,
+    domain interpretation for farmers, and physical feature ranges.
+    """
+    model = forecast_service.pipeline.correction_model.model
+    scaler = forecast_service.pipeline.correction_model.scaler
+    importances = model.feature_importances_ if hasattr(model, "feature_importances_") else [0.0] * 6
+
+    feature_meta = [
+        {
+            "feature": "elevation",
+            "unit": "meters (m)",
+            "category": "Micro-Topography",
+            "description": "Altitude above sea level. Controls lapse rate cooling (~6.5°C/1000m).",
+            "farmer_impact": "Directly controls frost danger, heat accumulation, and disease susceptibility in highland farms."
+        },
+        {
+            "feature": "dist_to_water",
+            "unit": "kilometers (km)",
+            "category": "Hydrological Buffer",
+            "description": "Proximity to rivers, backwaters, and coast. High thermal inertia moderates temperature swings.",
+            "farmer_impact": "Farms near water experience gentler diurnal fluctuations; inland farms suffer faster heat shock."
+        },
+        {
+            "feature": "block_temp",
+            "unit": "Celsius (°C)",
+            "category": "Macro Meteorology",
+            "description": "Regional synoptic baseline temperature from IMD/Open-Meteo station forecast.",
+            "farmer_impact": "Serves as foundation anchor for downscaled farm canopy prediction."
+        },
+        {
+            "feature": "block_humidity",
+            "unit": "percent (%)",
+            "category": "Atmospheric Moisture",
+            "description": "Ambient relative humidity, indicating cloud cover thickness and evaporative cooling potential.",
+            "farmer_impact": "High humidity alerts farmers to blight and fungal risks; dry air prompts irrigation alerts."
+        },
+        {
+            "feature": "block_rain",
+            "unit": "millimeters (mm)",
+            "category": "Precipitation",
+            "description": "Precipitation volume in the forecast interval.",
+            "farmer_impact": "Identifies washout risks for pesticides and opportunities for natural soil recharge."
+        },
+        {
+            "feature": "land_cover",
+            "unit": "categorical (0-4)",
+            "category": "Surface Biophysics",
+            "description": "Vegetation canopy class (agriculture, forest, urban, water, barren) altering albedo and shading.",
+            "farmer_impact": "Forest canopy buffers extreme sun; urban built environments cause micro heat islands."
+        }
+    ]
+
+    items = []
+    # Names in order: block_temp (0), block_rain (1), block_humidity (2), elevation (3), dist_to_water (4), land_cover (5)
+    name_to_idx = {
+        "block_temp": 0,
+        "block_rain": 1,
+        "block_humidity": 2,
+        "elevation": 3,
+        "dist_to_water": 4,
+        "land_cover": 5
+    }
+
+    for meta in feature_meta:
+        idx = name_to_idx[meta["feature"]]
+        pct = round(float(importances[idx]) * 100.0, 2) if idx < len(importances) else 0.0
+        items.append({
+            "feature": meta["feature"],
+            "importance_pct": pct,
+            "unit": meta["unit"],
+            "category": meta["category"],
+            "description": meta["description"],
+            "farmer_impact": meta["farmer_impact"]
+        })
+
+    # Sort descending by importance
+    items.sort(key=lambda x: x["importance_pct"], reverse=True)
+
+    return {
+        "model_type": "RandomForestRegressor (n_estimators=50, max_depth=8)",
+        "n_features": 6,
+        "features": ["block_temp", "block_rain", "block_humidity", "elevation", "dist_to_water", "land_cover"],
+        "feature_importances": items,
+        "default_static_features": {
+            "elevation_m": 300.0,
+            "dist_to_water_km": 5.0,
+            "land_cover": "agriculture"
+        },
+        "feature_ranges": {
+            "temp_c": [-40.0, 60.0],
+            "rain_mm": [0.0, 1000.0],
+            "humidity_pct": [0.0, 100.0],
+            "elevation_m": [-500.0, 9000.0],
+            "dist_to_water_km": [0.0, 500.0]
+        }
     }
 
 
@@ -52,22 +156,25 @@ def post_forecast(req: ForecastRequestPayload):
     Caller sends block_forecast, static_features, crop_stage.
     Returns corrected_temp_c, correction_delta, weather_inferred, and advisory.
     """
-    static_features = req.static_features.model_dump()
-    static_features.setdefault("land_cover", "agriculture")
+    try:
+        static_features = req.static_features.model_dump() if req.static_features else {}
+        static_features.setdefault("land_cover", "agriculture")
 
-    result = forecast_service.pipeline.forecast_and_advise(
-        block_forecast=req.block_forecast.model_dump(),
-        static_features=static_features,
-        crop_stage=req.crop_stage,
-    )
+        result = forecast_service.pipeline.forecast_and_advise(
+            block_forecast=req.block_forecast.model_dump(),
+            static_features=static_features,
+            crop_stage=req.crop_stage,
+        )
 
-    return {
-        "village_id": req.village_id,
-        "corrected_temp_c": result["corrected_temp_c"],
-        "correction_delta": result["correction_delta"],
-        "weather_inferred": result["weather_inferred"],
-        "advisory": result["advisory"],
-    }
+        return {
+            "village_id": req.village_id,
+            "corrected_temp_c": result["corrected_temp_c"],
+            "correction_delta": result["correction_delta"],
+            "weather_inferred": result["weather_inferred"],
+            "advisory": result["advisory"],
+        }
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
 
 @router.get("/forecast/{panchayat_id}", response_model=ForecastResponse, summary="Downscaled 3-Day Village Forecast")

@@ -20,6 +20,23 @@ def test_health_endpoint():
     assert data["loaded_villages"] == 1031
     assert data["loaded_blocks"] == 31
     assert data["model_trained"] is True
+    assert data["features_count"] == 6
+
+
+def test_model_info_endpoint():
+    """Verify /model/info returns 6-feature architecture and farmer impact metadata."""
+    response = client.get("/model/info")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["n_features"] == 6
+    assert len(data["features"]) == 6
+    assert "elevation" in data["features"]
+    assert "land_cover" in data["features"]
+    assert len(data["feature_importances"]) == 6
+    # Top features should be elevation and dist_to_water
+    top_feat = data["feature_importances"][0]["feature"]
+    assert top_feat in ["elevation", "dist_to_water"]
+    assert "farmer_impact" in data["feature_importances"][0]
 
 
 def test_get_villages_geojson():
@@ -113,6 +130,41 @@ def test_post_forecast_contract():
     assert "advisory" in data
     assert "text" in data["advisory"]
     assert data["advisory"]["confidence"] == "high"
+
+
+def test_post_forecast_out_of_range_validation():
+    """Verify that physically impossible values (e.g. temp=120C) trigger validation errors."""
+    payload = {
+        "village_id": 42,
+        "block_forecast": {"temp_c": 120.0, "rain_mm": 10.0, "humidity_pct": 50.0},
+        "crop_stage": "spraying_window"
+    }
+    response = client.post("/forecast", json=payload)
+    assert response.status_code == 422  # Pydantic validation rejection
+
+
+def test_post_forecast_omitted_static_features_fallback():
+    """Verify that omitted static features safely use defaults without crashing."""
+    payload = {
+        "village_id": "VIL_TEST",
+        "block_forecast": {"temp_c": 26.0, "rain_mm": 0.0, "humidity_pct": 60.0},
+        "crop_stage": "flowering"
+    }
+    response = client.post("/forecast", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert "corrected_temp_c" in data
+    assert "correction_delta" in data
+    assert data["weather_inferred"] in ["normal", "no_rain_7d"]
+
+
+def test_advisory_mature_stage():
+    """Verify new rule matching for mature crop stage under normal weather."""
+    response = client.get("/advisory/KL_PANCH_0001?crop_stage=mature")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["crop_stage"] == "mature"
+    assert "advisory" in data
 
 
 def test_advisory_endpoint():
