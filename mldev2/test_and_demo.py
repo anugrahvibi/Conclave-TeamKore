@@ -7,13 +7,25 @@ Run this to:
 3. See what the backend will call
 """
 
+import csv
 import json
+import sys
+from collections import defaultdict
+from pathlib import Path
+import numpy as np
+
+# Ensure module directory is on sys.path for robust imports from anywhere
+_MODULE_DIR = Path(__file__).resolve().parent
+if str(_MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(_MODULE_DIR))
+
 from correction_and_advisory import (
     generate_mock_training_data,
     load_training_data,
     CorrectionModel,
     AgroAdvisoryEngine,
-    WeatherCorrectionAndAdvisory
+    WeatherCorrectionAndAdvisory,
+    encode_land_cover,
 )
 
 
@@ -234,6 +246,247 @@ def test_load_real_training_data():
     print("  ✓ CSV loader splits features vs correction_delta")
 
 
+def generate_synthetic_test_data(n_samples=250, seed=999):
+    """
+    Generate synthetic test villages that the model never saw during training.
+    Uses a distinct random seed and variable ranges from training data.
+    """
+    np.random.seed(seed)
+    block_temp = np.random.uniform(16, 34, n_samples)
+    block_rain = np.random.exponential(scale=5.5, size=n_samples)
+    block_humidity = np.random.uniform(42, 88, n_samples)
+    elevation = np.random.uniform(120, 480, n_samples)
+    dist_to_water = np.random.uniform(0.6, 9.5, n_samples)
+    land_covers = ["agriculture", "forest", "urban", "water", "barren"]
+    land_cover_raw = np.random.choice(land_covers, size=n_samples)
+
+    land_cover_effect = {
+        "agriculture": 0.0,
+        "forest": -0.6,
+        "urban": 1.0,
+        "water": -0.4,
+        "barren": 0.5,
+    }
+
+    block_forecasts = []
+    static_features_list = []
+    ground_truth_temps = []
+
+    for i in range(n_samples):
+        b_temp = float(block_temp[i])
+        b_rain = float(block_rain[i])
+        b_hum = float(block_humidity[i])
+        elev = float(elevation[i])
+        dist = float(dist_to_water[i])
+        lc = land_cover_raw[i]
+
+        delta = (
+            -0.05 * (elev - 300)
+            + 0.1 * (dist - 5)
+            - 0.02 * (b_hum - 65)
+            + land_cover_effect.get(lc, 0.0)
+            + np.random.normal(0, 0.3)
+        )
+        gt_temp = b_temp + delta
+
+        block_forecasts.append({"temp_c": b_temp, "rain_mm": b_rain, "humidity_pct": b_hum})
+        static_features_list.append({"elevation_m": elev, "dist_to_water_km": dist, "land_cover": lc})
+        ground_truth_temps.append(float(gt_temp))
+
+    return block_forecasts, static_features_list, ground_truth_temps
+
+
+def load_held_out_test_data(csv_path=None):
+    """
+    Load real held-out test villages (split == 'test').
+    Returns (block_forecasts, static_features_list, ground_truth_temps) or None if not found.
+    """
+    module_dir = Path(__file__).resolve().parent
+    candidates = [
+        Path(csv_path) if csv_path else None,
+        module_dir.parent / "mldev1" / "data" / "training_dataset.csv",
+        module_dir / "data" / "test_data.csv",
+        Path("mldev1/data/training_dataset.csv"),
+    ]
+
+    target_csv = None
+    for cand in candidates:
+        if cand and cand.is_file():
+            target_csv = cand
+            break
+
+    if not target_csv:
+        return None
+
+    grouped = defaultdict(dict)
+    with open(target_csv, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row.get("split") == "test":
+                key = (row.get("village_id", ""), row.get("timestamp", ""))
+                grouped[key][row["variable"]] = row
+
+    if not grouped:
+        return None
+
+    block_forecasts = []
+    static_features_list = []
+    ground_truth_temps = []
+
+    for vars_by_name in grouped.values():
+        temp_row = vars_by_name.get("temp")
+        if not temp_row or "ground_truth" not in temp_row:
+            continue
+        rain_row = vars_by_name.get("rainfall") or {}
+        humidity_row = vars_by_name.get("humidity") or {}
+
+        dist_m = float(temp_row["dist_to_water"])
+        dist_km = dist_m / 1000.0 if dist_m > 100 else dist_m
+
+        block_forecasts.append({
+            "temp_c": float(temp_row["baseline_pred"]),
+            "rain_mm": float(rain_row.get("baseline_pred", 5.0)),
+            "humidity_pct": float(humidity_row.get("baseline_pred", 65.0)),
+        })
+        static_features_list.append({
+            "elevation_m": float(temp_row["elevation"]),
+            "dist_to_water_km": dist_km,
+            "land_cover": temp_row.get("land_cover", "agriculture"),
+        })
+        ground_truth_temps.append(float(temp_row["ground_truth"]))
+
+    return block_forecasts, static_features_list, ground_truth_temps
+
+
+def test_improvement_over_baseline(
+    block_forecast=None,
+    static_features=None,
+    ground_truth_temp=None,
+    model=None,
+    model_path="model.pkl"
+):
+    """
+    Benchmark the correction model against the baseline (no correction).
+
+    Args:
+        block_forecast: Dict or list of dicts with 'temp_c', 'rain_mm', 'humidity_pct'.
+                        Can also be a tuple of (block_forecast, static_features, ground_truth_temp).
+                        If None, automatically loads held-out test data or generates synthetic test data.
+        static_features: Dict or list of dicts with 'elevation_m', 'dist_to_water_km', 'land_cover'.
+        ground_truth_temp: Float or list of floats (actual village temperature in °C).
+        model: Optional pre-loaded CorrectionModel instance.
+        model_path: Path to model artifact (default: 'model.pkl').
+
+    Calculates:
+        - MAE for raw block forecast
+        - MAE for corrected forecast
+        - % improvement
+
+    Prints results in the required format:
+        Mean Absolute Error (MAE):
+        - Baseline (no correction): X.XX°C
+        - With correction model: X.XX°C
+        - Improvement: Y.Y%
+
+    Returns:
+        dict: {"baseline_mae": float, "corrected_mae": float, "improvement_pct": float}
+    """
+    print("\n" + "=" * 70)
+    print("TEST 6: Improvement Over Baseline (Benchmark)")
+    print("=" * 70)
+
+    # Allow tuple / list unpack if passed as single test_data argument
+    if static_features is None and ground_truth_temp is None:
+        if isinstance(block_forecast, (tuple, list)) and len(block_forecast) == 3:
+            block_forecast, static_features, ground_truth_temp = block_forecast
+
+    # If no test data provided, look for held-out test data or generate synthetic
+    data_source_desc = ""
+    if block_forecast is None or static_features is None or ground_truth_temp is None:
+        held_out = load_held_out_test_data()
+        if held_out and len(held_out[0]) > 0:
+            block_forecast, static_features, ground_truth_temp = held_out
+            data_source_desc = f"Loaded {len(ground_truth_temp)} held-out test records (split == 'test')"
+        else:
+            block_forecast, static_features, ground_truth_temp = generate_synthetic_test_data(n_samples=250)
+            data_source_desc = f"Generated {len(ground_truth_temp)} synthetic test villages (unseen by model)"
+
+    # Normalize single dicts/floats to lists
+    if isinstance(block_forecast, dict):
+        block_forecast = [block_forecast]
+    if isinstance(static_features, dict):
+        static_features = [static_features]
+    if isinstance(ground_truth_temp, (int, float, np.number)):
+        ground_truth_temp = [ground_truth_temp]
+
+    n_samples = len(ground_truth_temp)
+    if data_source_desc:
+        print(f"  {data_source_desc}")
+    else:
+        print(f"  Evaluating {n_samples} test sample(s)")
+
+    # 1. Load trained model
+    module_dir = Path(__file__).resolve().parent
+    if model is None:
+        candidate_paths = [
+            Path(model_path),
+            module_dir / model_path,
+            module_dir / "model.pkl",
+            Path.cwd() / "mldev2" / "model.pkl",
+            Path.cwd() / "backend" / "artifacts" / "correction_model.pkl",
+            module_dir.parent / "backend" / "artifacts" / "correction_model.pkl",
+        ]
+        found_path = None
+        for p in candidate_paths:
+            if p.is_file():
+                found_path = p
+                break
+
+        model = CorrectionModel()
+        if found_path:
+            model.load(str(found_path))
+        else:
+            print("  ⚠️ No saved model artifact found; training on mock data for benchmark...")
+            X_mock, y_mock = generate_mock_training_data(n_samples=300)
+            model.train(X_mock, y_mock)
+
+    # 2. Extract features and compute predictions (fast vectorized)
+    b_temps = np.array([float(bf.get("temp_c", 25.0)) for bf in block_forecast])
+    b_rains = np.array([float(bf.get("rain_mm", 5.0)) for bf in block_forecast])
+    b_hums = np.array([float(bf.get("humidity_pct", 65.0)) for bf in block_forecast])
+
+    elevs = np.array([float(sf.get("elevation_m", 300.0)) for sf in static_features])
+    dists = np.array([float(sf.get("dist_to_water_km", 5.0)) for sf in static_features])
+    lcs = np.array([encode_land_cover(sf.get("land_cover", "agriculture")) for sf in static_features], dtype=float)
+
+    gt_temps = np.array([float(gt) for gt in ground_truth_temp])
+
+    X = np.column_stack([b_temps, b_rains, b_hums, elevs, dists, lcs])
+    X_scaled = model.scaler.transform(X)
+    predicted_deltas = model.model.predict(X_scaled)
+    corrected_temps = b_temps + predicted_deltas
+
+    # 3. Calculate MAE for raw block forecast and corrected forecast
+    baseline_mae = float(np.mean(np.abs(b_temps - gt_temps)))
+    corrected_mae = float(np.mean(np.abs(corrected_temps - gt_temps)))
+    improvement = float(((baseline_mae - corrected_mae) / baseline_mae) * 100.0) if baseline_mae > 0 else 0.0
+
+    # 4. Print results in exact requested format
+    print("\nMean Absolute Error (MAE):")
+    print(f"- Baseline (no correction): {baseline_mae:.2f}°C")
+    print(f"- With correction model: {corrected_mae:.2f}°C")
+    print(f"- Improvement: {improvement:.1f}%\n")
+
+    if "pytest" in sys.modules:
+        return None
+
+    return {
+        "baseline_mae": baseline_mae,
+        "corrected_mae": corrected_mae,
+        "improvement_pct": improvement,
+    }
+
+
 def interactive_demo():
     """
     Interactive mode: You can type in values and see what the system outputs.
@@ -291,6 +544,7 @@ if __name__ == "__main__":
         test_full_pipeline()
         test_backend_integration()
         test_load_real_training_data()
+        test_improvement_over_baseline()
         
         print("\n" + "="*70)
         print("All tests passed! ✓")
