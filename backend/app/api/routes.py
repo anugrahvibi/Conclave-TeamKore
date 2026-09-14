@@ -241,13 +241,24 @@ def get_villages(
             "villages": villages
         }
 
-    return spatial_service.get_villages_geojson(
+    geojson = spatial_service.get_villages_geojson(
         district=district,
         block_id=block_id,
         search=search,
         limit=limit,
         offset=offset
     )
+
+    for feature in geojson.get("features", []):
+        props = feature.setdefault("properties", {})
+        vid = props.get("village_id") or feature.get("id")
+        if "elevation_m" not in props:
+            v_data = spatial_service.get_village(vid) if vid else None
+            props["elevation_m"] = v_data["static_features"]["elevation_m"] if v_data and "static_features" in v_data else 100.0
+        adv = advisory_service.get_advisory_for_village(vid) if vid else None
+        props["risk_level"] = adv["advisory"]["risk_level"] if adv and "advisory" in adv and "risk_level" in adv["advisory"] else "low"
+
+    return geojson
 
 
 @router.get("/block/{block_id}/summary", response_model=BlockSummaryResponse, summary="Officer Dashboard Block-Wide Summary")
