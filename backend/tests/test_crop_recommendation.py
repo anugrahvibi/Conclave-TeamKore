@@ -170,3 +170,100 @@ def test_recommend_crop_endpoint_404_not_found():
     """
     response = client.get("/recommend-crop/NON_EXISTENT_PANCHAYAT_99999")
     assert response.status_code == 404
+
+
+def test_soil_matching_scores_higher():
+    """
+    Test 7: Soil matching boosts suitability score.
+    Confirms that a crop with matching soil pH and texture scores higher
+    than an otherwise-identical case with mismatched soil properties.
+    """
+    forecast = {
+        "summary": {
+            "avg_temp_c": 27.5,
+            "total_rainfall_mm": 75.0,
+            "avg_humidity_pct": 85.0,
+            "max_wind_kmh": 12.0
+        }
+    }
+
+    # Favorable weather and terrain for rice (paddy)
+    base_static = {
+        "elevation_m": 30.0,
+        "land_cover": "agriculture",
+        "dist_to_water_km": 1.0
+    }
+
+    # Case A: Ideal soil for rice (pH 6.2 within [5.5, 7.5], clay 45% + sand 20% -> clay texture)
+    static_matched = {
+        **base_static,
+        "ph": 6.2,
+        "clay_pct": 45.0,
+        "sand_pct": 20.0,
+        "organic_carbon": 35.0
+    }
+
+    # Case B: Mismatched soil for rice (alkaline pH 8.8 exceeding 7.5, sand 90% + clay 5% -> sand texture)
+    static_mismatched = {
+        **base_static,
+        "ph": 8.8,
+        "clay_pct": 5.0,
+        "sand_pct": 90.0,
+        "organic_carbon": 5.0
+    }
+
+    recs_matched = recommend_crops(forecast, static_matched)
+    recs_mismatched = recommend_crops(forecast, static_mismatched)
+
+    rice_matched = next((c for c in recs_matched if c["crop"] == "rice"), None)
+    rice_mismatched = next((c for c in recs_mismatched if c["crop"] == "rice"), None)
+
+    assert rice_matched is not None, "Rice should be in matched recommendations"
+    assert rice_mismatched is not None, "Rice should be in mismatched recommendations"
+
+    # Confirms matching soil scores higher than mismatched soil
+    assert rice_matched["suitability_score"] > rice_mismatched["suitability_score"]
+
+    # Confirms soil factors are reported in explanation when present
+    assert "pH 6.2" in rice_matched["explanation"]
+    assert "clay 45%" in rice_matched["explanation"]
+    assert "sand 20%" in rice_matched["explanation"]
+
+
+def test_missing_soil_data_fallback_graceful(caplog):
+    """
+    Test 8: Missing soil data fallback.
+    Confirms that when a village has no soil data (not yet fetched or missing),
+    the system falls back to scoring without crashing, logs a warning, and returns valid recommendations.
+    """
+    forecast = {
+        "temp_c": 28.0,
+        "rainfall_mm": 50.0,
+        "humidity_pct": 75.0,
+        "wind_kmh": 10.0
+    }
+    # Static features with NO soil data attributes
+    static_features_no_soil = {
+        "elevation_m": 45.0,
+        "land_cover": "mixed_agroforestry",
+        "dist_to_water_km": 2.5
+    }
+
+    import logging
+    with caplog.at_level(logging.WARNING):
+        recs = recommend_crops(forecast, static_features_no_soil)
+
+    assert isinstance(recs, list)
+    assert len(recs) > 0
+
+    # Ensure warning was logged
+    warning_logged = any("soil" in record.message.lower() for record in caplog.records)
+    assert warning_logged, "Should log a warning when soil data is missing"
+
+    # Ensure schema and score validity
+    for item in recs:
+        assert 0.0 <= item["suitability_score"] <= 1.0
+        assert item["confidence"] in ["high", "medium", "low"]
+        assert isinstance(item["explanation"], str)
+        assert len(item["explanation"]) > 0
+

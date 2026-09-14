@@ -9,8 +9,10 @@
       "optimal_rainfall_mm": [40.0, 120.0],
       "suitable_land_cover_types": ["agriculture", "wetland", "mixed_agroforestry", "paddy_field", "alluvial_plain"],
       "max_elevation_m": 800.0,
+      "ph_range": [5.5, 7.5],
+      "suitable_soil_texture": ["clay", "clay_loam", "silty_clay", "loam"],
       "season": ["Virippu (Autumn: Apr/May - Sep/Oct)", "Mundakan (Winter: Sep/Oct - Dec/Jan)", "Puncha (Summer: Dec/Jan - Mar/Apr)"],
-      "notes": "Thrives in warm, humid tropical conditions with high water availability and fertile lowland clayey-alluvial soils."
+      "notes": "Thrives in warm, humid tropical conditions with high water availability, fertile lowland clayey-alluvial soils, and soil pH 5.5-7.5."
     },
     "banana": {
       "crop_name": "banana",
@@ -21,8 +23,10 @@
       "optimal_rainfall_mm": [20.0, 60.0],
       "suitable_land_cover_types": ["agriculture", "mixed_agroforestry", "homestead", "alluvial_plain", "river_valley"],
       "max_elevation_m": 1200.0,
+      "ph_range": [5.5, 7.5],
+      "suitable_soil_texture": ["loam", "sandy_loam", "clay_loam", "silt_loam"],
       "season": ["Year-round", "Nendran main planting (Aug-Sep)", "Pre-monsoon planting (Mar-Apr)"],
-      "notes": "Requires warm, humid tropical valleys and homesteads with well-drained loamy soil and steady moisture; sensitive to waterlogging and strong winds."
+      "notes": "Requires warm, humid tropical valleys and homesteads with well-drained loamy soil, steady moisture, and pH 5.5-7.5; sensitive to waterlogging and strong winds."
     },
     "coconut": {
       "crop_name": "coconut",
@@ -33,8 +37,10 @@
       "optimal_rainfall_mm": [15.0, 50.0],
       "suitable_land_cover_types": ["coastal", "mixed_agroforestry", "agriculture", "homestead", "sandy_loam"],
       "max_elevation_m": 600.0,
+      "ph_range": [5.2, 8.0],
+      "suitable_soil_texture": ["sandy_loam", "sand", "loamy_sand", "loam", "lateritic"],
       "season": ["Year-round", "May-June (South-West Monsoon)", "September-October (North-East Monsoon)"],
-      "notes": "Ideal for coastal and midland belts with high relative humidity, abundant sunshine, and well-drained sandy loam or lateritic soils."
+      "notes": "Ideal for coastal and midland belts with high relative humidity, abundant sunshine, pH 5.2-8.0, and well-drained sandy loam or lateritic soils."
     },
     "tapioca": {
       "crop_name": "tapioca",
@@ -45,8 +51,10 @@
       "optimal_rainfall_mm": [5.0, 35.0],
       "suitable_land_cover_types": ["agriculture", "laterite_upland", "mixed_agroforestry", "slopes", "dryland"],
       "max_elevation_m": 1000.0,
+      "ph_range": [5.5, 6.5],
+      "suitable_soil_texture": ["sandy_loam", "loam", "loamy_sand"],
       "season": ["Main crop (April-May)", "Second crop (September-October)"],
-      "notes": "Drought-hardy tuber crop well-suited to undulating lateritic midlands and upland slopes; highly intolerant of waterlogged conditions."
+      "notes": "Drought-hardy tuber crop well-suited to undulating lateritic midlands with light sandy loam, pH 5.5-6.5; highly intolerant of waterlogged conditions."
     },
     "vegetables": {
       "crop_name": "vegetables",
@@ -57,8 +65,10 @@
       "optimal_rainfall_mm": [5.0, 25.0],
       "suitable_land_cover_types": ["homestead", "agriculture", "mixed_agroforestry", "alluvial_plain", "riverbed"],
       "max_elevation_m": 1500.0,
+      "ph_range": [6.0, 7.5],
+      "suitable_soil_texture": ["loam", "sandy_loam", "clay_loam", "silt_loam"],
       "season": ["Onattukara / Summer (Jan-Feb)", "Post-monsoon (Sep-Oct)", "Pre-monsoon (May)"],
-      "notes": "Requires mild to warm temperatures, moderate soil moisture, and good drainage; highly susceptible to rot during torrential monsoon rains."
+      "notes": "Requires mild to warm temperatures, moderate soil moisture, pH 6.0-7.5, and well-drained fertile loam; highly susceptible to rot during torrential monsoon rains."
     },
     "rubber": {
       "crop_name": "rubber",
@@ -69,8 +79,10 @@
       "optimal_rainfall_mm": [35.0, 90.0],
       "suitable_land_cover_types": ["plantation", "forest_fringe", "hills_and_slopes", "mixed_agroforestry", "agriculture"],
       "max_elevation_m": 650.0,
+      "ph_range": [4.5, 6.5],
+      "suitable_soil_texture": ["sandy_loam", "loam", "clay_loam", "lateritic"],
       "season": ["Year-round tapping (peak post-monsoon)", "Planting (June-July South-West Monsoon)"],
-      "notes": "Thrives on warm, humid slopes and lateritic foothill plantations with heavy rainfall and deep, well-drained soils; unsuitable for waterlogged lowlands."
+      "notes": "Thrives on warm, humid slopes and lateritic foothill plantations with acidic pH 4.5-6.5, heavy rainfall, and deep, well-drained soils; unsuitable for waterlogged lowlands."
     }
   }
 }
