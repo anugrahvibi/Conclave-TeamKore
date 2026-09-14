@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import cropData from '../data/crops.json';
@@ -12,6 +12,7 @@ interface Map3DProps {
   initialBearing?: number;
   className?: string;
   villageData?: any;
+  backendUrl?: string;
 }
 
 const BASEMAP_TILES = {
@@ -20,62 +21,66 @@ const BASEMAP_TILES = {
   carto: 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
 };
 
-// 3D Mountain Showcase Locations
+// Kerala agro-advisory locations
 const LOCATIONS = [
   {
-    name: '🌾 Diablo Terraced Crops',
-    center: [-121.865, 37.855] as [number, number],
-    zoom: 13.0,
+    name: '🌾 Kerala Overview',
+    center: [76.27, 10.85] as [number, number],
+    zoom: 7.0,
+    pitch: 40,
+    bearing: -15,
+    desc: 'Full Kerala overview — 1031 Panchayats & Municipalities',
+  },
+  {
+    name: '🏔️ Idukki (Highland)',
+    center: [77.0, 9.9] as [number, number],
+    zoom: 10.5,
+    pitch: 72,
+    bearing: 30,
+    desc: 'High elevation tea & spice plantations in the Western Ghats',
+  },
+  {
+    name: '🌊 Alappuzha (Backwaters)',
+    center: [76.34, 9.49] as [number, number],
+    zoom: 11.0,
     pitch: 50,
-    bearing: -45,
-    desc: 'High-elevation mountain terraced crop parcels climbing up Mount Diablo',
-  },
-  {
-    name: '🏔️ Mount Diablo Summit',
-    center: [-121.914, 37.881] as [number, number],
-    zoom: 12.8,
-    pitch: 78,
-    bearing: -55,
-    desc: '3,849 ft peak directly overlooking the California valley',
-  },
-  {
-    name: '🏜️ Grand Canyon',
-    center: [-112.14, 36.06] as [number, number],
-    zoom: 12.2,
-    pitch: 80,
-    bearing: 45,
-    desc: 'Massive 1,500m deep vertical canyon walls & ridges',
-  },
-  {
-    name: '🏔️ Austrian Alps (Innsbruck)',
-    center: [11.39, 47.26] as [number, number],
-    zoom: 12.0,
-    pitch: 82,
-    bearing: 60,
-    desc: 'Towering 3,000m European alpine summits',
-  },
-  {
-    name: '🌋 Mount Rainier',
-    center: [-121.76, 46.85] as [number, number],
-    zoom: 11.5,
-    pitch: 80,
     bearing: -20,
-    desc: '14,411 ft massive volcanic peak with glaciers and steep valleys',
+    desc: 'Famous backwaters & paddy fields of Kuttanad',
+  },
+  {
+    name: '🌿 Wayanad (Forest)',
+    center: [76.08, 11.6] as [number, number],
+    zoom: 10.5,
+    pitch: 65,
+    bearing: 20,
+    desc: 'Dense forest canopy with coffee & cardamom estates',
+  },
+  {
+    name: '🏙️ Thiruvananthapuram',
+    center: [76.95, 8.52] as [number, number],
+    zoom: 11.0,
+    pitch: 45,
+    bearing: -10,
+    desc: 'State capital with coastal plains & suburban agriculture',
   },
 ];
 
 export default function Map3D({
-  initialCenter = [-121.865, 37.855], // Mount Diablo terraced crop parcels
-  initialZoom = 13.0,
-  initialPitch = 50,
-  initialBearing = -45,
+  initialCenter = [76.27, 10.85] as [number, number], // Kerala, India
+  initialZoom = 7.0,
+  initialPitch = 45,
+  initialBearing = -15,
   className = '',
   villageData,
+  backendUrl = 'http://localhost:8000',
 }: Map3DProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
   const [selectedCrop, setSelectedCrop] = useState<any>(null);
+  const [selectedVillage, setSelectedVillage] = useState<any>(null);
+  const [villageAdvisory, setVillageAdvisory] = useState<any>(null);
+  const [advisoryLoading, setAdvisoryLoading] = useState(false);
   const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
   const [terrainProvider, setTerrainProvider] = useState<'terrarium' | 'maplibre'>('terrarium');
 
@@ -212,160 +217,118 @@ export default function Map3D({
       map.resize();
       setIsLoaded(true);
 
-      // --- 3. ADD 3D CROP PARCELS DATA SOURCE ---
-      if (!map.getSource('crops-source')) {
-        map.addSource('crops-source', {
+      // --- 3. ADD KERALA VILLAGES DATA SOURCE ---
+      if (villageData && !map.getSource('villages-source')) {
+        map.addSource('villages-source', {
           type: 'geojson',
-          data: cropData as any,
+          data: villageData as any,
         });
 
-        // 1. 2D Solid Ground Fill
+        // Heatmap at low zoom
         map.addLayer({
-          id: 'crops-2d-fill',
-          type: 'fill',
-          source: 'crops-source',
+          id: 'villages-heat',
+          type: 'heatmap',
+          source: 'villages-source',
+          maxzoom: 9,
           paint: {
-            'fill-color': ['get', 'color'],
-            'fill-opacity': 0.75,
+            'heatmap-weight': 1,
+            'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 9, 2],
+            'heatmap-color': [
+              'interpolate', ['linear'], ['heatmap-density'],
+              0, 'rgba(16,185,129,0)',
+              0.3, '#10b981',
+              0.6, '#f59e0b',
+              1.0, '#ef4444'
+            ],
+            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 8, 9, 20],
+            'heatmap-opacity': 0.75,
           },
         });
 
-        // 2. Thick White Outlines (draped on surface)
+        // Circles at zoom ≥ 8
         map.addLayer({
-          id: 'crops-outline',
-          type: 'line',
-          source: 'crops-source',
+          id: 'villages-points',
+          type: 'circle',
+          source: 'villages-source',
+          minzoom: 8,
           paint: {
-            'line-color': '#ffffff',
-            'line-width': 3,
-            'line-opacity': 1.0,
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 4, 12, 9],
+            'circle-color': [
+              'match',
+              ['get', 'current_risk_level'],
+              'critical', '#dc2626',
+              'high', '#ef4444',
+              'medium', '#f59e0b',
+              'low', '#10b981',
+              '#6b7280'
+            ],
+            'circle-stroke-width': 1.5,
+            'circle-stroke-color': '#ffffff',
+            'circle-opacity': 0.9,
           },
         });
 
-        // --- 3.5. ADD VILLAGES DATA SOURCE ---
-        if (villageData) {
-          map.addSource('villages-source', {
-            type: 'geojson',
-            data: villageData as any,
-          });
-
-          map.addLayer({
-            id: 'villages-points',
-            type: 'circle',
-            source: 'villages-source',
-            paint: {
-              'circle-radius': 6,
-              'circle-color': [
-                'match',
-                ['get', 'current_risk_level'],
-                'high', '#ef4444',
-                'medium', '#f59e0b',
-                'low', '#10b981',
-                '#888888'
-              ],
-              'circle-stroke-width': 2,
-              'circle-stroke-color': '#ffffff'
-            }
-          });
-        }
-      }
-
-      // --- 4. ADD FLOATING HTML BADGE PINS ---
-      markersRef.current.forEach((m) => m.remove());
-      markersRef.current = [];
-
-      cropData.features.forEach((feature) => {
-        const props = feature.properties;
-        const coords = feature.geometry.coordinates[0][0] as [number, number];
-
-        // Create Badge Element
-        const el = document.createElement('div');
-        el.className = 'crop-badge';
-        el.style.backgroundColor = props.color;
-        el.style.color = '#ffffff';
-        el.style.padding = '5px 10px';
-        el.style.borderRadius = '14px';
-        el.style.fontSize = '12px';
-        el.style.fontWeight = '700';
-        el.style.fontFamily = 'system-ui, sans-serif';
-        el.style.boxShadow = '0 6px 16px rgba(0,0,0,0.6)';
-        el.style.border = '2px solid #ffffff';
-        el.style.cursor = 'pointer';
-        el.style.whiteSpace = 'nowrap';
-        el.innerText = `${props.cropType} (${props.fieldAreaAcres}ac)`;
-
-        el.addEventListener('click', () => {
-          setSelectedCrop(props);
-          map.flyTo({ center: coords, zoom: 14.5, pitch: 50, duration: 1000 });
+        // Village name labels at high zoom
+        map.addLayer({
+          id: 'villages-labels',
+          type: 'symbol',
+          source: 'villages-source',
+          minzoom: 11,
+          layout: {
+            'text-field': ['get', 'panchayat_name'],
+            'text-size': 11,
+            'text-offset': [0, 1.2],
+            'text-anchor': 'top',
+            'text-font': ['Open Sans Regular'],
+          },
+          paint: {
+            'text-color': '#ffffff',
+            'text-halo-color': 'rgba(0,0,0,0.8)',
+            'text-halo-width': 1.5,
+          },
         });
 
-        const marker = new maplibregl.Marker({ element: el })
-          .setLngLat(coords)
-          .addTo(map);
+        // Click handler → fetch live advisory from backend
+        map.on('click', 'villages-points', async (e) => {
+          if (!e.features || !e.features[0]) return;
+          const props = e.features[0].properties as any;
+          const coords = (e.features[0].geometry as any).coordinates as [number, number];
+          setSelectedCrop(null);
+          setSelectedVillage(props);
+          setVillageAdvisory(null);
+          setAdvisoryLoading(true);
+          map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 11), pitch: 50, duration: 800 });
 
-        markersRef.current.push(marker);
-      });
-
-      // Village badges
-      if (villageData && villageData.features) {
-        (villageData as any).features.forEach((feature: any) => {
-          const props = feature.properties;
-          const coords = feature.geometry.coordinates as [number, number];
-
-          const el = document.createElement('div');
-        el.className = 'village-badge';
-        el.style.backgroundColor = props.current_risk_level === 'high' ? '#ef4444' : props.current_risk_level === 'medium' ? '#f59e0b' : '#10b981';
-        el.style.color = '#ffffff';
-        el.style.padding = '4px 8px';
-        el.style.borderRadius = '12px';
-        el.style.fontSize = '11px';
-        el.style.fontWeight = '700';
-        el.style.fontFamily = 'system-ui, sans-serif';
-        el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)';
-        el.style.border = '2px solid #ffffff';
-        el.style.cursor = 'pointer';
-        el.style.whiteSpace = 'nowrap';
-        el.innerText = `${props.panchayat_name}`;
-
-        el.addEventListener('click', () => {
-          setSelectedCrop(props); // Using same state for convenience
-          map.flyTo({ center: coords, zoom: 12, pitch: 45, duration: 1000 });
+          try {
+            const [advRes, fcRes] = await Promise.all([
+              fetch(`${backendUrl}/advisory/${props.panchayat_id}?crop_stage=spraying_window`),
+              fetch(`${backendUrl}/forecast/${props.panchayat_id}`),
+            ]);
+            const adv = advRes.ok ? await advRes.json() : null;
+            const fc = fcRes.ok ? await fcRes.json() : null;
+            setVillageAdvisory({ advisory: adv, forecast: fc });
+          } catch {
+            setVillageAdvisory({ error: 'Failed to fetch live data' });
+          } finally {
+            setAdvisoryLoading(false);
+          }
         });
 
-        const marker = new maplibregl.Marker({ element: el })
-          .setLngLat(coords)
-          .addTo(map);
-
-          markersRef.current.push(marker);
+        map.on('mouseenter', 'villages-points', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'villages-points', () => {
+          map.getCanvas().style.cursor = '';
         });
       }
 
-      // Interactive Click on 2D Crop Parcel
-      map.on('click', 'crops-2d-fill', (e) => {
-        if (e.features && e.features[0]) {
-          const props = e.features[0].properties;
-          setSelectedCrop(props);
+      // --- 4. STATIC DEMO CROP PARCELS (kept as-is for reference) ---
+      if (!map.getSource('crops-source')) {
+        // skipped — Kerala data takes priority
+      }
 
-          new maplibregl.Popup({ offset: 25, closeButton: false })
-            .setLngLat(e.lngLat)
-            .setHTML(`
-              <div style="font-family: sans-serif; padding: 6px 10px; color: #111;">
-                <strong style="font-size: 15px; color: ${props.color};">${props.cropType} (${props.variety})</strong>
-                <div style="font-size: 12px; margin-top: 4px; color: #555;">Farmer: <b>${props.farmer}</b></div>
-                <div style="font-size: 12px; color: #555;">Area: <b>${props.fieldAreaAcres} Acres</b></div>
-                <div style="font-size: 12px; color: #555;">NDVI Score: <b>${props.ndvi}</b> | Health: <b>${props.healthStatus}</b></div>
-              </div>
-            `)
-            .addTo(map);
-        }
-      });
-
-      map.on('mouseenter', 'crops-2d-fill', () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', 'crops-2d-fill', () => {
-        map.getCanvas().style.cursor = '';
-      });
+      // No HTML badge pins — village circles are rendered as vector layers
+      // (supports 1000+ villages without DOM overhead)
 
       // Navigation & Official MapLibre 3D Terrain Controls
       map.addControl(
@@ -398,7 +361,7 @@ export default function Map3D({
       map.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [villageData, backendUrl]);
 
   // Basemap switcher
   const switchBasemap = (type: 'osm' | 'satellite' | 'carto') => {
@@ -512,7 +475,7 @@ export default function Map3D({
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
           <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
-            🌾 3D Crop Map
+            🌾 Kerala Agro-Advisory
           </h2>
           <button
             onClick={toggleOrbit}
@@ -697,106 +660,97 @@ export default function Map3D({
           </div>
         </div>
 
-        {/* Crop Field List */}
-        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6, color: '#e2e8f0' }}>
-          Crop Parcels ({cropData.features.length} Fields)
-        </div>
+        {/* Village count badge */}
+        {villageData && (
+          <div style={{ fontSize: 11, color: '#38bdf8', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+            <b>{villageData.features?.length ?? 0}</b> Kerala Panchayats loaded from backend
+          </div>
+        )}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 110, overflowY: 'auto' }}>
-          {cropData.features.map((f) => (
-            <div
-              key={f.properties.id}
-              onClick={() => {
-                setSelectedCrop(f.properties);
-                const coords = f.geometry.coordinates[0][0] as [number, number];
-                mapRef.current?.flyTo({ center: coords, zoom: 14.5, pitch: 50, duration: 1000 });
-              }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '4px 6px',
-                borderRadius: 6,
-                background: selectedCrop?.id === f.properties.id ? 'rgba(59, 130, 246, 0.35)' : 'rgba(255,255,255,0.05)',
-                cursor: 'pointer',
-                fontSize: 11,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: f.properties.color }} />
-                <span>{f.properties.cropType}</span>
-              </div>
-              <span style={{ color: '#94a3b8', fontSize: 10 }}>{f.properties.fieldAreaAcres} ac</span>
+        {/* Risk legend */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+          {[['🔴', 'critical / high', '#ef4444'], ['🟡', 'medium', '#f59e0b'], ['🟢', 'low', '#10b981']].map(([icon, label, color]) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#cbd5e1' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: color as string }} />
+              {label}
             </div>
           ))}
         </div>
-        {/* Village List */}
-        {villageData && villageData.features && (
-          <>
-            <div style={{ fontSize: 12, fontWeight: 600, marginTop: 12, marginBottom: 6, color: '#e2e8f0' }}>
-              Villages ({(villageData as any).features.length} Points)
-            </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 110, overflowY: 'auto' }}>
-              {(villageData as any).features.map((f: any) => (
-                <div
-                  key={f.properties.panchayat_id}
-                  onClick={() => {
-                    setSelectedCrop(f.properties);
-                    const coords = f.geometry.coordinates as [number, number];
-                    mapRef.current?.flyTo({ center: coords, zoom: 12, pitch: 45, duration: 1000 });
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '4px 6px',
-                    borderRadius: 6,
-                    background: selectedCrop?.panchayat_id === f.properties.panchayat_id ? 'rgba(59, 130, 246, 0.35)' : 'rgba(255,255,255,0.05)',
-                    cursor: 'pointer',
-                    fontSize: 11,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: f.properties.current_risk_level === 'high' ? '#ef4444' : f.properties.current_risk_level === 'medium' ? '#f59e0b' : '#10b981' }} />
-                    <span>{f.properties.panchayat_name}</span>
+        {/* Live Village Advisory Panel */}
+        {(selectedVillage || advisoryLoading) && (
+          <div style={{
+            marginBottom: 10,
+            padding: '10px 12px',
+            background: 'rgba(16, 185, 129, 0.08)',
+            border: '1px solid rgba(16,185,129,0.25)',
+            borderRadius: 10,
+            fontSize: 11,
+          }}>
+            {advisoryLoading ? (
+              <div style={{ color: '#38bdf8', fontWeight: 600 }}>⏳ Fetching live advisory from backend...</div>
+            ) : selectedVillage && (
+              <>
+                <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color:
+                  villageAdvisory?.advisory?.advisory?.risk_level === 'critical' ? '#dc2626' :
+                  villageAdvisory?.advisory?.advisory?.risk_level === 'high' ? '#ef4444' :
+                  villageAdvisory?.advisory?.advisory?.risk_level === 'medium' ? '#f59e0b' : '#10b981'
+                }}>
+                  📍 {selectedVillage.panchayat_name}
+                  <span style={{ marginLeft: 6, fontSize: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 4, padding: '1px 5px', color: '#94a3b8' }}>
+                    {selectedVillage.district}
+                  </span>
+                </div>
+
+                {villageAdvisory?.error && (
+                  <div style={{ color: '#ef4444' }}>⚠️ {villageAdvisory.error}</div>
+                )}
+
+                {villageAdvisory?.forecast && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 10px', marginBottom: 8 }}>
+                    {[
+                      ['🌡️', 'Temp', `${villageAdvisory.forecast.summary?.avg_temp_c?.toFixed(1)}°C`],
+                      ['🌧️', 'Rain', `${villageAdvisory.forecast.summary?.total_rainfall_mm?.toFixed(1)}mm`],
+                      ['💧', 'Humidity', `${villageAdvisory.forecast.summary?.avg_humidity_pct?.toFixed(0)}%`],
+                      ['💨', 'Wind', `${villageAdvisory.forecast.summary?.max_wind_kmh?.toFixed(1)} km/h`],
+                    ].map(([icon, label, val]) => (
+                      <div key={label} style={{ color: '#e2e8f0' }}>
+                        <span style={{ color: '#94a3b8' }}>{icon} {label}: </span><b>{val}</b>
+                      </div>
+                    ))}
                   </div>
-                  <span style={{ color: '#94a3b8', fontSize: 10 }}>{f.properties.district}</span>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+                )}
 
-        {/* Parcel/Village Inspection Details */}
-        {selectedCrop && (
-          <div
-            style={{
-              marginTop: 10,
-              paddingTop: 8,
-              borderTop: '1px solid rgba(255,255,255,0.12)',
-              fontSize: 11,
-            }}
-          >
-            {selectedCrop.cropType ? (
-              <>
-                <div style={{ fontWeight: 700, color: selectedCrop.color, fontSize: 13 }}>
-                  {selectedCrop.cropType} — {selectedCrop.variety}
-                </div>
-                <div style={{ color: '#cbd5e1', marginTop: 2 }}>Farmer: {selectedCrop.farmer}</div>
-                <div style={{ color: '#cbd5e1' }}>NDVI Score: <b>{selectedCrop.ndvi}</b> ({selectedCrop.healthStatus})</div>
-                <div style={{ color: '#cbd5e1' }}>Moisture: <b>{selectedCrop.moistureLevel}</b> | Soil: {selectedCrop.soilType}</div>
-              </>
-            ) : (
-              <>
-                <div style={{ fontWeight: 700, color: selectedCrop.current_risk_level === 'high' ? '#ef4444' : selectedCrop.current_risk_level === 'medium' ? '#f59e0b' : '#10b981', fontSize: 13 }}>
-                  {selectedCrop.panchayat_name} ({selectedCrop.panchayat_id})
-                </div>
-                <div style={{ color: '#cbd5e1', marginTop: 2 }}>District: {selectedCrop.district}</div>
-                <div style={{ color: '#cbd5e1' }}>Block ID: <b>{selectedCrop.block_id}</b></div>
-                <div style={{ color: '#cbd5e1' }}>Risk Level: <b>{selectedCrop.current_risk_level}</b></div>
+                {villageAdvisory?.advisory?.advisory && (() => {
+                  const adv = villageAdvisory.advisory.advisory;
+                  const riskColor = adv.risk_level === 'critical' ? '#dc2626' : adv.risk_level === 'high' ? '#ef4444' : adv.risk_level === 'medium' ? '#f59e0b' : '#10b981';
+                  return (
+                    <>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                        <span style={{ background: riskColor, color: '#fff', borderRadius: 4, padding: '1px 7px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>
+                          {adv.risk_level} risk
+                        </span>
+                        <span style={{ color: '#94a3b8', fontSize: 10 }}>conf: {adv.confidence}</span>
+                      </div>
+                      <div style={{ color: '#cbd5e1', lineHeight: 1.4, marginBottom: 6 }}>{adv.text}</div>
+                      {adv.actionable_recommendations?.slice(0, 2).map((r: string, i: number) => (
+                        <div key={i} style={{ color: '#86efac', fontSize: 10, marginBottom: 2 }}>• {r}</div>
+                      ))}
+                    </>
+                  );
+                })()}
               </>
             )}
+          </div>
+        )}
+
+        {/* Elevation & static info */}
+        {selectedVillage && !advisoryLoading && (
+          <div style={{ fontSize: 10, color: '#64748b', marginBottom: 8 }}>
+            Elev: <b style={{ color: '#94a3b8' }}>{selectedVillage.elevation_m}m</b> ·
+            Land: <b style={{ color: '#94a3b8' }}>{selectedVillage.land_cover}</b> ·
+            Block: <b style={{ color: '#94a3b8' }}>{selectedVillage.block_id}</b>
           </div>
         )}
       </div>
