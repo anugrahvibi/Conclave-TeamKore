@@ -1,0 +1,152 @@
+{
+  "type": "FeatureCollection",
+  "name": "DiabloSlopeTerracedCropParcels",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PARCEL-001",
+        "cropType": "Vineyard (Cabernet)",
+        "variety": "Mountain Reserve Cabernet",
+        "farmer": "Diablo Peak Terraced Vineyards",
+        "fieldAreaAcres": 65.4,
+        "healthStatus": "Optimal",
+        "ndvi": 0.86,
+        "moistureLevel": "64%",
+        "soilType": "Volcanic Gravelly Loam",
+        "height": 250,
+        "color": "#9333ea"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-121.885, 37.855],
+            [-121.865, 37.855],
+            [-121.860, 37.870],
+            [-121.880, 37.872],
+            [-121.885, 37.855]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PARCEL-002",
+        "cropType": "Olive Groves",
+        "variety": "Mission & Frantoio",
+        "farmer": "Sierra Foothill Estate",
+        "fieldAreaAcres": 82.1,
+        "healthStatus": "Optimal",
+        "ndvi": 0.89,
+        "moistureLevel": "58%",
+        "soilType": "Rocky Limestone",
+        "height": 320,
+        "color": "#16a34a"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-121.860, 37.852],
+            [-121.840, 37.850],
+            [-121.835, 37.868],
+            [-121.855, 37.870],
+            [-121.860, 37.852]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PARCEL-003",
+        "cropType": "Almond Orchards",
+        "variety": "Nonpareil Mountain",
+        "farmer": "Highland Valley Agri",
+        "fieldAreaAcres": 110.5,
+        "healthStatus": "Moderate",
+        "ndvi": 0.72,
+        "moistureLevel": "51%",
+        "soilType": "Alluvial Loam",
+        "height": 280,
+        "color": "#eab308"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-121.880, 37.835],
+            [-121.858, 37.834],
+            [-121.855, 37.850],
+            [-121.878, 37.852],
+            [-121.880, 37.835]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PARCEL-004",
+        "cropType": "Sunflowers",
+        "variety": "Helios Gold Organic",
+        "farmer": "Sun Summit Botanicals",
+        "fieldAreaAcres": 55.0,
+        "healthStatus": "Optimal",
+        "ndvi": 0.91,
+        "moistureLevel": "72%",
+        "soilType": "Rich Sandy Silt",
+        "height": 220,
+        "color": "#f97316"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-121.855, 37.832],
+            [-121.835, 37.830],
+            [-121.832, 37.848],
+            [-121.852, 37.850],
+            [-121.855, 37.832]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PARCEL-005",
+        "cropType": "Organic Lavender",
+        "variety": "Grosso French Lavender",
+        "farmer": "Diablo Mist Herbs",
+        "fieldAreaAcres": 40.2,
+        "healthStatus": "Optimal",
+        "ndvi": 0.84,
+        "moistureLevel": "60%",
+        "soilType": "Well-drained Gravel",
+        "height": 180,
+        "color": "#ec4899"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-121.895, 37.848],
+            [-121.882, 37.848],
+            [-121.880, 37.865],
+            [-121.893, 37.866],
+            [-121.895, 37.848]
+          ]
+        ]
+      }
+    }
+  ]
+}
