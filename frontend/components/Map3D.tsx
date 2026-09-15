@@ -84,13 +84,53 @@ export default function Map3D({
   const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
   const [terrainProvider, setTerrainProvider] = useState<'terrarium' | 'maplibre'>('terrarium');
 
-  // Camera & Telemetry state
   const [pitch, setPitch] = useState<number>(initialPitch);
   const [bearing, setBearing] = useState<number>(initialBearing);
   const [isOrbiting, setIsOrbiting] = useState<boolean>(false);
   const [currentElevation, setCurrentElevation] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [loadedVillageData, setLoadedVillageData] = useState<any>(villageData);
   const orbitFrameRef = useRef<number | null>(null);
+
+  // Client-side village fetch fallback if villageData prop is not passed
+  useEffect(() => {
+    if (villageData) {
+      setLoadedVillageData(villageData);
+      return;
+    }
+    let isMounted = true;
+    fetch(`${backendUrl}/villages?format=json&limit=300`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !data || !data.villages) return;
+        const features = data.villages.map((v: any) => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [v.lon, v.lat],
+          },
+          properties: {
+            village_id: v.village_id,
+            panchayat_id: v.panchayat_id,
+            panchayat_name: v.name,
+            name_ml: v.name_ml || '',
+            district: v.district,
+            block_id: v.nearest_block_id,
+            block_name: v.nearest_block_name,
+            elevation_m: v.static_features?.elevation_m ?? 100,
+            land_cover: v.static_features?.land_cover ?? 'agriculture',
+            current_risk_level: 'low',
+          },
+        }));
+        setLoadedVillageData({ type: 'FeatureCollection', features });
+      })
+      .catch((err) => console.warn('Village fetch notice:', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [villageData, backendUrl]);
+
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return;
@@ -217,119 +257,6 @@ export default function Map3D({
       map.resize();
       setIsLoaded(true);
 
-      // --- 3. ADD KERALA VILLAGES DATA SOURCE ---
-      if (villageData && !map.getSource('villages-source')) {
-        map.addSource('villages-source', {
-          type: 'geojson',
-          data: villageData as any,
-        });
-
-        // Heatmap at low zoom
-        map.addLayer({
-          id: 'villages-heat',
-          type: 'heatmap',
-          source: 'villages-source',
-          maxzoom: 9,
-          paint: {
-            'heatmap-weight': 1,
-            'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 9, 2],
-            'heatmap-color': [
-              'interpolate', ['linear'], ['heatmap-density'],
-              0, 'rgba(16,185,129,0)',
-              0.3, '#10b981',
-              0.6, '#f59e0b',
-              1.0, '#ef4444'
-            ],
-            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 8, 9, 20],
-            'heatmap-opacity': 0.75,
-          },
-        });
-
-        // Circles at zoom ≥ 8
-        map.addLayer({
-          id: 'villages-points',
-          type: 'circle',
-          source: 'villages-source',
-          minzoom: 8,
-          paint: {
-            'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 4, 12, 9],
-            'circle-color': [
-              'match',
-              ['get', 'current_risk_level'],
-              'critical', '#dc2626',
-              'high', '#ef4444',
-              'medium', '#f59e0b',
-              'low', '#10b981',
-              '#6b7280'
-            ],
-            'circle-stroke-width': 1.5,
-            'circle-stroke-color': '#ffffff',
-            'circle-opacity': 0.9,
-          },
-        });
-
-        // Village name labels at high zoom
-        map.addLayer({
-          id: 'villages-labels',
-          type: 'symbol',
-          source: 'villages-source',
-          minzoom: 11,
-          layout: {
-            'text-field': ['get', 'panchayat_name'],
-            'text-size': 11,
-            'text-offset': [0, 1.2],
-            'text-anchor': 'top',
-            'text-font': ['Open Sans Regular'],
-          },
-          paint: {
-            'text-color': '#ffffff',
-            'text-halo-color': 'rgba(0,0,0,0.8)',
-            'text-halo-width': 1.5,
-          },
-        });
-
-        // Click handler → fetch live advisory from backend
-        map.on('click', 'villages-points', async (e) => {
-          if (!e.features || !e.features[0]) return;
-          const props = e.features[0].properties as any;
-          const coords = (e.features[0].geometry as any).coordinates as [number, number];
-          setSelectedCrop(null);
-          setSelectedVillage(props);
-          setVillageAdvisory(null);
-          setAdvisoryLoading(true);
-          map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 11), pitch: 50, duration: 800 });
-
-          try {
-            const [advRes, fcRes] = await Promise.all([
-              fetch(`${backendUrl}/advisory/${props.panchayat_id}?crop_stage=spraying_window`),
-              fetch(`${backendUrl}/forecast/${props.panchayat_id}`),
-            ]);
-            const adv = advRes.ok ? await advRes.json() : null;
-            const fc = fcRes.ok ? await fcRes.json() : null;
-            setVillageAdvisory({ advisory: adv, forecast: fc });
-          } catch {
-            setVillageAdvisory({ error: 'Failed to fetch live data' });
-          } finally {
-            setAdvisoryLoading(false);
-          }
-        });
-
-        map.on('mouseenter', 'villages-points', () => {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        map.on('mouseleave', 'villages-points', () => {
-          map.getCanvas().style.cursor = '';
-        });
-      }
-
-      // --- 4. STATIC DEMO CROP PARCELS (kept as-is for reference) ---
-      if (!map.getSource('crops-source')) {
-        // skipped — Kerala data takes priority
-      }
-
-      // No HTML badge pins — village circles are rendered as vector layers
-      // (supports 1000+ villages without DOM overhead)
-
       // Navigation & Official MapLibre 3D Terrain Controls
       map.addControl(
         new maplibregl.NavigationControl({
@@ -361,7 +288,126 @@ export default function Map3D({
       map.remove();
       mapRef.current = null;
     };
-  }, [villageData, backendUrl]);
+  }, [currentBasemap, initialCenter, initialZoom, initialPitch, initialBearing]);
+
+  // Reactive effect to render/update villages GeoJSON source & layers
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isLoaded || !loadedVillageData) return;
+
+    if (map.getSource('villages-source')) {
+      (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(loadedVillageData);
+      return;
+    }
+
+    map.addSource('villages-source', {
+      type: 'geojson',
+      data: loadedVillageData as any,
+    });
+
+    // Heatmap at low zoom
+    if (!map.getLayer('villages-heat')) {
+      map.addLayer({
+        id: 'villages-heat',
+        type: 'heatmap',
+        source: 'villages-source',
+        maxzoom: 9,
+        paint: {
+          'heatmap-weight': 1,
+          'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 9, 2],
+          'heatmap-color': [
+            'interpolate', ['linear'], ['heatmap-density'],
+            0, 'rgba(16,185,129,0)',
+            0.3, '#10b981',
+            0.6, '#f59e0b',
+            1.0, '#ef4444'
+          ],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 8, 9, 20],
+          'heatmap-opacity': 0.75,
+        },
+      });
+    }
+
+    // Circles at zoom >= 8
+    if (!map.getLayer('villages-points')) {
+      map.addLayer({
+        id: 'villages-points',
+        type: 'circle',
+        source: 'villages-source',
+        minzoom: 8,
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 4, 12, 9],
+          'circle-color': [
+            'match',
+            ['get', 'current_risk_level'],
+            'critical', '#dc2626',
+            'high', '#ef4444',
+            'medium', '#f59e0b',
+            'low', '#10b981',
+            '#6b7280'
+          ],
+          'circle-stroke-width': 1.5,
+          'circle-stroke-color': '#ffffff',
+          'circle-opacity': 0.9,
+        },
+      });
+    }
+
+    // Village name labels at high zoom
+    if (!map.getLayer('villages-labels')) {
+      map.addLayer({
+        id: 'villages-labels',
+        type: 'symbol',
+        source: 'villages-source',
+        minzoom: 11,
+        layout: {
+          'text-field': ['get', 'panchayat_name'],
+          'text-size': 11,
+          'text-offset': [0, 1.2],
+          'text-anchor': 'top',
+          'text-font': ['Open Sans Regular'],
+        },
+        paint: {
+          'text-color': '#ffffff',
+          'text-halo-color': 'rgba(0,0,0,0.8)',
+          'text-halo-width': 1.5,
+        },
+      });
+    }
+
+    // Click handler → fetch live advisory from backend
+    map.on('click', 'villages-points', async (e) => {
+      if (!e.features || !e.features[0]) return;
+      const props = e.features[0].properties as any;
+      const coords = (e.features[0].geometry as any).coordinates as [number, number];
+      setSelectedCrop(null);
+      setSelectedVillage(props);
+      setVillageAdvisory(null);
+      setAdvisoryLoading(true);
+      map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 11), pitch: 50, duration: 800 });
+
+      try {
+        const [advRes, fcRes] = await Promise.all([
+          fetch(`${backendUrl}/advisory/${props.panchayat_id}?crop_stage=spraying_window`),
+          fetch(`${backendUrl}/forecast/${props.panchayat_id}`),
+        ]);
+        const adv = advRes.ok ? await advRes.json() : null;
+        const fc = fcRes.ok ? await fcRes.json() : null;
+        setVillageAdvisory({ advisory: adv, forecast: fc });
+      } catch {
+        setVillageAdvisory({ error: 'Failed to fetch live data' });
+      } finally {
+        setAdvisoryLoading(false);
+      }
+    });
+
+    map.on('mouseenter', 'villages-points', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'villages-points', () => {
+      map.getCanvas().style.cursor = '';
+    });
+  }, [isLoaded, loadedVillageData, backendUrl]);
 
   // Basemap switcher
   const switchBasemap = (type: 'osm' | 'satellite' | 'carto') => {
