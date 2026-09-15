@@ -256,7 +256,20 @@ def get_villages(
             v_data = spatial_service.get_village(vid) if vid else None
             props["elevation_m"] = v_data["static_features"]["elevation_m"] if v_data and "static_features" in v_data else 100.0
         adv = advisory_service.get_advisory_for_village(vid) if vid else None
-        props["risk_level"] = adv["advisory"]["risk_level"] if adv and "advisory" in adv and "risk_level" in adv["advisory"] else "low"
+        if adv and "advisory" in adv:
+            props["risk_level"] = adv["advisory"].get("risk_level", "low")
+            weather_code = adv.get("weather_inferred", "normal")
+            category_map = {
+                "frost_risk": "frost",
+                "high_temp_dry": "heat",
+                "rain_24h": "rain",
+                "heavy_rain": "rain",
+                "high_wind": "rain",
+            }
+            props["risk_category"] = category_map.get(weather_code, "none")
+        else:
+            props["risk_level"] = "low"
+            props["risk_category"] = "none"
 
     return geojson
 

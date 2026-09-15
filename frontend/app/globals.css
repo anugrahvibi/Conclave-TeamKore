@@ -22,6 +22,51 @@ body {
   width: 100%;
 }
 
+/* MapLibre Popup — nested rounding & light theme per DESIGN.md (no shadows)
+   parent radius 24px = child radius 20px + 4px padding (concentric) */
+.maplibregl-popup-content {
+  padding: 4px !important;
+  border-radius: 1.5rem !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+.maplibregl-popup-content > div {
+  border-radius: 1.25rem !important;
+  padding: 12px 16px;
+}
+.maplibregl-popup-tip {
+  border: none !important;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: #ffffff;
+}
+.maplibregl-popup-close-button {
+  border-radius: 9999px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  color: #64748b;
+  padding: 0;
+  top: 6px;
+}
+.maplibregl-popup-close-button:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* MapLibre attribution control — rounded light chip, flush-edge exception */
+.maplibregl-ctrl-attrib {
+  background: #ffffff !important;
+  border-radius: 9999px;
+  padding: 2px 6px;
+}
+.maplibregl-ctrl-attrib-button {
+  border-radius: 9999px;
+}
+
 /* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
