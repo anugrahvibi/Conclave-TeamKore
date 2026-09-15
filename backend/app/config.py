@@ -29,6 +29,7 @@ class Settings:
     VILLAGE_CENTROIDS_CSV: Path = MLDEV1_DATA_DIR / "village_centroids.csv"
     VILLAGE_METADATA_CSV: Path = MLDEV1_DATA_DIR / "village_metadata_kerala.csv"
     VILLAGE_STATIC_FEATURES_CSV: Path = MLDEV1_DATA_DIR / "village_static_features.csv"
+    VILLAGE_SOIL_DATA_CSV: Path = PROJECT_ROOT / "data" / "village_soil_data.csv"
     KERALA_GEOJSON: Path = MLDEV1_DATA_DIR / "raw" / "kerala.geojson"
     TRAINING_DATASET_CSV: Path = MLDEV1_DATA_DIR / "training_dataset.csv"
     

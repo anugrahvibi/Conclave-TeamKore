@@ -3,13 +3,17 @@ Spatial Service for managing village boundaries, centroids, and nearest-station 
 """
 
 import json
+import logging
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from scipy.spatial import cKDTree
 
 from backend.app.config import settings
 from backend.app.services.data_service import KERALA_BLOCK_STATIONS, data_service
+
+logger = logging.getLogger(__name__)
 
 
 def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -59,6 +63,29 @@ class SpatialService:
         df_static = pd.read_csv(settings.VILLAGE_STATIC_FEATURES_CSV)
         merged = pd.merge(df_meta, df_static, on="village_id", how="left")
 
+        # Load village_soil_data.csv at startup if present (cached batch data)
+        soil_csv_path = getattr(settings, "VILLAGE_SOIL_DATA_CSV", None)
+        if not (soil_csv_path and Path(soil_csv_path).exists()):
+            for alt in [
+                settings.PROJECT_ROOT / "data" / "village_soil_data.csv",
+                settings.MLDEV1_DATA_DIR / "village_soil_data.csv",
+                Path.cwd() / "data" / "village_soil_data.csv"
+            ]:
+                if alt.exists():
+                    soil_csv_path = alt
+                    break
+
+        if soil_csv_path and Path(soil_csv_path).exists():
+            try:
+                df_soil = pd.read_csv(soil_csv_path)
+                if not df_soil.empty and "village_id" in df_soil.columns:
+                    merged = pd.merge(merged, df_soil, on="village_id", how="left")
+                    logger.info(f"Loaded soil data from {soil_csv_path} for {len(df_soil)} villages.")
+            except Exception as e:
+                logger.warning(f"Could not load soil data from {soil_csv_path} ({e}); proceeding without soil.")
+        else:
+            logger.warning("village_soil_data.csv not found at startup; proceeding without soil data.")
+
         for _, row in merged.iterrows():
             vid = str(row["village_id"])
             pid = str(row["panchayat_id"])
@@ -79,6 +106,28 @@ class SpatialService:
             # Boundary polygon if available
             geom = self.geometries.get(osm_id)
 
+            static_features: Dict[str, Any] = {
+                "elevation_m": elevation,
+                "dist_to_water_km": round(dist_to_water / 1000.0, 2),
+                "land_cover": land_cover
+            }
+
+            # Attach soil features if available
+            ph_val = row.get("ph")
+            clay_val = row.get("clay_pct")
+            sand_val = row.get("sand_pct")
+            oc_val = row.get("organic_carbon")
+            if pd.notna(ph_val) and pd.notna(clay_val) and pd.notna(sand_val):
+                try:
+                    static_features["ph"] = float(ph_val)
+                    static_features["soil_ph"] = float(ph_val)
+                    static_features["clay_pct"] = float(clay_val)
+                    static_features["sand_pct"] = float(sand_val)
+                    if pd.notna(oc_val) and str(oc_val).strip() != "":
+                        static_features["organic_carbon"] = float(oc_val)
+                except (ValueError, TypeError):
+                    pass
+
             village_record = {
                 "village_id": vid,
                 "panchayat_id": pid,
@@ -91,11 +140,7 @@ class SpatialService:
                 "nearest_block_id": nearest_bid,
                 "nearest_block_name": nearest_block.get("name", nearest_bid),
                 "nearest_block_dist_km": round(haversine_km(lat, lon, nearest_block["lat"], nearest_block["lon"]), 2),
-                "static_features": {
-                    "elevation_m": elevation,
-                    "dist_to_water_km": round(dist_to_water / 1000.0, 2),
-                    "land_cover": land_cover
-                },
+                "static_features": static_features,
                 "geometry": geom
             }
 
