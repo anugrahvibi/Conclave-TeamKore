@@ -1,6 +1,30 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import {
+  Globe,
+  MapTrifold,
+  Compass,
+  MagnifyingGlass,
+  MapPin,
+  Plant,
+  Thermometer,
+  CloudRain,
+  Drop,
+  Wind,
+  CircleNotch,
+  X,
+  CaretUp,
+  CaretDown,
+  Mouse,
+  Scroll,
+  Buildings,
+  Mountains,
+  Waves,
+  Tree,
+  IconProps,
+} from '@phosphor-icons/react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import cropData from '../data/crops.json';
@@ -15,54 +39,46 @@ interface Map3DProps {
   backendUrl?: string;
 }
 
+const cartoApiKey = process.env.NEXT_PUBLIC_CARTO_API_KEY;
 const BASEMAP_TILES = {
   satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   osm: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  carto: 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
+  carto:
+    cartoApiKey && cartoApiKey !== 'your_carto_api_key_here' && cartoApiKey.trim() !== ''
+      ? `https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${cartoApiKey}`
+      : 'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',
 };
 
-// Kerala agro-advisory locations
-const LOCATIONS = [
+const BASEMAP_OPTIONS = [
   {
-    name: '🌾 Kerala Overview',
-    center: [76.27, 10.85] as [number, number],
-    zoom: 7.0,
-    pitch: 40,
-    bearing: -15,
-    desc: 'Full Kerala overview — 1031 Panchayats & Municipalities',
+    id: 'satellite' as const,
+    label: 'Satellite',
+    icon: Globe,
+    preview: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/4/8/11',
   },
   {
-    name: '🏔️ Idukki (Highland)',
-    center: [77.0, 9.9] as [number, number],
-    zoom: 10.5,
-    pitch: 72,
-    bearing: 30,
-    desc: 'High elevation tea & spice plantations in the Western Ghats',
+    id: 'osm' as const,
+    label: 'Streets',
+    icon: MapTrifold,
+    preview: 'https://tile.openstreetmap.org/4/11/7.png',
   },
   {
-    name: '🌊 Alappuzha (Backwaters)',
-    center: [76.34, 9.49] as [number, number],
-    zoom: 11.0,
-    pitch: 50,
-    bearing: -20,
-    desc: 'Famous backwaters & paddy fields of Kuttanad',
+    id: 'carto' as const,
+    label: 'Voyager',
+    icon: Compass,
+    preview: cartoApiKey && cartoApiKey !== 'your_carto_api_key_here' && cartoApiKey.trim() !== ''
+      ? `https://a.basemaps.cartocdn.com/rastertiles/voyager/4/11/7.png?key=${cartoApiKey}`
+      : 'https://a.basemaps.cartocdn.com/rastertiles/voyager/4/11/7.png',
   },
-  {
-    name: '🌿 Wayanad (Forest)',
-    center: [76.08, 11.6] as [number, number],
-    zoom: 10.5,
-    pitch: 65,
-    bearing: 20,
-    desc: 'Dense forest canopy with coffee & cardamom estates',
-  },
-  {
-    name: '🏙️ Thiruvananthapuram',
-    center: [76.95, 8.52] as [number, number],
-    zoom: 11.0,
-    pitch: 45,
-    bearing: -10,
-    desc: 'State capital with coastal plains & suburban agriculture',
-  },
+];
+
+// Preset quick search locations
+const POPULAR_LOCATIONS = [
+  { name: 'Kerala Overview', district: 'Statewide', center: [76.27, 10.85] as [number, number], zoom: 7.0, type: 'region', icon: Plant },
+  { name: 'Idukki Highlands', district: 'Idukki', center: [77.0, 9.9] as [number, number], zoom: 11.0, type: 'region', icon: Mountains },
+  { name: 'Alappuzha Backwaters', district: 'Alappuzha', center: [76.34, 9.49] as [number, number], zoom: 11.5, type: 'region', icon: Waves },
+  { name: 'Wayanad Plantations', district: 'Wayanad', center: [76.08, 11.6] as [number, number], zoom: 11.0, type: 'region', icon: Tree },
+  { name: 'Thiruvananthapuram', district: 'Thiruvananthapuram', center: [76.95, 8.52] as [number, number], zoom: 11.5, type: 'region', icon: Buildings },
 ];
 
 export default function Map3D({
@@ -77,20 +93,18 @@ export default function Map3D({
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
-  const [selectedCrop, setSelectedCrop] = useState<any>(null);
-  const [selectedVillage, setSelectedVillage] = useState<any>(null);
-  const [villageAdvisory, setVillageAdvisory] = useState<any>(null);
-  const [advisoryLoading, setAdvisoryLoading] = useState(false);
-  const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
-  const [terrainProvider, setTerrainProvider] = useState<'terrarium' | 'maplibre'>('terrarium');
 
-  const [pitch, setPitch] = useState<number>(initialPitch);
-  const [bearing, setBearing] = useState<number>(initialBearing);
-  const [isOrbiting, setIsOrbiting] = useState<boolean>(false);
-  const [currentElevation, setCurrentElevation] = useState<number | null>(null);
+  // Basemap & View Selector State
+  const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
+  const [isMapViewMenuOpen, setIsMapViewMenuOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loadedVillageData, setLoadedVillageData] = useState<any>(villageData);
-  const orbitFrameRef = useRef<number | null>(null);
+
+  // Search Bar / Pill State
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Client-side village fetch fallback if villageData prop is not passed
   useEffect(() => {
@@ -131,6 +145,101 @@ export default function Map3D({
     };
   }, [villageData, backendUrl]);
 
+  // Handle click outside search to collapse pill
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        if (!searchQuery) {
+          setIsSearchOpen(false);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [searchQuery]);
+
+  // Focus input when search shifts to pill
+  useEffect(() => {
+    if (isSearchOpen) {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+    }
+  }, [isSearchOpen]);
+
+  // Suggestions computation
+  const suggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) {
+      return POPULAR_LOCATIONS.map((loc) => ({
+        id: `pop-${loc.name}`,
+        title: loc.name,
+        subtitle: loc.district,
+        badge: 'Region',
+        coords: loc.center,
+        zoom: loc.zoom,
+        icon: loc.icon,
+      }));
+    }
+
+    const list: Array<{
+      id: string;
+      title: string;
+      subtitle: string;
+      badge: string;
+      coords: [number, number];
+      zoom: number;
+      icon: React.ComponentType<IconProps>;
+    }> = [];
+
+    // Filter villages
+    if (loadedVillageData?.features) {
+      for (const f of loadedVillageData.features) {
+        const p = f.properties;
+        const name = (p.panchayat_name || '').toLowerCase();
+        const dist = (p.district || '').toLowerCase();
+        const nameMl = (p.name_ml || '').toLowerCase();
+
+        if (name.includes(q) || dist.includes(q) || nameMl.includes(q)) {
+          list.push({
+            id: `v-${p.village_id || p.panchayat_id}`,
+            title: p.panchayat_name,
+            subtitle: `${p.district || ''} • Elev: ${p.elevation_m || 100}m`,
+            badge: 'Village',
+            coords: f.geometry.coordinates as [number, number],
+            zoom: 12.5,
+            icon: MapPin,
+          });
+          if (list.length >= 6) break;
+        }
+      }
+    }
+
+    // Filter crops
+    if (cropData?.features) {
+      for (const f of cropData.features) {
+        const p = f.properties;
+        const cropType = (p.cropType || '').toLowerCase();
+        const variety = (p.variety || '').toLowerCase();
+        const farmer = (p.farmer || '').toLowerCase();
+
+        if (cropType.includes(q) || variety.includes(q) || farmer.includes(q)) {
+          list.push({
+            id: `c-${p.id || Math.random()}`,
+            title: `${p.cropType} (${p.variety})`,
+            subtitle: `Farmer: ${p.farmer} • ${p.fieldAreaAcres} ac`,
+            badge: 'Crop',
+            coords: f.geometry.coordinates[0][0] as [number, number],
+            zoom: 14.5,
+            icon: Plant,
+          });
+          if (list.length >= 10) break;
+        }
+      }
+    }
+
+    return list;
+  }, [searchQuery, loadedVillageData]);
 
   useEffect(() => {
     if (!mapContainer.current || mapRef.current) return;
@@ -140,7 +249,7 @@ export default function Map3D({
       maplibregl.setWorkerUrl(`${origin}/maplibre-gl-worker.mjs`);
     }
 
-    // 1. Initialize Map with Built-in 3D Terrain & Hillshade Relief
+    // Initialize Map with AWS Terrarium 3D Terrain & Hillshade Relief only
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: {
@@ -150,7 +259,7 @@ export default function Map3D({
             type: 'raster',
             tiles: [BASEMAP_TILES[currentBasemap]],
             tileSize: 256,
-            attribution: '© OpenStreetMap / Esri / OpenFreeMap contributors',
+            attribution: '© OpenStreetMap / Esri / CARTO / OpenFreeMap contributors',
           },
           'terrain-dem-terrarium': {
             type: 'raster-dem',
@@ -166,13 +275,6 @@ export default function Map3D({
             tileSize: 256,
             maxzoom: 15,
           },
-          'terrain-dem-maplibre': {
-            type: 'raster-dem',
-            tiles: ['https://demotiles.maplibre.org/terrain-tiles/{z}/{x}/{y}.png'],
-            encoding: 'mapbox',
-            tileSize: 256,
-            maxzoom: 14,
-          },
         },
         layers: [
           {
@@ -187,9 +289,9 @@ export default function Map3D({
             type: 'hillshade',
             source: 'hillshade-dem-terrarium',
             paint: {
-              'hillshade-exaggeration': 0.95,
-              'hillshade-shadow-color': '#020617',
-              'hillshade-highlight-color': '#ffffff',
+              'hillshade-exaggeration': 0.8,
+              'hillshade-shadow-color': '#94a3b8',
+              'hillshade-highlight-color': 'rgba(255, 255, 255, 0.1)',
               'hillshade-illumination-direction': 315,
             },
           },
@@ -204,11 +306,11 @@ export default function Map3D({
         sky: {
           'sky-color': '#0284c7',
           'sky-horizon-blend': 0.8,
-          'horizon-color': '#e0f2fe',
-          'horizon-fog-blend': 1.0,
-          'fog-color': '#ffffff',
-          'fog-ground-blend': 1.0,
-          'atmosphere-blend': 0.85,
+          'horizon-color': '#bae6fd',
+          'horizon-fog-blend': 0.5,
+          'fog-color': 'rgba(255, 255, 255, 0.1)',
+          'fog-ground-blend': 0.5,
+          'atmosphere-blend': 0.8,
         },
       },
       center: initialCenter,
@@ -224,62 +326,104 @@ export default function Map3D({
 
     mapRef.current = map;
     (window as any).__map = map;
-    console.log('[Map3D] Map initialized');
+    console.log('[Map3D] Map initialized with AWS Terrarium 3D Terrain');
 
-    // Error listener to catch any tile or WebGL issues
     map.on('error', (e) => {
       if (e && e.error) {
         console.warn('MapLibre engine notice:', e.error.message || e.error);
       }
     });
 
-    // Track camera angle updates and live terrain elevation
-    const updateTelemetry = () => {
-      setBearing(Math.round(map.getBearing()));
-      setPitch(Math.round(map.getPitch()));
-      try {
-        const center = map.getCenter();
-        const ele = map.queryTerrainElevation(center);
-        if (ele !== null && !isNaN(ele)) {
-          setCurrentElevation(Math.round(ele));
-        }
-      } catch (err) {
-        // terrain query not ready
-      }
-    };
-
-    map.on('rotate', updateTelemetry);
-    map.on('pitch', updateTelemetry);
-    map.on('move', updateTelemetry);
-    map.on('render', updateTelemetry);
-
     const setupControls = () => {
       map.resize();
       setIsLoaded(true);
 
-      // Avoid adding controls multiple times
-      if (!(map as any).__controlsAdded) {
-        (map as any).__controlsAdded = true;
-        map.addControl(
-          new maplibregl.NavigationControl({
-            visualizePitch: true,
-            showZoom: true,
-            showCompass: true,
-          }),
-          'top-right'
-        );
-        map.addControl(
-          new maplibregl.TerrainControl({
-            source: 'terrain-dem-terrarium',
-            exaggeration: 1,
-          }),
-          'top-right'
-        );
-        map.addControl(
-          new maplibregl.GlobeControl(),
-          'top-right'
-        );
+      // --- ADD 3D CROP PARCELS DATA SOURCE ---
+      if (!map.getSource('crops-source')) {
+        map.addSource('crops-source', {
+          type: 'geojson',
+          data: cropData as any,
+        });
+
+        map.addLayer({
+          id: 'crops-2d-fill',
+          type: 'fill',
+          source: 'crops-source',
+          paint: {
+            'fill-color': ['get', 'color'],
+            'fill-opacity': 0.75,
+          },
+        });
+
+        map.addLayer({
+          id: 'crops-outline',
+          type: 'line',
+          source: 'crops-source',
+          paint: {
+            'line-color': '#ffffff',
+            'line-width': 2.5,
+            'line-opacity': 1.0,
+          },
+        });
+
+        // Interactive Click on Crop Parcels
+        map.on('click', 'crops-2d-fill', (e) => {
+          if (e.features && e.features[0]) {
+            const props = e.features[0].properties as any;
+            const plantIconHtml = renderToStaticMarkup(<Plant size={16} color={props.color} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />);
+            new maplibregl.Popup({ offset: 20, closeButton: true })
+              .setLngLat(e.lngLat)
+              .setHTML(`
+                <div style="font-family: system-ui, sans-serif; padding: 6px 10px; color: #111;">
+                  <strong style="font-size: 14px; color: ${props.color}; display: flex; align-items: center;">${plantIconHtml} <span>${props.cropType} (${props.variety})</span></strong>
+                  <div style="font-size: 11px; margin-top: 4px; color: #444;">Farmer: <b>${props.farmer}</b></div>
+                  <div style="font-size: 11px; color: #444;">Area: <b>${props.fieldAreaAcres} Acres</b></div>
+                  <div style="font-size: 11px; color: #444;">NDVI: <b>${props.ndvi}</b> | Health: <b>${props.healthStatus}</b></div>
+                  <div style="font-size: 11px; color: #444;">Soil: <b>${props.soilType}</b> | Moisture: <b>${props.moistureLevel}</b></div>
+                </div>
+              `)
+              .addTo(map);
+          }
+        });
+
+        map.on('mouseenter', 'crops-2d-fill', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'crops-2d-fill', () => {
+          map.getCanvas().style.cursor = '';
+        });
       }
+
+      // Floating HTML Badge Pins for Crops
+      markersRef.current.forEach((m) => m.remove());
+      markersRef.current = [];
+
+      cropData.features?.forEach((feature) => {
+        const props = feature.properties;
+        const coords = feature.geometry.coordinates[0][0] as [number, number];
+
+        const el = document.createElement('div');
+        el.className = 'crop-badge';
+        el.style.backgroundColor = props.color;
+        el.style.color = '#ffffff';
+        el.style.padding = '4px 8px';
+        el.style.borderRadius = '12px';
+        el.style.fontSize = '11px';
+        el.style.fontWeight = '700';
+        el.style.fontFamily = 'system-ui, sans-serif';
+        el.style.border = '1px solid #e2e8f0';
+        el.style.cursor = 'pointer';
+        el.style.whiteSpace = 'nowrap';
+        el.innerText = `${props.cropType} (${props.fieldAreaAcres}ac)`;
+
+        el.addEventListener('click', () => {
+          map.flyTo({ center: coords, zoom: 14.5, pitch: 50, duration: 1000 });
+        });
+
+        const marker = new maplibregl.Marker({ element: el }).setLngLat(coords).addTo(map);
+        markersRef.current.push(marker);
+      });
+
     };
 
     if (map.isStyleLoaded()) {
@@ -290,7 +434,6 @@ export default function Map3D({
     }
 
     return () => {
-      if (orbitFrameRef.current) cancelAnimationFrame(orbitFrameRef.current);
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       map.remove();
@@ -324,11 +467,17 @@ export default function Map3D({
           'heatmap-weight': 1,
           'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 9, 2],
           'heatmap-color': [
-            'interpolate', ['linear'], ['heatmap-density'],
-            0, 'rgba(16,185,129,0)',
-            0.3, '#10b981',
-            0.6, '#f59e0b',
-            1.0, '#ef4444'
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0,
+            'rgba(16,185,129,0)',
+            0.3,
+            '#10b981',
+            0.6,
+            '#f59e0b',
+            1.0,
+            '#ef4444',
           ],
           'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 8, 9, 20],
           'heatmap-opacity': 0.75,
@@ -348,11 +497,15 @@ export default function Map3D({
           'circle-color': [
             'match',
             ['get', 'current_risk_level'],
-            'critical', '#dc2626',
-            'high', '#ef4444',
-            'medium', '#f59e0b',
-            'low', '#10b981',
-            '#6b7280'
+            'critical',
+            '#dc2626',
+            'high',
+            '#ef4444',
+            'medium',
+            '#f59e0b',
+            'low',
+            '#10b981',
+            '#6b7280',
           ],
           'circle-stroke-width': 1.5,
           'circle-stroke-color': '#ffffff',
@@ -383,16 +536,26 @@ export default function Map3D({
       });
     }
 
-    // Click handler → fetch live advisory & ML crop recommendations from backend
+    // Click handler → fetch live advisory & ML recommendations and show on map popup
     map.on('click', 'villages-points', async (e) => {
       if (!e.features || !e.features[0]) return;
       const props = e.features[0].properties as any;
       const coords = (e.features[0].geometry as any).coordinates as [number, number];
-      setSelectedCrop(null);
-      setSelectedVillage(props);
-      setVillageAdvisory(null);
-      setAdvisoryLoading(true);
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 11), pitch: 50, duration: 800 });
+
+      const pinIconHtml = renderToStaticMarkup(<MapPin size={14} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
+      const loadingIconHtml = renderToStaticMarkup(<CircleNotch size={14} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
+
+      const popup = new maplibregl.Popup({ offset: 15, maxWidth: '300px', closeButton: true })
+        .setLngLat(coords)
+        .setHTML(`
+          <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a;">
+            <div style="font-weight: 700; font-size: 13px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
+            <div id="popup-loading-${props.village_id || '0'}" style="font-size: 11px; color: #0284c7; display: flex; align-items: center;">${loadingIconHtml} <span>Loading live advisory & forecast...</span></div>
+          </div>
+        `)
+        .addTo(map);
 
       try {
         const targetId = props.panchayat_id || props.village_id || 'KL_PANCH_0001';
@@ -404,15 +567,57 @@ export default function Map3D({
         const adv = advRes.ok ? await advRes.json() : null;
         const fc = fcRes.ok ? await fcRes.json() : null;
         const crops = cropRes.ok ? await cropRes.json() : null;
-        setVillageAdvisory({
-          advisory: adv,
-          forecast: fc,
-          crops: crops?.recommendations || [],
-        });
+
+        const advData = adv?.advisory;
+        const riskLevel = advData?.risk_level || 'low';
+        const riskColor =
+          riskLevel === 'critical'
+            ? '#dc2626'
+            : riskLevel === 'high'
+            ? '#ef4444'
+            : riskLevel === 'medium'
+            ? '#f59e0b'
+            : '#10b981';
+
+        const plantIconHtml = renderToStaticMarkup(<Plant size={12} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
+        const topCrops = crops?.recommendations?.slice(0, 2) || [];
+        const cropHtml = topCrops.length > 0
+          ? `<div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;">
+              <span style="font-size: 10px; font-weight: 700; color: #0284c7; display: flex; align-items: center;">${plantIconHtml} <span>Top ML Crops:</span></span>
+              ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">• <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
+             </div>`
+          : '';
+
+        const tempIconHtml = renderToStaticMarkup(<Thermometer size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
+        const rainIconHtml = renderToStaticMarkup(<CloudRain size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
+        const humIconHtml = renderToStaticMarkup(<Drop size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
+        const windIconHtml = renderToStaticMarkup(<Wind size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
+
+        const forecastHtml = fc?.summary
+          ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px 6px; font-size: 10px; margin-bottom: 4px; color: #475569;">
+              <div style="display: flex; align-items: center;">${tempIconHtml} <span>${fc.summary.avg_temp_c?.toFixed(1)}°C</span></div>
+              <div style="display: flex; align-items: center;">${rainIconHtml} <span>${fc.summary.total_rainfall_mm?.toFixed(1)}mm rain</span></div>
+              <div style="display: flex; align-items: center;">${humIconHtml} <span>${fc.summary.avg_humidity_pct?.toFixed(0)}% hum</span></div>
+              <div style="display: flex; align-items: center;">${windIconHtml} <span>${fc.summary.max_wind_kmh?.toFixed(0)} km/h</span></div>
+             </div>`
+          : '';
+
+        popup.setHTML(`
+          <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 280px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
+              <strong style="font-size: 13px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
+              <span style="background: ${riskColor}; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">
+                ${riskLevel}
+              </span>
+            </div>
+            <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''}</div>
+            ${forecastHtml}
+            ${advData?.text ? `<div style="font-size: 10px; color: #334155; line-height: 1.3; margin-bottom: 4px;">${advData.text}</div>` : ''}
+            ${cropHtml}
+          </div>
+        `);
       } catch {
-        setVillageAdvisory({ error: 'Failed to fetch live data' });
-      } finally {
-        setAdvisoryLoading(false);
+        // Keep initial popup content if fetch fails
       }
     });
 
@@ -435,69 +640,21 @@ export default function Map3D({
     }
   };
 
-  // Switch DEM Source (AWS Terrarium vs MapLibre RGB)
-  const switchTerrain = (provider: 'terrarium' | 'maplibre') => {
-    setTerrainProvider(provider);
+  // Fly to suggestion
+  const handleSelectSuggestion = (item: { coords: [number, number]; zoom: number }) => {
     if (!mapRef.current) return;
-    const map = mapRef.current;
-    const sourceId = provider === 'terrarium' ? 'terrain-dem-terrarium' : 'terrain-dem-maplibre';
-    map.setTerrain({
-      source: sourceId,
-      exaggeration: 1,
-    });
-  };
-
-  // Camera Pitch Adjuster
-  const handlePitchChange = (newPitch: number) => {
-    setPitch(newPitch);
-    if (!mapRef.current) return;
-    mapRef.current.setPitch(newPitch);
-  };
-
-  // Camera Bearing Adjuster
-  const handleBearingChange = (newBearing: number) => {
-    setBearing(newBearing);
-    if (!mapRef.current) return;
-    mapRef.current.setBearing(newBearing);
-  };
-
-  // Fly to Location Preset
-  const flyToLocation = (loc: (typeof LOCATIONS)[0]) => {
-    if (!mapRef.current) return;
-    stopOrbit();
     mapRef.current.flyTo({
-      center: loc.center,
-      zoom: loc.zoom,
-      pitch: loc.pitch,
-      bearing: loc.bearing,
-      duration: 2500,
+      center: item.coords,
+      zoom: item.zoom,
+      pitch: 50,
+      duration: 1500,
       essential: true,
     });
+    setIsSearchOpen(false);
+    setSearchQuery('');
   };
 
-  // 360° Cinematic Orbit Animation
-  const toggleOrbit = () => {
-    if (isOrbiting) {
-      stopOrbit();
-    } else {
-      setIsOrbiting(true);
-      const orbit = () => {
-        if (!mapRef.current) return;
-        const currentB = mapRef.current.getBearing();
-        mapRef.current.setBearing((currentB + 0.35) % 360);
-        orbitFrameRef.current = requestAnimationFrame(orbit);
-      };
-      orbitFrameRef.current = requestAnimationFrame(orbit);
-    }
-  };
-
-  const stopOrbit = () => {
-    if (orbitFrameRef.current) {
-      cancelAnimationFrame(orbitFrameRef.current);
-      orbitFrameRef.current = null;
-    }
-    setIsOrbiting(false);
-  };
+  const activeBasemapObj = BASEMAP_OPTIONS.find((b) => b.id === currentBasemap) || BASEMAP_OPTIONS[0];
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
@@ -514,363 +671,333 @@ export default function Map3D({
         }}
       />
 
-      {/* Floating HUD Dashboard */}
+      {/* Top-Left Search: Button that smoothly shifts to Pill with Dropdown (Completely White, DESIGN.md) */}
       <div
+        ref={searchContainerRef}
         style={{
           position: 'absolute',
           top: 20,
           left: 20,
-          background: 'rgba(15, 23, 42, 0.94)',
-          backdropFilter: 'blur(12px)',
-          borderRadius: 14,
-          padding: '16px 18px',
-          color: '#fff',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          width: 330,
-          zIndex: 10,
-          maxHeight: 'calc(100vh - 40px)',
-          overflowY: 'auto',
+          zIndex: 30,
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>
-            🌾 Kerala Agro-Advisory
-          </h2>
+        {!isSearchOpen ? (
+          // Search Button (Completely White, flat with single 1px border)
           <button
-            onClick={toggleOrbit}
+            onClick={() => setIsSearchOpen(true)}
             style={{
-              background: isOrbiting ? '#ef4444' : '#8b5cf6',
-              border: 'none',
-              borderRadius: 6,
-              color: '#fff',
-              fontSize: 11,
-              fontWeight: 600,
-              padding: '4px 8px',
-              cursor: 'pointer',
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid #e2e8f0',
+              borderRadius: 9999,
+              height: 44,
+              padding: '0 18px',
               display: 'flex',
               alignItems: 'center',
-              gap: 4,
+              gap: 8,
+              cursor: 'pointer',
+              fontSize: 13,
+              fontWeight: 600,
+              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.03)';
+              e.currentTarget.style.background = '#f8fafc';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.background = '#ffffff';
             }}
           >
-            {isOrbiting ? '⏹ Stop' : '🔄 Orbit 360°'}
+            <MagnifyingGlass size={16} />
+            <span>Search</span>
           </button>
-        </div>
-
-        {/* 🏔️ 3D Mountain Mesh Showcase Fly-To Buttons */}
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#38bdf8', textTransform: 'uppercase', marginBottom: 6 }}>
-            🏔️ 3D Terrain & Parcel Locations
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            {LOCATIONS.map((loc) => (
-              <button
-                key={loc.name}
-                onClick={() => flyToLocation(loc)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 6,
-                  color: '#e2e8f0',
-                  fontSize: 12,
-                  padding: '6px 8px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                }}
-              >
-                <span style={{ fontWeight: 600 }}>{loc.name}</span>
-                <span style={{ fontSize: 10, color: '#94a3b8' }}>Fly ✈️</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 3D DEM Provider Selector */}
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 6 }}>
-            3D Elevation Source
-          </div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            <button
-              onClick={() => switchTerrain('terrarium')}
+        ) : (
+          // Expanded Search Pill & Dropdown
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: 320,
+              animation: 'expandPill 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            {/* White Pill Search Input */}
+            <div
               style={{
-                flex: 1,
-                background: terrainProvider === 'terrarium' ? '#10b981' : 'rgba(255,255,255,0.08)',
-                border: 'none',
-                borderRadius: 6,
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 600,
-                padding: '5px 2px',
-                cursor: 'pointer',
+                background: '#ffffff',
+                borderRadius: 9999,
+                height: 44,
+                padding: '0 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                border: '1px solid #e2e8f0',
               }}
             >
-              AWS Terrarium (Global)
-            </button>
-            <button
-              onClick={() => switchTerrain('maplibre')}
-              style={{
-                flex: 1,
-                background: terrainProvider === 'maplibre' ? '#10b981' : 'rgba(255,255,255,0.08)',
-                border: 'none',
-                borderRadius: 6,
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 600,
-                padding: '5px 2px',
-                cursor: 'pointer',
-              }}
-            >
-              MapLibre Alps DEM
-            </button>
-          </div>
-        </div>
-
-        {/* Manual 3D Camera Controls */}
-        <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 8, padding: 10, marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 8 }}>
-            Camera & Terrain Controls
-          </div>
-
-          {/* Pitch Slider */}
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#cbd5e1' }}>
-              <span>Tilt (Pitch):</span>
-              <b>{pitch}°</b>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="85"
-              value={pitch}
-              onChange={(e) => handlePitchChange(Number(e.target.value))}
-              style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6' }}
-            />
-          </div>
-
-          {/* Bearing Slider */}
-          <div style={{ marginBottom: 8 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#cbd5e1' }}>
-              <span>Rotation (Bearing):</span>
-              <b>{bearing}°</b>
-            </div>
-            <input
-              type="range"
-              min="-180"
-              max="180"
-              value={bearing}
-              onChange={(e) => handleBearingChange(Number(e.target.value))}
-              style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6' }}
-            />
-          </div>
-        </div>
-
-        {/* Basemap Switcher */}
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 6 }}>
-            Basemap Style
-          </div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {(['satellite', 'osm', 'carto'] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => switchBasemap(mode)}
+              <MagnifyingGlass size={16} color="#64748b" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search village, crop, district..."
                 style={{
-                  flex: 1,
-                  background: currentBasemap === mode ? '#3b82f6' : 'rgba(255,255,255,0.08)',
                   border: 'none',
-                  borderRadius: 6,
-                  color: '#fff',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  padding: '5px 2px',
+                  outline: 'none',
+                  background: 'transparent',
+                  width: '100%',
+                  fontSize: 13,
+                  color: '#0f172a',
+                  fontWeight: 500,
+                }}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    background: '#f1f5f9',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: 20,
+                    height: 20,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 10,
+                    color: '#64748b',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <X size={12} color="#64748b" />
+                </button>
+              )}
+              <button
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery('');
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: 12,
+                  color: '#94a3b8',
                   cursor: 'pointer',
-                  textTransform: 'capitalize',
+                  padding: '2px 4px',
+                  fontWeight: 600,
                 }}
               >
-                {mode === 'osm' ? 'Vector/OSM' : mode}
+                Close
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Live Elevation Telemetry Status */}
-        <div
-          style={{
-            background: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.3)',
-            borderRadius: 8,
-            padding: '8px 10px',
-            marginBottom: 12,
-            fontSize: 11,
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#38bdf8', fontWeight: 600 }}>
-            <span>📡 3D Mesh Status:</span>
-            <span>{isLoaded ? '🟢 Loaded & Active' : '🟡 Initializing...'}</span>
-          </div>
-          <div style={{ color: '#cbd5e1', marginTop: 4 }}>
-            Ground Elevation at Center:{' '}
-            <b style={{ color: '#fff' }}>
-              {currentElevation !== null ? `${currentElevation} meters (${Math.round(currentElevation * 3.28084)} ft)` : 'Scanning...'}
-            </b>
-          </div>
-        </div>
-
-        {/* Village count badge */}
-        {villageData && (
-          <div style={{ fontSize: 11, color: '#38bdf8', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-            <b>{villageData.features?.length ?? 0}</b> Kerala Panchayats loaded from backend
-          </div>
-        )}
-
-        {/* Risk legend */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
-          {[['🔴', 'critical / high', '#ef4444'], ['🟡', 'medium', '#f59e0b'], ['🟢', 'low', '#10b981']].map(([icon, label, color]) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#cbd5e1' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: color as string }} />
-              {label}
             </div>
-          ))}
-        </div>
 
-        {/* Live Village Advisory Panel */}
-        {(selectedVillage || advisoryLoading) && (
-          <div style={{
-            marginBottom: 10,
-            padding: '10px 12px',
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16,185,129,0.25)',
-            borderRadius: 10,
-            fontSize: 11,
-          }}>
-            {advisoryLoading ? (
-              <div style={{ color: '#38bdf8', fontWeight: 600 }}>⏳ Fetching live advisory from backend...</div>
-            ) : selectedVillage && (
-              <>
-                <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color:
-                  villageAdvisory?.advisory?.advisory?.risk_level === 'critical' ? '#dc2626' :
-                  villageAdvisory?.advisory?.advisory?.risk_level === 'high' ? '#ef4444' :
-                  villageAdvisory?.advisory?.advisory?.risk_level === 'medium' ? '#f59e0b' : '#10b981'
-                }}>
-                  📍 {selectedVillage.panchayat_name}
-                  <span style={{ marginLeft: 6, fontSize: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 4, padding: '1px 5px', color: '#94a3b8' }}>
-                    {selectedVillage.district}
-                  </span>
+            {/* Completely White Suggestion Dropdown (DESIGN.md squircle/rounded curve) */}
+            <div
+              style={{
+                background: '#ffffff',
+                marginTop: 8,
+                borderRadius: 20,
+                border: '1px solid #e2e8f0',
+                maxHeight: 280,
+                overflowY: 'auto',
+                padding: 6,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <div
+                style={{
+                  padding: '6px 12px 4px',
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  color: '#94a3b8',
+                }}
+              >
+                {searchQuery ? 'Matching Results' : 'Featured & Suggested'}
+              </div>
+
+              {suggestions.length === 0 ? (
+                <div style={{ padding: '12px 14px', fontSize: 12, color: '#64748b', textAlign: 'center' }}>
+                  No matches found for &quot;{searchQuery}&quot;
                 </div>
-
-                {villageAdvisory?.error && (
-                  <div style={{ color: '#ef4444' }}>⚠️ {villageAdvisory.error}</div>
-                )}
-
-                {villageAdvisory?.forecast && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 10px', marginBottom: 8 }}>
-                    {[
-                      ['🌡️', 'Temp', `${villageAdvisory.forecast.summary?.avg_temp_c?.toFixed(1)}°C`],
-                      ['🌧️', 'Rain', `${villageAdvisory.forecast.summary?.total_rainfall_mm?.toFixed(1)}mm`],
-                      ['💧', 'Humidity', `${villageAdvisory.forecast.summary?.avg_humidity_pct?.toFixed(0)}%`],
-                      ['💨', 'Wind', `${villageAdvisory.forecast.summary?.max_wind_kmh?.toFixed(1)} km/h`],
-                    ].map(([icon, label, val]) => (
-                      <div key={label} style={{ color: '#e2e8f0' }}>
-                        <span style={{ color: '#94a3b8' }}>{icon} {label}: </span><b>{val}</b>
+              ) : (
+                suggestions.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleSelectSuggestion(item)}
+                    style={{
+                      background: '#ffffff',
+                      border: 'none',
+                      borderRadius: 12,
+                      padding: '8px 12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      transition: 'background 0.15s ease',
+                      width: '100%',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f8fafc';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ffffff';
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <item.icon size={16} color="#0284c7" />
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>{item.title}</span>
+                        <span style={{ fontSize: 10, color: '#64748b' }}>{item.subtitle}</span>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {villageAdvisory?.advisory?.advisory && (() => {
-                  const adv = villageAdvisory.advisory.advisory;
-                  const riskColor = adv.risk_level === 'critical' ? '#dc2626' : adv.risk_level === 'high' ? '#ef4444' : adv.risk_level === 'medium' ? '#f59e0b' : '#10b981';
-                  return (
-                    <>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                        <span style={{ background: riskColor, color: '#fff', borderRadius: 4, padding: '1px 7px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>
-                          {adv.risk_level} risk
-                        </span>
-                        <span style={{ color: '#94a3b8', fontSize: 10 }}>conf: {adv.confidence}</span>
-                      </div>
-                      <div style={{ color: '#cbd5e1', lineHeight: 1.4, marginBottom: 6 }}>{adv.text}</div>
-                      {adv.actionable_recommendations?.slice(0, 2).map((r: string, i: number) => (
-                        <div key={i} style={{ color: '#86efac', fontSize: 10, marginBottom: 2 }}>• {r}</div>
-                      ))}
-                    </>
-                  );
-                })()}
-
-                {/* ML Crop Suitability Recommendations */}
-                {villageAdvisory?.crops && villageAdvisory.crops.length > 0 && (
-                  <div style={{ marginTop: 10, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 8 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#38bdf8', marginBottom: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span>🤖 ML Crop Suitability Recommendations</span>
-                      <span style={{ fontSize: 9, color: '#94a3b8' }}>RF + ICAR Rules</span>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {villageAdvisory.crops.slice(0, 3).map((item: any, idx: number) => {
-                        const scorePct = Math.round(item.suitability_score * 100);
-                        const badgeColor = scorePct >= 90 ? '#10b981' : scorePct >= 75 ? '#3b82f6' : '#f59e0b';
-                        return (
-                          <div key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                              <span style={{ textTransform: 'capitalize', fontWeight: 600, color: '#f8fafc', fontSize: 11 }}>
-                                🌱 {item.crop}
-                              </span>
-                              <span style={{ background: badgeColor, color: '#fff', fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 4 }}>
-                                {scorePct}% Suitable
-                              </span>
-                            </div>
-                            <div style={{ fontSize: 10, color: '#94a3b8', lineHeight: 1.3 }}>
-                              {item.explanation}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Elevation & static info */}
-        {selectedVillage && !advisoryLoading && (
-          <div style={{ fontSize: 10, color: '#64748b', marginBottom: 8 }}>
-            Elev: <b style={{ color: '#94a3b8' }}>{selectedVillage.elevation_m}m</b> ·
-            Land: <b style={{ color: '#94a3b8' }}>{selectedVillage.land_cover}</b> ·
-            Block: <b style={{ color: '#94a3b8' }}>{selectedVillage.block_id}</b>
+                    <span
+                      style={{
+                        fontSize: 9,
+                        fontWeight: 700,
+                        background: item.badge === 'Crop' ? '#ecfdf5' : item.badge === 'Village' ? '#f0f9ff' : '#f8fafc',
+                        color: item.badge === 'Crop' ? '#059669' : item.badge === 'Village' ? '#0284c7' : '#64748b',
+                        padding: '2px 6px',
+                        borderRadius: 6,
+                        border: '1px solid rgba(0,0,0,0.06)',
+                      }}
+                    >
+                      {item.badge}
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
 
-      {/* Bottom Floating Shortcut Cheat Sheet */}
+      {/* Change Map View - Flat Square Button & Options (Bottom-Left) */}
       <div
         style={{
           position: 'absolute',
-          bottom: 20,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(15, 23, 42, 0.85)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: 20,
-          padding: '6px 16px',
-          color: '#94a3b8',
-          fontSize: 12,
-          fontFamily: 'system-ui, sans-serif',
+          bottom: 24,
+          left: 24,
+          zIndex: 20,
           display: 'flex',
-          gap: 16,
-          zIndex: 10,
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          pointerEvents: 'none',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: 10,
         }}
       >
-        <span>🖱️ <b>Right-Click + Drag</b> (or <b>Ctrl + Drag</b>) to rotate & pitch</span>
-        <span>📜 <b>Scroll</b> to Zoom</span>
-        <span>🖱️ <b>Left-Click + Drag</b> to Pan</span>
+        {/* Expanded Square Basemap Selection Menu */}
+        {isMapViewMenuOpen && (
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              background: '#ffffff',
+              padding: 8,
+              borderRadius: 12,
+              border: '1px solid #e2e8f0',
+              animation: 'fadeIn 0.15s ease-in-out',
+            }}
+          >
+            {BASEMAP_OPTIONS.map((option) => {
+              const isSelected = currentBasemap === option.id;
+              const IconComp = option.icon;
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => {
+                    switchBasemap(option.id);
+                    setIsMapViewMenuOpen(false);
+                  }}
+                  style={{
+                    width: 68,
+                    height: 68,
+                    borderRadius: 8,
+                    border: isSelected ? '2px solid #0284c7' : '1px solid #e2e8f0',
+                    backgroundImage: `url(${option.preview})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: 4,
+                    color: '#ffffff',
+                    fontFamily: 'system-ui, sans-serif',
+                    textAlign: 'left',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <span style={{ alignSelf: 'flex-end' }}>
+                    <IconComp size={16} color="#ffffff" />
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {option.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Main Flat Square Trigger Button */}
+        <button
+          onClick={() => setIsMapViewMenuOpen(!isMapViewMenuOpen)}
+          title="Change Map View"
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: 10,
+            border: '1px solid #e2e8f0',
+            backgroundImage: `url(${activeBasemapObj.preview})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: 5,
+            color: '#ffffff',
+            fontFamily: 'system-ui, sans-serif',
+            transition: 'transform 0.15s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.04)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            {(() => {
+              const ActiveIcon = activeBasemapObj.icon;
+              return <ActiveIcon size={16} color="#ffffff" />;
+            })()}
+            <span style={{ opacity: 0.9 }}>
+              {isMapViewMenuOpen ? <CaretUp size={10} color="#ffffff" /> : <CaretDown size={10} color="#ffffff" />}
+            </span>
+          </div>
+          <span
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              lineHeight: 1.1,
+              textAlign: 'left',
+            }}
+          >
+            Map View
+          </span>
+        </button>
       </div>
     </div>
   );
