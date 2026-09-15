@@ -253,33 +253,41 @@ export default function Map3D({
     map.on('move', updateTelemetry);
     map.on('render', updateTelemetry);
 
-    map.on('load', () => {
+    const setupControls = () => {
       map.resize();
       setIsLoaded(true);
 
-      // Navigation & Official MapLibre 3D Terrain Controls
-      map.addControl(
-        new maplibregl.NavigationControl({
-          visualizePitch: true,
-          showZoom: true,
-          showCompass: true,
-        }),
-        'top-right'
-      );
+      // Avoid adding controls multiple times
+      if (!(map as any).__controlsAdded) {
+        (map as any).__controlsAdded = true;
+        map.addControl(
+          new maplibregl.NavigationControl({
+            visualizePitch: true,
+            showZoom: true,
+            showCompass: true,
+          }),
+          'top-right'
+        );
+        map.addControl(
+          new maplibregl.TerrainControl({
+            source: 'terrain-dem-terrarium',
+            exaggeration: 1,
+          }),
+          'top-right'
+        );
+        map.addControl(
+          new maplibregl.GlobeControl(),
+          'top-right'
+        );
+      }
+    };
 
-      map.addControl(
-        new maplibregl.TerrainControl({
-          source: 'terrain-dem-terrarium',
-          exaggeration: 1,
-        }),
-        'top-right'
-      );
-
-      map.addControl(
-        new maplibregl.GlobeControl(),
-        'top-right'
-      );
-    });
+    if (map.isStyleLoaded()) {
+      setupControls();
+    } else {
+      map.once('style.load', setupControls);
+      map.once('load', setupControls);
+    }
 
     return () => {
       if (orbitFrameRef.current) cancelAnimationFrame(orbitFrameRef.current);
