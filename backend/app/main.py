@@ -56,8 +56,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include API Router
+from backend.app.api.crop_routes import crop_router
+
+# Include API Routers
 app.include_router(router, prefix=settings.API_PREFIX)
+app.include_router(crop_router, prefix=settings.API_PREFIX)
+
 
 
 @app.get("/", include_in_schema=False)

@@ -383,7 +383,7 @@ export default function Map3D({
       });
     }
 
-    // Click handler → fetch live advisory from backend
+    // Click handler → fetch live advisory & ML crop recommendations from backend
     map.on('click', 'villages-points', async (e) => {
       if (!e.features || !e.features[0]) return;
       const props = e.features[0].properties as any;
@@ -395,13 +395,20 @@ export default function Map3D({
       map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 11), pitch: 50, duration: 800 });
 
       try {
-        const [advRes, fcRes] = await Promise.all([
-          fetch(`${backendUrl}/advisory/${props.panchayat_id}?crop_stage=spraying_window`),
-          fetch(`${backendUrl}/forecast/${props.panchayat_id}`),
+        const targetId = props.panchayat_id || props.village_id || 'KL_PANCH_0001';
+        const [advRes, fcRes, cropRes] = await Promise.all([
+          fetch(`${backendUrl}/advisory/${targetId}?crop_stage=spraying_window`),
+          fetch(`${backendUrl}/forecast/${targetId}`),
+          fetch(`${backendUrl}/recommend-crop/${targetId}`),
         ]);
         const adv = advRes.ok ? await advRes.json() : null;
         const fc = fcRes.ok ? await fcRes.json() : null;
-        setVillageAdvisory({ advisory: adv, forecast: fc });
+        const crops = cropRes.ok ? await cropRes.json() : null;
+        setVillageAdvisory({
+          advisory: adv,
+          forecast: fc,
+          crops: crops?.recommendations || [],
+        });
       } catch {
         setVillageAdvisory({ error: 'Failed to fetch live data' });
       } finally {
@@ -794,6 +801,37 @@ export default function Map3D({
                     </>
                   );
                 })()}
+
+                {/* ML Crop Suitability Recommendations */}
+                {villageAdvisory?.crops && villageAdvisory.crops.length > 0 && (
+                  <div style={{ marginTop: 10, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 8 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#38bdf8', marginBottom: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>🤖 ML Crop Suitability Recommendations</span>
+                      <span style={{ fontSize: 9, color: '#94a3b8' }}>RF + ICAR Rules</span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {villageAdvisory.crops.slice(0, 3).map((item: any, idx: number) => {
+                        const scorePct = Math.round(item.suitability_score * 100);
+                        const badgeColor = scorePct >= 90 ? '#10b981' : scorePct >= 75 ? '#3b82f6' : '#f59e0b';
+                        return (
+                          <div key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                              <span style={{ textTransform: 'capitalize', fontWeight: 600, color: '#f8fafc', fontSize: 11 }}>
+                                🌱 {item.crop}
+                              </span>
+                              <span style={{ background: badgeColor, color: '#fff', fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 4 }}>
+                                {scorePct}% Suitable
+                              </span>
+                            </div>
+                            <div style={{ fontSize: 10, color: '#94a3b8', lineHeight: 1.3 }}>
+                              {item.explanation}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
