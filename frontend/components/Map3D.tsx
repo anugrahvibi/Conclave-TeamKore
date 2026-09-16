@@ -308,6 +308,30 @@ export default function Map3D({
   const [is3D, setIs3D] = useState<boolean>(initialPitch > 0);
   const [isLocating, setIsLocating] = useState(false);
 
+  const selectedVillage = useMemo(() => {
+    if (!selectedPanchayatId || !loadedVillageData?.features) return null;
+    return loadedVillageData.features.find(
+      (f: any) =>
+        f.properties?.panchayat_id === selectedPanchayatId ||
+        f.properties?.village_id === selectedPanchayatId
+    );
+  }, [selectedPanchayatId, loadedVillageData]);
+
+  const clearLocationMode = () => {
+    if (onSelectPanchayat) {
+      onSelectPanchayat('');
+    }
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: initialCenter,
+        zoom: initialZoom,
+        pitch: initialPitch,
+        bearing: initialBearing,
+        duration: 1200,
+      });
+    }
+  };
+
   // Client-side village fetch fallback if villageData prop is not passed
   useEffect(() => {
     if (villageData) {
@@ -579,7 +603,7 @@ export default function Map3D({
           list.push({
             id: `v-${p.village_id || p.panchayat_id}`,
             title: p.panchayat_name,
-            subtitle: `${p.district || ''} â€¢ Elev: ${p.elevation_m || 100}m`,
+            subtitle: `${p.district || ''} • Elev: ${p.elevation_m || 100}m`,
             badge: 'Village',
             type: 'village',
             coords: f.geometry.coordinates as [number, number],
@@ -630,7 +654,7 @@ export default function Map3D({
             type: 'raster',
             tiles: [BASEMAP_TILES[currentBasemap]],
             tileSize: 256,
-            attribution: 'Â© OpenStreetMap / Esri / CARTO / OpenFreeMap contributors',
+            attribution: '© OpenStreetMap / Esri / CARTO / OpenFreeMap contributors',
           },
           'terrain-dem-terrarium': {
             type: 'raster-dem',
@@ -769,7 +793,7 @@ export default function Map3D({
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
 
-      (cropData as any).features?.forEach((feature: any) => {
+      cropData.features?.forEach((feature) => {
         const props = feature.properties;
         const coords = feature.geometry.coordinates[0][0] as [number, number];
 
@@ -952,7 +976,7 @@ export default function Map3D({
         .setHTML(`
           <div style="font-family: var(--font-sans, Poppins, sans-serif); padding: 4px; color: #0f172a;">
             <div style="font-weight: 800; font-size: 16px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} â€¢ Elev: ${props.elevation_m ?? 100}m</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
             ${props.name_ml ? `<div style="font-size: 11px; color: #334155; margin-bottom: 6px;">${props.name_ml}</div>` : ''}
             <div id="popup-loading-${props.village_id || '0'}" style="font-size: 11px; color: #0284c7; display: flex; align-items: center;">${loadingIconHtml} <span>Loading live advisory & forecast...</span></div>
           </div>
@@ -980,7 +1004,7 @@ export default function Map3D({
 
         const forecastHtml = fc?.summary
           ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px 6px; font-size: 10px; margin-bottom: 4px; color: #475569;">
-              <div style="display: flex; align-items: center;">${tempIconHtml} <span>${fc.summary.avg_temp_c?.toFixed(1)}Â°C</span></div>
+              <div style="display: flex; align-items: center;">${tempIconHtml} <span>${fc.summary.avg_temp_c?.toFixed(1)}°C</span></div>
               <div style="display: flex; align-items: center;">${rainIconHtml} <span>${fc.summary.total_rainfall_mm?.toFixed(1)}mm rain</span></div>
               <div style="display: flex; align-items: center;">${humIconHtml} <span>${fc.summary.avg_humidity_pct?.toFixed(0)}% hum</span></div>
               <div style="display: flex; align-items: center;">${windIconHtml} <span>${fc.summary.max_wind_kmh?.toFixed(0)} km/h</span></div>
@@ -1013,7 +1037,7 @@ export default function Map3D({
                   ${cropScore}% Match
                 </span>
               </div>
-              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''} â€¢ Elev: ${props.elevation_m ?? 100}m</div>
+              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
 
               <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px;">
                 <div style="font-size: 11px; font-weight: 700; color: #0f172a; display: flex; align-items: center; justify-content: space-between;">
@@ -1051,7 +1075,7 @@ export default function Map3D({
           const cropHtml = topCrops.length > 0
             ? `<div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;">
                 <span style="font-size: 10px; font-weight: 700; color: #0284c7; display: flex; align-items: center;">${plantIconHtml} <span>Top ML Crops:</span></span>
-                ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">â€¢ <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
+                ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">• <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
                </div>`
             : '';
 
@@ -1494,104 +1518,77 @@ export default function Map3D({
           )}
         </div>
 
+        {/* Selected Village Pill */}
+        {selectedVillage && (
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: 9999,
+              padding: '6px 12px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              pointerEvents: 'auto',
+              fontFamily: 'var(--font-sans, Poppins, sans-serif)',
+            }}
+          >
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
+              {selectedVillage.properties.panchayat_name || 'Village'}
+            </span>
+            <button
+              onClick={clearLocationMode}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                padding: 2,
+                color: '#64748b',
+              }}
+            >
+              <X size={14} weight="bold" />
+            </button>
+          </div>
+        )}
+
+        {/* Active Crop Pill */}
         {activeCrop && (
           <div
             style={{
-              fontFamily: 'var(--font-sans, Poppins, sans-serif)',
+              background: '#ffffff',
+              borderRadius: 9999,
+              padding: '6px 12px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
               display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: 6,
-              maxWidth: '92%',
-              animation: 'fadeIn 0.2s ease-out',
+              alignItems: 'center',
+              gap: 8,
               pointerEvents: 'auto',
+              fontFamily: 'var(--font-sans, Poppins, sans-serif)',
             }}
           >
-            {/* Main Suitability Pill */}
-            <div
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
+              {activeCrop.name}
+            </span>
+            <button
+              onClick={clearCropMode}
               style={{
-                background: '#ffffff',
-                borderRadius: 9999,
-                padding: '6px 14px 6px 12px',
-                border: '1px solid #e2e8f0',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
+                background: 'transparent',
+                border: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
+                justifyContent: 'center',
+                cursor: 'pointer',
+                padding: 2,
+                color: '#64748b',
               }}
             >
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: '50%',
-                  background: '#dcfce7',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Plant size={18} weight="fill" color="#15803d" />
-              </div>
-  
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
-                    {activeCrop.name}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: 9,
-                      fontWeight: 700,
-                      background: '#ecfdf5',
-                      color: '#059669',
-                      padding: '1px 6px',
-                      borderRadius: 9999,
-                      border: '1px solid rgba(5,150,105,0.2)',
-                    }}
-                  >
-                    Best Growing Zones
-                  </span>
-                  {isLoadingCrop && (
-                    <CircleNotch size={14} color="#15803d" className="animate-spin" />
-                  )}
-                </div>
-                <span style={{ fontSize: 10, color: '#64748b' }}>
-                  Risk level display paused â€¢ Green highlights highest cultivation suitability
-                </span>
-              </div>
-  
-              <button
-                onClick={clearCropMode}
-                title="Exit crop mode & restore risk levels"
-                style={{
-                  background: '#f1f5f9',
-                  border: 'none',
-                  borderRadius: 9999,
-                  padding: '4px 10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: '#475569',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease',
-                  marginLeft: 4,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#e2e8f0';
-                  e.currentTarget.style.color = '#0f172a';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#f1f5f9';
-                  e.currentTarget.style.color = '#475569';
-                }}
-              >
-                <X size={12} weight="bold" />
-                <span>Exit Crop View</span>
-              </button>
-            </div>
+              <X size={14} weight="bold" />
+            </button>
           </div>
         )}
       </div>
@@ -1746,7 +1743,6 @@ export default function Map3D({
             fontSize: 11,
             fontWeight: 600,
             color: '#475569',
-            fontFamily: 'var(--font-sans, Poppins, sans-serif)',
             minWidth: 150,
             pointerEvents: 'auto',
           }}
@@ -1758,15 +1754,15 @@ export default function Map3D({
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#15803d' }} />
-                <span>â‰¥75% Optimal</span>
+                <span>≥75% Optimal</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e' }} />
-                <span>60â€“74% Good</span>
+                <span>60–74% Good</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308' }} />
-                <span>45â€“59% Moderate</span>
+                <span>45–59% Moderate</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#94a3b8' }} />
