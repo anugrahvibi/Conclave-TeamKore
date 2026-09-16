@@ -579,7 +579,7 @@ export default function Map3D({
           list.push({
             id: `v-${p.village_id || p.panchayat_id}`,
             title: p.panchayat_name,
-            subtitle: `${p.district || ''} • Elev: ${p.elevation_m || 100}m`,
+            subtitle: `${p.district || ''} â€¢ Elev: ${p.elevation_m || 100}m`,
             badge: 'Village',
             type: 'village',
             coords: f.geometry.coordinates as [number, number],
@@ -630,7 +630,7 @@ export default function Map3D({
             type: 'raster',
             tiles: [BASEMAP_TILES[currentBasemap]],
             tileSize: 256,
-            attribution: '© OpenStreetMap / Esri / CARTO / OpenFreeMap contributors',
+            attribution: 'Â© OpenStreetMap / Esri / CARTO / OpenFreeMap contributors',
           },
           'terrain-dem-terrarium': {
             type: 'raster-dem',
@@ -745,7 +745,7 @@ export default function Map3D({
             new maplibregl.Popup({ offset: 20, closeButton: true })
               .setLngLat(e.lngLat)
               .setHTML(`
-                <div style="font-family: system-ui, sans-serif; padding: 6px 10px; color: #111;">
+                <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 6px 10px; color: #111;">
                   <strong style="font-size: 16px; font-weight: 800; color: ${props.color}; display: flex; align-items: center;">${plantIconHtml} <span>${props.cropType} (${props.variety})</span></strong>
                   <div style="font-size: 11px; margin-top: 4px; color: #444;">Farmer: <b>${props.farmer}</b></div>
                   <div style="font-size: 11px; color: #444;">Area: <b>${props.fieldAreaAcres} Acres</b></div>
@@ -781,7 +781,7 @@ export default function Map3D({
         el.style.borderRadius = '9999px';
         el.style.fontSize = '11px';
         el.style.fontWeight = '700';
-        el.style.fontFamily = 'system-ui, sans-serif';
+        el.style.fontFamily = 'var(--font-sans, Inter, sans-serif)';
         el.style.border = '1px solid #e2e8f0';
         el.style.cursor = 'pointer';
         el.style.whiteSpace = 'nowrap';
@@ -869,7 +869,7 @@ export default function Map3D({
       if (map.getLayer(id)) map.removeLayer(id);
     });
 
-    // Village polygon fills — each village shaded by risk_level
+    // Village polygon fills â€” each village shaded by risk_level
     // red=frost (critical), orange=heat (high), yellow=rain (medium), green=none (low)
     if (!map.getLayer('villages-fill')) {
       map.addLayer({
@@ -897,7 +897,7 @@ export default function Map3D({
       });
     }
 
-    // Village name labels — each village labelled with its name
+    // Village name labels â€” each village labelled with its name
     if (!map.getLayer('villages-labels')) {
       map.addLayer({
         id: 'villages-labels',
@@ -909,7 +909,7 @@ export default function Map3D({
           'text-size': 10,
           'text-offset': [0, 0],
           'text-anchor': 'center',
-          'text-font': ['Open Sans Regular'],
+          'text-font': ['Inter Regular'],
           'text-max-width': 10,
         },
         paint: {
@@ -950,9 +950,9 @@ export default function Map3D({
       const popup = new maplibregl.Popup({ offset: 15, maxWidth: '300px', closeButton: true })
         .setLngLat(coords)
         .setHTML(`
-          <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a;">
+          <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a;">
             <div style="font-weight: 800; font-size: 16px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
-            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
+            <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} â€¢ Elev: ${props.elevation_m ?? 100}m</div>
             ${props.name_ml ? `<div style="font-size: 11px; color: #334155; margin-bottom: 6px;">${props.name_ml}</div>` : ''}
             <div id="popup-loading-${props.village_id || '0'}" style="font-size: 11px; color: #0284c7; display: flex; align-items: center;">${loadingIconHtml} <span>Loading live advisory & forecast...</span></div>
           </div>
@@ -980,7 +980,7 @@ export default function Map3D({
 
         const forecastHtml = fc?.summary
           ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px 6px; font-size: 10px; margin-bottom: 4px; color: #475569;">
-              <div style="display: flex; align-items: center;">${tempIconHtml} <span>${fc.summary.avg_temp_c?.toFixed(1)}°C</span></div>
+              <div style="display: flex; align-items: center;">${tempIconHtml} <span>${fc.summary.avg_temp_c?.toFixed(1)}Â°C</span></div>
               <div style="display: flex; align-items: center;">${rainIconHtml} <span>${fc.summary.total_rainfall_mm?.toFixed(1)}mm rain</span></div>
               <div style="display: flex; align-items: center;">${humIconHtml} <span>${fc.summary.avg_humidity_pct?.toFixed(0)}% hum</span></div>
               <div style="display: flex; align-items: center;">${windIconHtml} <span>${fc.summary.max_wind_kmh?.toFixed(0)} km/h</span></div>
@@ -1006,14 +1006,14 @@ export default function Map3D({
           const plantIconHtml = renderToStaticMarkup(<Plant size={13} color="#15803d" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
 
           popup.setHTML(`
-            <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 290px;">
+            <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a; max-width: 290px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
                 <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
                 <span style="background: ${cropColor}; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
                   ${cropScore}% Match
                 </span>
               </div>
-              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
+              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''} â€¢ Elev: ${props.elevation_m ?? 100}m</div>
 
               <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px;">
                 <div style="font-size: 11px; font-weight: 700; color: #0f172a; display: flex; align-items: center; justify-content: space-between;">
@@ -1051,12 +1051,12 @@ export default function Map3D({
           const cropHtml = topCrops.length > 0
             ? `<div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;">
                 <span style="font-size: 10px; font-weight: 700; color: #0284c7; display: flex; align-items: center;">${plantIconHtml} <span>Top ML Crops:</span></span>
-                ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">• <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
+                ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">â€¢ <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
                </div>`
             : '';
 
           popup.setHTML(`
-            <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 280px;">
+            <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a; max-width: 280px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
                 <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
                 <span style="background: ${riskColor}; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">
@@ -1177,6 +1177,7 @@ export default function Map3D({
     const map = mapRef.current;
     if (is3D) {
       // Switch to 2D
+      map.setTerrain(null);
       map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
       setTimeout(() => {
         if (mapRef.current) {
@@ -1191,6 +1192,7 @@ export default function Map3D({
       map.setMaxPitch(85);
       map.dragRotate.enable();
       map.touchZoomRotate.enableRotation();
+      map.setTerrain({ source: 'terrain-dem-terrarium', exaggeration: 1 });
       map.easeTo({ pitch: 45, duration: 800 });
       setIs3D(true);
     }
@@ -1236,7 +1238,7 @@ export default function Map3D({
         }}
       />
 
-      {/* Top-right profile — unlabeled toggle between the two dashboards */}
+      {/* Top-right profile â€” unlabeled toggle between the two dashboards */}
       <button
         type="button"
         onClick={() => {
@@ -1261,7 +1263,7 @@ export default function Map3D({
           alignItems: 'center',
           justifyContent: 'center',
           padding: 0,
-          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          fontFamily: 'var(--font-sans, Inter, sans-serif)',
           transition: 'background 0.15s ease',
         }}
         onMouseEnter={(e) => {
@@ -1274,363 +1276,325 @@ export default function Map3D({
         <User size={22} color="#0f172a" weight={isFarmerDash ? 'fill' : 'regular'} />
       </button>
 
-      {/* Top-Left Search: shared by both profiles; profile toggle only changes map focus */}
+      {/* Top-Left Controls: Search and Active Crop Pill */}
       <div
-        ref={searchContainerRef}
         style={{
           position: 'absolute',
           top: 20,
           left: 20,
           zIndex: 30,
-          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: 12,
+          fontFamily: 'var(--font-sans, Inter, sans-serif)',
         }}
       >
-        {!isSearchOpen ? (
-          // Search Button (Completely White, flat with single 1px border)
-          <button
-            onClick={() => setIsSearchOpen(true)}
-            style={{
-              background: '#ffffff',
-              color: '#0f172a',
-              border: '1px solid #e2e8f0',
-              borderRadius: 9999,
-              height: 44,
-              padding: '0 18px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              cursor: 'pointer',
-              fontSize: 13,
-              fontWeight: 600,
-              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.03)';
-              e.currentTarget.style.background = '#f8fafc';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.background = '#ffffff';
-            }}
-          >
-            <MagnifyingGlass size={16} />
-            <span>Search</span>
-          </button>
-        ) : (
-          // Expanded Search Pill & Dropdown
+        <div ref={searchContainerRef}>
+          {!isSearchOpen ? (
+            // Search Button (Completely White, flat with single 1px border)
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              style={{
+                background: '#ffffff',
+                color: '#0f172a',
+                border: '1px solid #e2e8f0',
+                borderRadius: 9999,
+                height: 44,
+                padding: '0 18px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                cursor: 'pointer',
+                fontSize: 13,
+                fontWeight: 600,
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.03)';
+                e.currentTarget.style.background = '#f8fafc';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.background = '#ffffff';
+              }}
+            >
+              <MagnifyingGlass size={16} />
+              <span>Search</span>
+            </button>
+          ) : (
+            // Expanded Search Pill & Dropdown
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: 320,
+                animation: 'expandPill 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+            >
+              {/* White Pill Search Input */}
+              <div
+                style={{
+                  background: '#ffffff',
+                  borderRadius: 9999,
+                  height: 44,
+                  padding: '0 14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                <MagnifyingGlass size={16} color="#64748b" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search village, crop, district..."
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    width: '100%',
+                    fontSize: 13,
+                    color: '#0f172a',
+                    fontWeight: 500,
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      background: '#f1f5f9',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: 20,
+                      height: 20,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 10,
+                      color: '#64748b',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <X size={12} color="#64748b" />
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setIsSearchOpen(false);
+                    setSearchQuery('');
+                  }}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    fontSize: 12,
+                    color: '#94a3b8',
+                    cursor: 'pointer',
+                    padding: '2px 4px',
+                    fontWeight: 600,
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+
+              {/* Completely White Suggestion Dropdown (DESIGN.md squircle/rounded curve) */}
+              <div
+                style={{
+                  background: '#ffffff',
+                  marginTop: 8,
+                  borderRadius: 20,
+                  border: '1px solid #e2e8f0',
+                  maxHeight: 280,
+                  overflowY: 'auto',
+                  padding: 6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                }}
+              >
+                <div
+                  style={{
+                    padding: '6px 12px 4px',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    color: '#94a3b8',
+                  }}
+                >
+                  {searchQuery ? 'Matching Results' : 'Featured & Suggested'}
+                </div>
+
+                {suggestions.length === 0 ? (
+                  <div style={{ padding: '12px 14px', fontSize: 12, color: '#64748b', textAlign: 'center' }}>
+                    No matches found for &quot;{searchQuery}&quot;
+                  </div>
+                ) : (
+                  suggestions.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleSelectSuggestion(item)}
+                      style={{
+                        background: item.type === 'crop_suitability' ? '#f0fdf4' : item.type === 'village' || item.type === 'region' ? '#f0f9ff' : '#ffffff',
+                        border: 'none',
+                        borderRadius: 14,
+                        padding: '8px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        transition: 'background 0.15s ease',
+                        width: '100%',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = item.type === 'crop_suitability' ? '#dcfce7' : item.type === 'village' || item.type === 'region' ? '#e0f2fe' : '#f8fafc';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = item.type === 'crop_suitability' ? '#f0fdf4' : item.type === 'village' || item.type === 'region' ? '#f0f9ff' : '#ffffff';
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>{item.title}</span>
+                          <span style={{ fontSize: 10, color: '#64748b' }}>{item.subtitle}</span>
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          fontSize: 9,
+                          fontWeight: 700,
+                          background:
+                            item.badge === 'Crop Suitability' || item.badge === 'Crop'
+                              ? '#ecfdf5'
+                              : item.badge === 'Village'
+                              ? '#f0f9ff'
+                              : '#f8fafc',
+                          color:
+                            item.badge === 'Crop Suitability' || item.badge === 'Crop'
+                              ? '#059669'
+                              : item.badge === 'Village'
+                              ? '#0284c7'
+                              : '#64748b',
+                          padding: '2px 6px',
+                          borderRadius: 9999,
+                          border: '1px solid rgba(0,0,0,0.06)',
+                        }}
+                      >
+                        {item.badge}
+                      </span>
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {activeCrop && (
           <div
             style={{
+              fontFamily: 'var(--font-sans, Inter, sans-serif)',
               display: 'flex',
               flexDirection: 'column',
-              width: 320,
-              animation: 'expandPill 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              alignItems: 'flex-start',
+              gap: 6,
+              maxWidth: '92%',
+              animation: 'fadeIn 0.2s ease-out',
+              pointerEvents: 'auto',
             }}
           >
-            {/* White Pill Search Input */}
+            {/* Main Suitability Pill */}
             <div
               style={{
                 background: '#ffffff',
                 borderRadius: 9999,
-                height: 44,
-                padding: '0 14px',
+                padding: '6px 14px 6px 12px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
-                border: '1px solid #e2e8f0',
-              }}
-            >
-              <MagnifyingGlass size={16} color="#64748b" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search village, crop, district..."
-                style={{
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  width: '100%',
-                  fontSize: 13,
-                  color: '#0f172a',
-                  fontWeight: 500,
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  style={{
-                    background: '#f1f5f9',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: 20,
-                    height: 20,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 10,
-                    color: '#64748b',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <X size={12} color="#64748b" />
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  setIsSearchOpen(false);
-                  setSearchQuery('');
-                }}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  fontSize: 12,
-                  color: '#94a3b8',
-                  cursor: 'pointer',
-                  padding: '2px 4px',
-                  fontWeight: 600,
-                }}
-              >
-                Close
-              </button>
-            </div>
-
-            {/* Completely White Suggestion Dropdown (DESIGN.md squircle/rounded curve) */}
-            <div
-              style={{
-                background: '#ffffff',
-                marginTop: 8,
-                borderRadius: 20,
-                border: '1px solid #e2e8f0',
-                maxHeight: 280,
-                overflowY: 'auto',
-                padding: 6,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
+                gap: 10,
               }}
             >
               <div
                 style={{
-                  padding: '6px 12px 4px',
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: '#94a3b8',
+                  width: 28,
+                  height: 28,
+                  borderRadius: '50%',
+                  background: '#dcfce7',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                {searchQuery ? 'Matching Results' : 'Featured & Suggested'}
+                <Plant size={18} weight="fill" color="#15803d" />
               </div>
-
-              {suggestions.length === 0 ? (
-                <div style={{ padding: '12px 14px', fontSize: 12, color: '#64748b', textAlign: 'center' }}>
-                  No matches found for &quot;{searchQuery}&quot;
-                </div>
-              ) : (
-                suggestions.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleSelectSuggestion(item)}
+  
+              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
+                    {activeCrop.name}
+                  </span>
+                  <span
                     style={{
-                      background: '#ffffff',
-                      border: 'none',
-                      borderRadius: 14,
-                      padding: '8px 12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      transition: 'background 0.15s ease',
-                      width: '100%',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#f8fafc';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#ffffff';
+                      fontSize: 9,
+                      fontWeight: 700,
+                      background: '#ecfdf5',
+                      color: '#059669',
+                      padding: '1px 6px',
+                      borderRadius: 9999,
+                      border: '1px solid rgba(5,150,105,0.2)',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <item.icon size={16} color={item.type === 'crop_suitability' ? '#15803d' : '#0284c7'} />
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>{item.title}</span>
-                        <span style={{ fontSize: 10, color: '#64748b' }}>{item.subtitle}</span>
-                      </div>
-                    </div>
-                    <span
-                      style={{
-                        fontSize: 9,
-                        fontWeight: 700,
-                        background:
-                          item.badge === 'Crop Suitability' || item.badge === 'Crop'
-                            ? '#ecfdf5'
-                            : item.badge === 'Village'
-                            ? '#f0f9ff'
-                            : '#f8fafc',
-                        color:
-                          item.badge === 'Crop Suitability' || item.badge === 'Crop'
-                            ? '#059669'
-                            : item.badge === 'Village'
-                            ? '#0284c7'
-                            : '#64748b',
-                        padding: '2px 6px',
-                        borderRadius: 9999,
-                        border: '1px solid rgba(0,0,0,0.06)',
-                      }}
-                    >
-                      {item.badge}
-                    </span>
-                  </button>
-                ))
-              )}
+                    Best Growing Zones
+                  </span>
+                  {isLoadingCrop && (
+                    <CircleNotch size={14} color="#15803d" className="animate-spin" />
+                  )}
+                </div>
+                <span style={{ fontSize: 10, color: '#64748b' }}>
+                  Risk level display paused â€¢ Green highlights highest cultivation suitability
+                </span>
+              </div>
+  
+              <button
+                onClick={clearCropMode}
+                title="Exit crop mode & restore risk levels"
+                style={{
+                  background: '#f1f5f9',
+                  border: 'none',
+                  borderRadius: 9999,
+                  padding: '4px 10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#475569',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  marginLeft: 4,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#e2e8f0';
+                  e.currentTarget.style.color = '#0f172a';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.color = '#475569';
+                }}
+              >
+                <X size={12} weight="bold" />
+                <span>Exit Crop View</span>
+              </button>
             </div>
           </div>
         )}
       </div>
-
-      {/* Floating Crop Suitability Banner & Legend (Top Center) */}
-      {activeCrop && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 20,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 35,
-            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 6,
-            maxWidth: '92%',
-            animation: 'fadeIn 0.2s ease-out',
-            pointerEvents: 'auto',
-          }}
-        >
-          {/* Main Suitability Pill */}
-          <div
-            style={{
-              background: '#ffffff',
-              borderRadius: 9999,
-              padding: '6px 14px 6px 12px',
-              border: '1px solid #e2e8f0',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-            }}
-          >
-            <div
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: '50%',
-                background: '#dcfce7',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Plant size={18} weight="fill" color="#15803d" />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
-                  {activeCrop.name}
-                </span>
-                <span
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 700,
-                    background: '#ecfdf5',
-                    color: '#059669',
-                    padding: '1px 6px',
-                    borderRadius: 9999,
-                    border: '1px solid rgba(5,150,105,0.2)',
-                  }}
-                >
-                  Best Growing Zones
-                </span>
-                {isLoadingCrop && (
-                  <CircleNotch size={14} color="#15803d" className="animate-spin" />
-                )}
-              </div>
-              <span style={{ fontSize: 10, color: '#64748b' }}>
-                Risk level display paused • Green highlights highest cultivation suitability
-              </span>
-            </div>
-
-            <button
-              onClick={clearCropMode}
-              title="Exit crop mode & restore risk levels"
-              style={{
-                background: '#f1f5f9',
-                border: 'none',
-                borderRadius: 9999,
-                padding: '4px 10px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                fontSize: 11,
-                fontWeight: 600,
-                color: '#475569',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                marginLeft: 4,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#e2e8f0';
-                e.currentTarget.style.color = '#0f172a';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.color = '#475569';
-              }}
-            >
-              <X size={12} weight="bold" />
-              <span>Exit Crop View</span>
-            </button>
-          </div>
-
-          {/* Color Scale Legend */}
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: 9999,
-              padding: '3px 14px',
-              border: '1px solid #e2e8f0',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              fontSize: 10,
-              fontWeight: 600,
-              color: '#475569',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#15803d' }} />
-              <span>≥75% Optimal</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
-              <span>60–74% Good</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#eab308' }} />
-              <span>45–59% Moderate</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#94a3b8' }} />
-              <span>&lt;45% Suboptimal</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Change Map View - Flat Square Button & Options (Bottom-Left) */}
       <div
@@ -1682,7 +1646,7 @@ export default function Map3D({
                     justifyContent: 'space-between',
                     padding: 4,
                     color: '#ffffff',
-                    fontFamily: 'system-ui, sans-serif',
+                    fontFamily: 'var(--font-sans, Inter, sans-serif)',
                     textAlign: 'left',
                     transition: 'all 0.15s ease',
                   }}
@@ -1723,7 +1687,7 @@ export default function Map3D({
             justifyContent: 'space-between',
             padding: 5,
             color: '#ffffff',
-            fontFamily: 'system-ui, sans-serif',
+            fontFamily: 'var(--font-sans, Inter, sans-serif)',
             transition: 'transform 0.15s ease',
           }}
           onMouseEnter={(e) => {
@@ -1755,7 +1719,7 @@ export default function Map3D({
         </button>
       </div>
 
-      {/* Right side controls (Zoom, Current Location, 3D Toggle) */}
+      {/* Bottom right container: Legend Card + Map Controls */}
       <div
         style={{
           position: 'absolute',
@@ -1763,11 +1727,76 @@ export default function Map3D({
           right: 10,
           zIndex: 20,
           display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
+          alignItems: 'flex-end',
+          gap: 12,
         }}
       >
-        {/* Zoom Controls */}
+        {/* Map Indexes / Legend Card */}
+        <div
+          style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(8px)',
+            borderRadius: 12,
+            padding: '12px 14px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            fontSize: 11,
+            fontWeight: 600,
+            color: '#475569',
+            minWidth: 150,
+            pointerEvents: 'auto',
+          }}
+        >
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#0f172a', marginBottom: 2 }}>
+            {activeCrop ? 'Suitability Index' : 'Risk Level Index'}
+          </div>
+          {activeCrop ? (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#15803d' }} />
+                <span>â‰¥75% Optimal</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e' }} />
+                <span>60â€“74% Good</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308' }} />
+                <span>45â€“59% Moderate</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#94a3b8' }} />
+                <span>&lt;45% Suboptimal</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#dc2626' }} />
+                <span>Critical (Frost)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#f97316' }} />
+                <span>High (Heat)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308' }} />
+                <span>Medium (Rain)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e' }} />
+                <span>Low (Normal)</span>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Right side controls (Zoom, Current Location, 3D Toggle) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {/* Zoom Controls */}
         <div
           style={{
             display: 'flex',
@@ -1864,7 +1893,7 @@ export default function Map3D({
             fontSize: 12,
             fontWeight: 700,
             color: '#0f172a',
-            fontFamily: 'system-ui, sans-serif',
+            fontFamily: 'var(--font-sans, Inter, sans-serif)',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             padding: 0,
           }}
@@ -1874,6 +1903,8 @@ export default function Map3D({
           {is3D ? '2D' : '3D'}
         </button>
       </div>
+      </div>
     </div>
   );
 }
+

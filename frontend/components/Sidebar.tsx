@@ -362,9 +362,6 @@ export default function Sidebar({
       {/* Top Header: Location, Elevation & Language Switcher */}
       <div className="p-4 sm:p-5 flex items-center justify-between shrink-0 bg-slate-50">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-9 h-9 rounded-full bg-sky-100 flex items-center justify-center shrink-0">
-            <Plant size={18} className="text-sky-600" weight="bold" />
-          </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
               <h2 className="text-lg md:text-xl font-extrabold text-slate-900 truncate">
@@ -381,7 +378,7 @@ export default function Sidebar({
                 </button>
               )}
             </div>
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
               <span>{district}</span>
               <span>•</span>
               <span>{t.elevation}: {Math.round(elevation)}m</span>
@@ -404,7 +401,7 @@ export default function Sidebar({
       {/* Dropdown for Panchayat Switcher if toggled */}
       {villageSelectorOpen && availableVillages.length > 0 && (
         <div className="px-4 py-2 bg-slate-50 max-h-48 overflow-y-auto z-30">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+          <div className="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5">
             {t.selectVillage}
           </div>
           <div className="flex flex-col gap-1">
@@ -418,14 +415,14 @@ export default function Sidebar({
                   }
                   setVillageSelectorOpen(false);
                 }}
-                className={`text-left px-2.5 py-1.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
+                className={`text-left px-2.5 py-2 rounded-xl text-sm font-medium flex items-center justify-between transition-colors ${
                   (v.panchayat_id === panchayatId || v.village_id === panchayatId)
-                    ? 'bg-sky-100 text-sky-800 font-bold'
-                    : 'text-slate-700 hover:bg-slate-200/60'
+                    ? 'bg-sky-100 text-sky-900 font-extrabold'
+                    : 'text-slate-800 hover:bg-slate-200/60'
                 }`}
               >
                 <span>{lang === 'ml' && v.name_ml ? v.name_ml : v.name}</span>
-                <span className="text-[10px] text-slate-400">{v.district}</span>
+                <span className="text-[11px] font-bold text-slate-500">{v.district}</span>
               </button>
             ))}
           </div>
@@ -435,7 +432,7 @@ export default function Sidebar({
       {/* Scrollable Content Container */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col gap-4">
         {isLoading && (
-          <div className="flex items-center justify-center py-4 text-xs font-medium text-sky-600 gap-2 bg-sky-50 rounded-2xl">
+          <div className="flex items-center justify-center py-4 text-sm font-bold text-sky-700 gap-2 bg-sky-50 rounded-2xl">
             <CircleNotch size={16} className="animate-spin" />
             <span>{t.loading}</span>
           </div>
@@ -493,7 +490,7 @@ export default function Sidebar({
                 ) : (
                   <CloudSun size={18} className="text-slate-600" weight="fill" />
                 )}
-                <span className="text-xs font-bold text-slate-800">
+                <span className="text-sm font-extrabold text-slate-900">
                   {t.weatherConditions[activeForecast.condition as keyof typeof t.weatherConditions] ||
                     activeForecast.condition}
                 </span>
@@ -507,33 +504,33 @@ export default function Sidebar({
             <div className="grid grid-cols-3 gap-2 text-center">
               {/* Temp Range */}
               <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400 mb-0.5">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
                   <Thermometer size={12} className="text-rose-500" />
                   <span>{t.tempRange}</span>
                 </div>
-                <div className="text-xs font-bold text-slate-800">
+                <div className="text-sm font-extrabold text-slate-900">
                   {activeForecast.minTemp}°C – {activeForecast.maxTemp}°C
                 </div>
               </div>
 
               {/* Rain Chance */}
               <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400 mb-0.5">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
                   <CloudRain size={12} className="text-sky-500" />
                   <span>{t.rainChance}</span>
                 </div>
-                <div className="text-xs font-bold text-sky-700">
+                <div className="text-sm font-extrabold text-sky-700">
                   {activeForecast.rainChancePct}%
                 </div>
               </div>
 
               {/* Wind Speed */}
               <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400 mb-0.5">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
                   <Wind size={12} className="text-teal-500" />
                   <span>{t.windSpeed}</span>
                 </div>
-                <div className="text-xs font-bold text-slate-800">
+                <div className="text-sm font-extrabold text-slate-900">
                   {activeForecast.maxWind} km/h
                 </div>
               </div>
@@ -548,11 +545,11 @@ export default function Sidebar({
                       key={sIdx}
                       className="bg-white rounded-lg p-1.5 text-center flex flex-col items-center gap-0.5"
                     >
-                      <span className="text-[9px] font-semibold text-slate-400">
+                      <span className="text-[10px] font-bold text-slate-500">
                         {sIdx === 0 ? '00h' : sIdx === 1 ? '06h' : sIdx === 2 ? '12h' : '18h'}
                       </span>
-                      <span className="text-[11px] font-bold text-slate-800">{step.temp}°</span>
-                      <span className="text-[9px] text-sky-600 font-medium">
+                      <span className="text-xs font-extrabold text-slate-900">{step.temp}°</span>
+                      <span className="text-[10px] text-sky-700 font-bold">
                         {step.rain > 0 ? `${step.rain}mm` : '—'}
                       </span>
                     </div>
@@ -571,9 +568,6 @@ export default function Sidebar({
             <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-800">
               {t.advisoryTitle}
             </h3>
-            <span className="text-[10px] font-bold text-sky-600 uppercase">
-              {advisory?.confidence || 'High'} {t.confidence}
-            </span>
           </div>
 
           <div
@@ -602,7 +596,7 @@ export default function Sidebar({
 
             {/* Main Human-Readable Advice Banner */}
             <div className="bg-white rounded-xl p-3">
-              <p className="text-xs font-semibold text-slate-800 leading-relaxed">
+              <p className="text-sm font-bold text-slate-900 leading-relaxed">
                 &ldquo;{advisory?.text || t.noAdvice}&rdquo;
               </p>
             </div>
@@ -611,14 +605,14 @@ export default function Sidebar({
             {advisory?.actionable_recommendations &&
               advisory.actionable_recommendations.length > 0 && (
                 <div className="flex flex-col gap-1.5 pt-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-600">
                     {t.recommendations}:
                   </span>
                   <div className="flex flex-col gap-1">
                     {advisory.actionable_recommendations.map((rec: string, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-2 text-xs text-slate-700 bg-white/70 rounded-lg p-1.5"
+                        className="flex items-start gap-2 text-sm font-medium text-slate-800 bg-white/70 rounded-lg p-2"
                       >
                         <CheckCircle
                           size={13}

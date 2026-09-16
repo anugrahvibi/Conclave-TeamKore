@@ -1,7 +1,7 @@
 # Design Guidelines
 
 ## Typography
-- **Font Family**: Only the **Poppins** font must be used throughout the application for all text, headings, and monospaced elements. No other fonts (like Geist, Inter, or Roboto) are permitted.
+- **Font Family**: Only the **Inter** font must be used throughout the application for all text, headings, and monospaced elements. No other fonts (like Geist, Poppins, or Roboto) are permitted.
 
 ## Styling & Layout
 
