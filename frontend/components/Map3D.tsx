@@ -28,6 +28,7 @@ import {
   Plus,
   Minus,
   IconProps,
+  ArrowsClockwise,
 } from '@phosphor-icons/react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -297,6 +298,8 @@ export default function Map3D({
   // Map Controls State
   const [is3D, setIs3D] = useState<boolean>(initialPitch > 0);
   const [isLocating, setIsLocating] = useState(false);
+  const [mapBearing, setMapBearing] = useState<number>(initialBearing);
+  const [mapPitch, setMapPitch] = useState<number>(initialPitch);
 
   const selectedVillage = useMemo(() => {
     if (!selectedPanchayatId || !loadedVillageData?.features) return null;
@@ -323,16 +326,15 @@ export default function Map3D({
   };
 
   // Client-side village fetch fallback if villageData prop is not passed
-  useEffect(() => {
+  const fetchVillagesData = (isMountedRef?: { current: boolean }) => {
     if (villageData) {
       setLoadedVillageData(villageData);
       return;
     }
-    let isMounted = true;
     fetch(`${backendUrl}/villages?format=geojson&limit=300`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (!isMounted || !data || !data.features) return;
+        if ((isMountedRef && !isMountedRef.current) || !data || !data.features) return;
         // Color each village polygon by risk_level: critical/high=red(frost), medium=orange(heat), low=green(none)
         const colorMap: Record<string, string> = {
           critical: '#dc2626',
@@ -361,7 +363,15 @@ export default function Map3D({
             },
           };
         });
-        setLoadedVillageData({ type: 'FeatureCollection', features });
+        const newFC = { type: 'FeatureCollection' as const, features };
+        setLoadedVillageData(newFC);
+        
+        // Update map source if exists
+        const map = mapRef.current;
+        if (map && map.getSource('villages-source')) {
+          (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(newFC as any);
+        }
+
         if (onVillagesLoaded) {
           const list = features.map((f: any) => ({
             village_id: f.properties?.village_id,
@@ -374,9 +384,13 @@ export default function Map3D({
         }
       })
       .catch((err) => console.warn('Village fetch notice:', err));
+  };
 
+  useEffect(() => {
+    const isMountedRef = { current: true };
+    fetchVillagesData(isMountedRef);
     return () => {
-      isMounted = false;
+      isMountedRef.current = false;
     };
   }, [villageData, backendUrl]);
 
@@ -705,6 +719,14 @@ export default function Map3D({
         console.warn('MapLibre engine notice:', e.error.message || e.error);
       }
     });
+
+    map.on('rotate', () => {
+      setMapBearing(map.getBearing());
+    });
+    map.on('pitch', () => {
+      setMapPitch(map.getPitch());
+    });
+
 
     const setupControls = () => {
       map.resize();
@@ -1210,6 +1232,45 @@ export default function Map3D({
     );
   };
 
+  const handleCompassPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!mapRef.current) return;
+    // e.preventDefault(); // Sometimes prevents default pointer capture behaviour on buttons
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startBearing = mapRef.current.getBearing();
+    const startPitch = mapRef.current.getPitch();
+    let hasDragged = false;
+
+    const onPointerMove = (moveEvent: PointerEvent) => {
+      const dx = moveEvent.clientX - startX;
+      const dy = moveEvent.clientY - startY;
+
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        hasDragged = true;
+      }
+
+      if (hasDragged) {
+        const newBearing = startBearing + dx * 0.5;
+        const newPitch = Math.max(0, Math.min(85, startPitch - dy * 0.5));
+        mapRef.current!.setBearing(newBearing);
+        mapRef.current!.setPitch(newPitch);
+      }
+    };
+
+    const onPointerUp = () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+
+      if (!hasDragged) {
+        mapRef.current!.resetNorthPitch({ duration: 1000 });
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+  };
+
   return (
     <div
       style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}
@@ -1226,6 +1287,87 @@ export default function Map3D({
           height: '100%',
         }}
       />
+
+      {/* Top-Right Controls: Compass & Refresh */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          zIndex: 30,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+          fontFamily: 'var(--font-sans, Poppins, sans-serif)',
+        }}
+      >
+        <button
+          onPointerDown={handleCompassPointerDown}
+          title="Drag to rotate/pitch, Click to reset North"
+          style={{
+            touchAction: 'none',
+            background: '#ffffff',
+            color: '#0f172a',
+            border: '1px solid #e2e8f0',
+            borderRadius: 8,
+            width: 44,
+            height: 44,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.03)';
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = '#ffffff';
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transform: `rotateX(${mapPitch}deg) rotateZ(${-mapBearing - 45}deg)`,
+              transition: 'transform 0.1s ease-out',
+            }}
+          >
+            <NavigationArrow size={20} weight="fill" color="#0f172a" />
+          </div>
+        </button>
+
+        <button
+          onClick={() => fetchVillagesData()}
+          title="Refresh Data Layer"
+          style={{
+            background: '#ffffff',
+            color: '#0f172a',
+            border: '1px solid #e2e8f0',
+            borderRadius: 8,
+            width: 44,
+            height: 44,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.03)';
+            e.currentTarget.style.background = '#f8fafc';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.background = '#ffffff';
+          }}
+        >
+          <ArrowsClockwise size={20} weight="bold" />
+        </button>
+      </div>
 
       {/* Top-Left Controls: Search and Active Crop Pill */}
       <div
