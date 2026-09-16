@@ -23,7 +23,7 @@ import {
   Mountains,
   Waves,
   Tree,
-  User,
+
   NavigationArrow,
   Plus,
   Minus,
@@ -239,14 +239,6 @@ const POPULAR_LOCATIONS = [
   { name: 'Thiruvananthapuram', district: 'Thiruvananthapuram', center: [76.95, 8.52] as [number, number], zoom: 11.5, type: 'region', icon: Buildings },
 ];
 
-// One dashboard, two profiles: k=0 officer (statewide Kerala view),
-// k=1 farmer (flies to their village). Search & village interaction identical.
-const DASH_OFFICER = 0;
-const DASH_FARMER = 1;
-const FARMER_HOME = {
-  center: [76.08, 11.6] as [number, number],
-  zoom: 12.6,
-};
 
 // Resolve a village's centroid for popups/flyTo: prefer the backend-provided
 // centroid {lat, lon} (it may arrive JSON-stringified through GeoJSON
@@ -286,6 +278,7 @@ export default function Map3D({
   const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
   const [isMapViewMenuOpen, setIsMapViewMenuOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [styleReadyTick, setStyleReadyTick] = useState(0);
   const [loadedVillageData, setLoadedVillageData] = useState<any>(villageData);
 
   // Crop Suitability Mode State (disables risk level display while active)
@@ -300,9 +293,6 @@ export default function Map3D({
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const [dash, setDash] = useState<typeof DASH_OFFICER | typeof DASH_FARMER>(DASH_OFFICER);
-  const isFarmerDash = dash === DASH_FARMER;
-  const prevDashRef = useRef<number | null>(null);
 
   // Map Controls State
   const [is3D, setIs3D] = useState<boolean>(initialPitch > 0);
@@ -780,7 +770,7 @@ export default function Map3D({
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
 
-      cropData.features?.forEach((feature) => {
+      (cropData as any).features?.forEach((feature: any) => {
         const props = feature.properties;
         const coords = feature.geometry.coordinates[0][0] as [number, number];
 
@@ -826,7 +816,6 @@ export default function Map3D({
     } else {
       map.once('style.load', () => safeSetup(true));
       map.once('load', () => safeSetup(true));
-      setupTimeout = setTimeout(() => safeSetup(true), 800);
     }
 
     return () => {
@@ -864,7 +853,23 @@ export default function Map3D({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !isLoaded || !loadedVillageData) return;
-    if (!map.isStyleLoaded()) return;
+    if (!map.isStyleLoaded()) {
+      // Style can still be loading when the data arrives (race). Retry briefly
+      // instead of silently returning and losing the data layer.
+      let cancelled = false;
+      const timer = setInterval(() => {
+        if (cancelled) return;
+        if (mapRef.current && mapRef.current.isStyleLoaded()) {
+          clearInterval(timer);
+          setStyleReadyTick((t) => t + 1);
+        }
+      }, 200);
+      setTimeout(() => clearInterval(timer), 15000);
+      return () => {
+        cancelled = true;
+        clearInterval(timer);
+      };
+    }
 
     if (map.getSource('villages-source')) {
       (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(loadedVillageData);
@@ -1086,8 +1091,8 @@ export default function Map3D({
       }
     }
 
-    applyVillageLayerMode(map, isFarmerDash);
-  }, [isLoaded, loadedVillageData, backendUrl, isFarmerDash]);
+    applyVillageLayerMode(map, false);
+  }, [isLoaded, styleReadyTick, loadedVillageData, backendUrl]);
 
   // Basemap switcher
   const switchBasemap = (type: 'osm' | 'satellite' | 'carto') => {
@@ -1127,33 +1132,7 @@ export default function Map3D({
 
   const activeBasemapObj = BASEMAP_OPTIONS.find((b) => b.id === currentBasemap) || BASEMAP_OPTIONS[0];
 
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !isLoaded) return;
 
-    const officer = dash === DASH_OFFICER;
-    applyVillageLayerMode(map, !officer);
-
-    markersRef.current.forEach((marker) => {
-      marker.getElement().style.display = officer ? '' : 'none';
-    });
-
-    if (prevDashRef.current === null) {
-      prevDashRef.current = dash;
-      return;
-    }
-    if (prevDashRef.current === dash) return;
-    prevDashRef.current = dash;
-
-    map.flyTo({
-      center: officer ? initialCenter : FARMER_HOME.center,
-      zoom: officer ? initialZoom : FARMER_HOME.zoom,
-      pitch: officer ? initialPitch : 52,
-      bearing: officer ? initialBearing : 18,
-      duration: 1400,
-      essential: true,
-    });
-  }, [dash, isLoaded, initialCenter, initialZoom, initialPitch, initialBearing]);
 
   // Handle external panchayat selection from sidebar
   useEffect(() => {
@@ -1233,7 +1212,6 @@ export default function Map3D({
 
   return (
     <div
-      data-k={dash}
       style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}
     >
       {/* Map Target Canvas */}
@@ -1248,44 +1226,6 @@ export default function Map3D({
           height: '100%',
         }}
       />
-
-      {/* Top-right profile â€” unlabeled toggle between the two dashboards */}
-      <button
-        type="button"
-        onClick={() => {
-          setIsSearchOpen(false);
-          setSearchQuery('');
-          setIsMapViewMenuOpen(false);
-          setDash((prev) => (prev === DASH_OFFICER ? DASH_FARMER : DASH_OFFICER));
-        }}
-        aria-label="Switch profile"
-        style={{
-          position: 'absolute',
-          top: 20,
-          right: 20,
-          zIndex: 40,
-          width: 44,
-          height: 44,
-          borderRadius: 9999,
-          border: isFarmerDash ? '2px solid #0284c7' : '1px solid #e2e8f0',
-          background: '#ffffff',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 0,
-          fontFamily: 'var(--font-sans, Poppins, sans-serif)',
-          transition: 'background 0.15s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#f8fafc';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = '#ffffff';
-        }}
-      >
-        <User size={22} color="#0f172a" weight={isFarmerDash ? 'fill' : 'regular'} />
-      </button>
 
       {/* Top-Left Controls: Search and Active Crop Pill */}
       <div

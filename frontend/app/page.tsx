@@ -6,6 +6,13 @@ import Sidebar from '@/components/Sidebar';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
+// Stable constants: Map3D re-creates the whole map when these array/object props
+// change identity, so they must not be re-allocated on every Home render.
+const INITIAL_CENTER: [number, number] = [76.27, 10.85];
+const INITIAL_ZOOM = 7;
+const INITIAL_PITCH = 45;
+const INITIAL_BEARING = -15;
+
 export default function Home() {
   const [selectedPanchayatId, setSelectedPanchayatId] = useState<string>('');
   const [availableVillages, setAvailableVillages] = useState<any[]>([]);
@@ -32,10 +39,10 @@ export default function Home() {
         {/* 3D Map Container with squircle rounding & hover transition */}
         <div className="flex-1 h-full rounded-[4rem] [corner-shape:squircle] overflow-hidden relative bg-slate-950 transition-all duration-300">
           <Map3DWrapper
-            initialCenter={[76.27, 10.85]}
-            initialZoom={7}
-            initialPitch={45}
-            initialBearing={-15}
+            initialCenter={INITIAL_CENTER}
+            initialZoom={INITIAL_ZOOM}
+            initialPitch={INITIAL_PITCH}
+            initialBearing={INITIAL_BEARING}
             backendUrl={BACKEND_URL}
             selectedPanchayatId={selectedPanchayatId}
             onSelectPanchayat={handleSelectPanchayat}

@@ -188,7 +188,7 @@ def test_advisory_endpoint():
 
 
 def test_block_summary_endpoint():
-    """Verify /block/{block_id}/summary returns officer dashboard aggregation."""
+    """Verify /block/{block_id}/summary returns dashboard aggregation."""
     response = client.get("/block/BLK_KSD_KAN/summary")
     assert response.status_code == 200
     data = response.json()

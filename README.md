@@ -39,8 +39,7 @@ flowchart TD
 
     subgraph Frontend - Next.js 3D WebGL
         I --> J[MapLibre GL 3D Map\nAWS Terrarium Terrain Mesh]
-        J --> K[Officer Dashboard\nStatewide Risk & Heatmap]
-        J --> L[Farmer Dashboard\nLocal Village Advisory & Crop Match]
+        J --> K[Interactive Dashboard\nRisk Heatmap & Advisory]
     end
 ```
 
@@ -53,8 +52,7 @@ flowchart TD
 - 🌾 **Automated Agro-Advisory Engine**: Generates real-time localized warnings (Frost Alert, Heat Stress, Heavy Rain Warning, Optimal Spraying Window, Drainage Advisory).
 - 🧪 **Crop Suitability Engine**: Ranks suitable crops based on live downscaled weather and soil chemistry (Nitrogen, Phosphorus, Potassium, pH, EC).
 - 👥 **Dual-Profile Dashboard**:
-  - **Officer Mode ($k=0$)**: Statewide Kerala overview, risk heatmaps, Panchayat risk-level polygons, and multi-village comparison.
-  - **Farmer Mode ($k=1$)**: Targeted village view, field stats (NDVI, soil moisture, acreage), and direct advisory summaries.
+- **Interactive Map View**: Statewide Kerala overview, risk heatmaps, Panchayat risk-level polygons, and multi-village comparison. Targeted village view, field stats (NDVI, soil moisture, acreage), and direct advisory summaries.
 - 🔍 **Unified Micro-Search**: Instant search across Panchayats, districts, and crop varieties with pill animation and drop-down suggestions.
 
 ---
