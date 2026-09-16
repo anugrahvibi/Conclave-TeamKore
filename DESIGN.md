@@ -1,7 +1,7 @@
 # Design Guidelines
 
 ## Typography
-- **Font Family**: Only the **Inter** font must be used throughout the application for all text, headings, and monospaced elements. No other fonts (like Geist, Poppins, or Roboto) are permitted.
+- **Font Family**: Only the **Poppins** font must be used throughout the application for all text, headings, and monospaced elements. No other fonts (like Geist, Inter, or Roboto) are permitted.
 
 ## Styling & Layout
 
@@ -13,20 +13,21 @@
 ### Corner Rounding (Nested & Generous)
 - **Never 0 Rounding**: Every visible component, control, and surface must have rounded corners. Sharp (0-radius) elements are prohibited.
 - **Nested (Concentric) Rounding**: Parent roundness = inner roundness + padding. A rounded parent's radius must equal its child's radius plus the padding between them (`parent radius = child radius + padding`, equivalently `child radius = parent radius − parent padding`). Keep the curves concentric (iOS-style); never mix arbitrary radii that break the nesting.
+- **Padding = Rounding**: Padding should equal rounding on all cards (except pills/badges which are fully rounded).
 - **Err Generous**: When picking a radius, round up — a bit of excessive rounding is preferred. The main map box (`rounded-[4rem]` + `corner-shape: squircle`) is the reference example; keep it unchanged.
-- **Chips & Pills**: Small chips, badges, tags, and the search pill always use full rounding (`border-radius: 9999px`).
+- **Chips & Pills**: Small chips, badges, tags, labels, and the search pill always use full rounding (`border-radius: 9999px`) and must be filled and have an outline.
 - **Edge-Flush Exception**: Elements flush against a container edge (e.g. map attribution) may keep square corners only on the edge they touch.
 - **Third-Party Surfaces**: Override bundled-library chrome (MapLibre popups, close buttons, attribution) in `globals.css` so third-party components follow these rounding rules too.
 
 ### Styling Restrictions (Strict)
-- **No Strokes or Outlines (Except Map View Box)**: Visual separation, hierarchy, and depth must be created solely using background fill contrast. All borders, strokes, and outlines are strictly prohibited on all UI elements, components, cards, chips, and overlays — with the sole exception of the main map view box container frame.
-- **Contrast via Fills**: Use subtle background surface fills (e.g. `#ffffff`, `#f8fafc`, `#f1f5f9`, `#e2e8f0`) and solid color fills for selection, badges, and emphasis instead of borders or outlines.
+- **No Strokes, Outlines, or Shadows (Except Map Views)**: All strokes, borders, outlines, and shadows (`box-shadow`, `text-shadow`, `drop-shadow`) are strictly prohibited across all UI elements, cards, chips, popups, and components — with the sole exception of map views (the main map view box frame and map view layers/controls). Visual separation and depth must be created solely using background fill contrast.
+- **Subtle, Balanced Fill Contrast**: Visual hierarchy and separation between cards, sections, and outer backgrounds must use soft, balanced fill contrast — clearly distinguishable without being overly dark, heavy, or high-contrast. Use subtle, harmonious light fills (e.g. `#ffffff`, `#f8fafc` / `slate-50`, `#f1f5f9` / `slate-100`, `#e2e8f0` / `slate-200`, and soft tinted fills like `sky-50`, `emerald-50`, `amber-50`) to delineate cards and surfaces smoothly. Avoid harsh, stark color jumps or heavy dark backgrounds for cards.
 - **No Glow**: No glowing effects of any kind — no `box-shadow` spread with a bright color (e.g. `0 0 10px ...`), no `text-shadow` halos, no `filter: drop-shadow` glows, no luminous highlight rings.
 - **No Gradients**: Never use `linear-gradient`, `radial-gradient`, or CSS `gradient()` values for backgrounds, overlays, or icon scrims — including gradient overlays on imagery (e.g. basemap preview tiles).
 - **No Dark Components**: No dark-surface UI chrome. Components must stay light: white/`#f8fafc`-family surfaces with slate text. No dark scrim backgrounds (e.g. `rgba(15,23,42,...)`, `#020617`), no dark translucent panels with `backdrop-blur`, no dark text-shadow for label readability.
   - *Exception*: The map container that sits directly behind the 3D globe stays dark (`bg-slate-950`) — the globe renders against space, and a white backdrop would wash out the atmosphere and horizon.
-- **No Shadow**: No `box-shadow` or `text-shadow` at all.
-- **Selection & Emphasis**: Selection state = solid color fill changes (e.g. `#sky-100` / `#0284c7` solid fill) with zero borders, strokes, or outlines.
+- **No Shadow**: No `box-shadow` or `text-shadow` anywhere outside of map views.
+- **Selection & Emphasis**: Selection state = solid color fill changes (e.g. `#sky-100` / `#0284c7` solid fill) with zero borders, strokes, outlines, or shadows.
 
 ## Map Styling
 - **Map surfaces**: Terrain, hillshade and sky colors must also stay in the light palette (no near-black shadow/horizon colors like `#020617`).

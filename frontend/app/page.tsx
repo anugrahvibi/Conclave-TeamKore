@@ -7,7 +7,7 @@ import Sidebar from '@/components/Sidebar';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
 export default function Home() {
-  const [selectedPanchayatId, setSelectedPanchayatId] = useState<string>('KL_PANCH_0001');
+  const [selectedPanchayatId, setSelectedPanchayatId] = useState<string>('');
   const [availableVillages, setAvailableVillages] = useState<any[]>([]);
 
   const handleSelectPanchayat = (id: string) => {
@@ -30,7 +30,7 @@ export default function Home() {
         />
 
         {/* 3D Map Container with squircle rounding & hover transition */}
-        <div className="flex-1 h-full rounded-[4rem] [corner-shape:squircle] overflow-hidden border border-gray-200 relative bg-slate-950 transition-all duration-300 hover:border-gray-300">
+        <div className="flex-1 h-full rounded-[4rem] [corner-shape:squircle] overflow-hidden relative bg-slate-950 transition-all duration-300">
           <Map3DWrapper
             initialCenter={[76.27, 10.85]}
             initialZoom={7}

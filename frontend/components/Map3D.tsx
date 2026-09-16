@@ -745,7 +745,7 @@ export default function Map3D({
             new maplibregl.Popup({ offset: 20, closeButton: true })
               .setLngLat(e.lngLat)
               .setHTML(`
-                <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 6px 10px; color: #111;">
+                <div style="font-family: var(--font-sans, Poppins, sans-serif); padding: 6px 10px; color: #111;">
                   <strong style="font-size: 16px; font-weight: 800; color: ${props.color}; display: flex; align-items: center;">${plantIconHtml} <span>${props.cropType} (${props.variety})</span></strong>
                   <div style="font-size: 11px; margin-top: 4px; color: #444;">Farmer: <b>${props.farmer}</b></div>
                   <div style="font-size: 11px; color: #444;">Area: <b>${props.fieldAreaAcres} Acres</b></div>
@@ -769,7 +769,7 @@ export default function Map3D({
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
 
-      cropData.features?.forEach((feature) => {
+      (cropData as any).features?.forEach((feature: any) => {
         const props = feature.properties;
         const coords = feature.geometry.coordinates[0][0] as [number, number];
 
@@ -781,7 +781,7 @@ export default function Map3D({
         el.style.borderRadius = '9999px';
         el.style.fontSize = '11px';
         el.style.fontWeight = '700';
-        el.style.fontFamily = 'var(--font-sans, Inter, sans-serif)';
+        el.style.fontFamily = 'var(--font-sans, Poppins, sans-serif)';
         el.style.border = '1px solid #e2e8f0';
         el.style.cursor = 'pointer';
         el.style.whiteSpace = 'nowrap';
@@ -909,7 +909,7 @@ export default function Map3D({
           'text-size': 10,
           'text-offset': [0, 0],
           'text-anchor': 'center',
-          'text-font': ['Inter Regular'],
+          'text-font': ['Poppins Regular', 'Noto Sans Regular'],
           'text-max-width': 10,
         },
         paint: {
@@ -950,7 +950,7 @@ export default function Map3D({
       const popup = new maplibregl.Popup({ offset: 15, maxWidth: '300px', closeButton: true })
         .setLngLat(coords)
         .setHTML(`
-          <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a;">
+          <div style="font-family: var(--font-sans, Poppins, sans-serif); padding: 4px; color: #0f172a;">
             <div style="font-weight: 800; font-size: 16px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
             <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} â€¢ Elev: ${props.elevation_m ?? 100}m</div>
             ${props.name_ml ? `<div style="font-size: 11px; color: #334155; margin-bottom: 6px;">${props.name_ml}</div>` : ''}
@@ -1006,7 +1006,7 @@ export default function Map3D({
           const plantIconHtml = renderToStaticMarkup(<Plant size={13} color="#15803d" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
 
           popup.setHTML(`
-            <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a; max-width: 290px;">
+            <div style="font-family: var(--font-sans, Poppins, sans-serif); padding: 4px; color: #0f172a; max-width: 290px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
                 <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
                 <span style="background: ${cropColor}; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
@@ -1056,7 +1056,7 @@ export default function Map3D({
             : '';
 
           popup.setHTML(`
-            <div style="font-family: var(--font-sans, Inter, sans-serif); padding: 4px; color: #0f172a; max-width: 280px;">
+            <div style="font-family: var(--font-sans, Poppins, sans-serif); padding: 4px; color: #0f172a; max-width: 280px;">
               <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
                 <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
                 <span style="background: ${riskColor}; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">
@@ -1263,7 +1263,7 @@ export default function Map3D({
           alignItems: 'center',
           justifyContent: 'center',
           padding: 0,
-          fontFamily: 'var(--font-sans, Inter, sans-serif)',
+          fontFamily: 'var(--font-sans, Poppins, sans-serif)',
           transition: 'background 0.15s ease',
         }}
         onMouseEnter={(e) => {
@@ -1286,7 +1286,7 @@ export default function Map3D({
           display: 'flex',
           alignItems: 'flex-start',
           gap: 12,
-          fontFamily: 'var(--font-sans, Inter, sans-serif)',
+          fontFamily: 'var(--font-sans, Poppins, sans-serif)',
         }}
       >
         <div ref={searchContainerRef}>
@@ -1497,7 +1497,7 @@ export default function Map3D({
         {activeCrop && (
           <div
             style={{
-              fontFamily: 'var(--font-sans, Inter, sans-serif)',
+              fontFamily: 'var(--font-sans, Poppins, sans-serif)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
@@ -1646,7 +1646,7 @@ export default function Map3D({
                     justifyContent: 'space-between',
                     padding: 4,
                     color: '#ffffff',
-                    fontFamily: 'var(--font-sans, Inter, sans-serif)',
+                    fontFamily: 'var(--font-sans, Poppins, sans-serif)',
                     textAlign: 'left',
                     transition: 'all 0.15s ease',
                   }}
@@ -1687,7 +1687,7 @@ export default function Map3D({
             justifyContent: 'space-between',
             padding: 5,
             color: '#ffffff',
-            fontFamily: 'var(--font-sans, Inter, sans-serif)',
+            fontFamily: 'var(--font-sans, Poppins, sans-serif)',
             transition: 'transform 0.15s ease',
           }}
           onMouseEnter={(e) => {
@@ -1746,6 +1746,7 @@ export default function Map3D({
             fontSize: 11,
             fontWeight: 600,
             color: '#475569',
+            fontFamily: 'var(--font-sans, Poppins, sans-serif)',
             minWidth: 150,
             pointerEvents: 'auto',
           }}
@@ -1893,7 +1894,7 @@ export default function Map3D({
             fontSize: 12,
             fontWeight: 700,
             color: '#0f172a',
-            fontFamily: 'var(--font-sans, Inter, sans-serif)',
+            fontFamily: 'var(--font-sans, Poppins, sans-serif)',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             padding: 0,
           }}

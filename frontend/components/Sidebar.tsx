@@ -10,13 +10,30 @@ import {
   CheckCircle,
   ShieldWarning,
   CircleNotch,
-  CaretDown,
   Sun,
   CloudSun,
   Plant,
 } from '@phosphor-icons/react';
 
 export type Language = 'en' | 'ml';
+
+export const CROP_NAME_ML: Record<string, string> = {
+  rice: 'നെല്ല്',
+  paddy: 'നെല്ല്',
+  coconut: 'തെങ്ങ്',
+  rubber: 'റബ്ബർ',
+  banana: 'വാഴ',
+  tapioca: 'കപ്പ (മരച്ചീനി)',
+  cassava: 'കപ്പ (മരച്ചീനി)',
+  pepper: 'കുരുമുളക്',
+  cardamom: 'ഏലം',
+  tea: 'തേയില',
+  coffee: 'കാപ്പി',
+  cashew: 'കശുവണ്ടി',
+  arecanut: 'കവുങ്ങ് (അടയ്ക്ക)',
+  vegetables: 'പച്ചക്കറികൾ',
+  spices: 'നറുഗന്ധവ്യഞ്ജനങ്ങള്‍',
+};
 
 export const TRANSLATIONS = {
   en: {
@@ -39,12 +56,14 @@ export const TRANSLATIONS = {
     mediumRisk: 'Moderate Risk',
     highRisk: 'High Risk',
     criticalRisk: 'Critical Alert',
-    forecastTitle: '3-Day Micro-Forecast',
+    forecastTitle: 'Micro-Forecast',
     selectVillage: 'Select Panchayat',
     loading: 'Fetching live agro-climatic data...',
     noAdvice: 'Normal crop conditions. Follow standard seasonal management schedule.',
     switchPanchayat: 'Change village / panchayat',
     timeSlots: ['00:00 (Night)', '06:00 (Morning)', '12:00 (Noon)', '18:00 (Evening)'],
+    topCrops: 'Top Crops',
+    match: 'Match',
     weatherConditions: {
       'Heavy Rain': 'Heavy Rain',
       'Moderate Rain': 'Moderate Rain',
@@ -80,6 +99,8 @@ export const TRANSLATIONS = {
     noAdvice: 'സാധാരണ കൃഷി കാലാവസ്ഥ. പതിവ് പരിചരണങ്ങൾ തുടരുക.',
     switchPanchayat: 'മറ്റൊരു ഗ്രാമം തിരഞ്ഞെടുക്കുക',
     timeSlots: ['00:00 (രാത്രി)', '06:00 (രാവിലെ)', '12:00 (ഉച്ചയ്ക്ക്)', '18:00 (വൈകുന്നേരം)'],
+    topCrops: 'മുൻനിര വിളകൾ',
+    match: 'അനുയോജ്യത',
     weatherConditions: {
       'Heavy Rain': 'കനത്ത മഴ',
       'Moderate Rain': 'മിതമായ മഴ',
@@ -113,9 +134,10 @@ interface ForecastDayData {
 }
 
 interface SidebarProps {
-  panchayatId: string;
+  panchayatId?: string;
   backendUrl?: string;
   onSelectPanchayat?: (id: string) => void;
+  onSelectCrop?: (cropId: string, cropName: string) => void;
   availableVillages?: Array<{
     panchayat_id: string;
     village_id?: string;
@@ -126,31 +148,41 @@ interface SidebarProps {
 }
 
 export default function Sidebar({
-  panchayatId = 'KL_PANCH_0001',
+  panchayatId = '',
   backendUrl = 'http://localhost:8000',
   onSelectPanchayat,
+  onSelectCrop,
   availableVillages = [],
 }: SidebarProps) {
   const [lang, setLang] = useState<Language>('en');
   const [activeDay, setActiveDay] = useState<number>(0);
   const [forecastData, setForecastData] = useState<any>(null);
   const [advisoryData, setAdvisoryData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [villageSelectorOpen, setVillageSelectorOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [cropData, setCropData] = useState<any>(null);
 
   const t = TRANSLATIONS[lang];
 
-  // Fetch forecast and advisory data whenever panchayatId changes
+  // Fetch forecast, advisory, and crop data whenever panchayatId changes
   useEffect(() => {
     let isCurrent = true;
+
+    if (!panchayatId) {
+      setForecastData(null);
+      setAdvisoryData(null);
+      setCropData(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
 
     const fetchData = async () => {
       try {
-        const targetId = panchayatId || 'KL_PANCH_0001';
-        const [fcRes, advRes] = await Promise.all([
-          fetch(`${backendUrl}/forecast/${targetId}`),
-          fetch(`${backendUrl}/advisory/${targetId}?crop_stage=spraying_window`),
+        const [fcRes, advRes, cropRes] = await Promise.all([
+          fetch(`${backendUrl}/forecast/${panchayatId}`),
+          fetch(`${backendUrl}/advisory/${panchayatId}?crop_stage=spraying_window`),
+          fetch(`${backendUrl}/recommend-crop/${panchayatId}`),
         ]);
 
         if (!isCurrent) return;
@@ -167,6 +199,13 @@ export default function Sidebar({
           setAdvisoryData(adv);
         } else {
           setAdvisoryData(null);
+        }
+
+        if (cropRes.ok) {
+          const crop = await cropRes.json();
+          setCropData(crop);
+        } else {
+          setCropData(null);
         }
       } catch (err) {
         console.warn('Sidebar data fetch notice:', err);
@@ -340,14 +379,18 @@ export default function Sidebar({
     );
 
   const villageName =
-    lang === 'ml' && (forecastData?.village_name_ml || advisoryData?.village_name_ml)
+    !panchayatId
+      ? (lang === 'ml' ? 'ഒരു പ്രദേശം തിരഞ്ഞെടുക്കുക' : 'Select a Region')
+      : lang === 'ml' && (forecastData?.village_name_ml || advisoryData?.village_name_ml)
       ? forecastData?.village_name_ml || advisoryData?.village_name_ml
       : forecastData?.village_name || advisoryData?.village_name || panchayatId;
 
   const district =
-    forecastData?.nearest_block?.district ||
-    advisoryData?.district ||
-    'Kerala';
+    !panchayatId
+      ? (lang === 'ml' ? 'മാപ്പിൽ ക്ലിക്ക് ചെയ്യുക' : 'Click a region on map')
+      : forecastData?.nearest_block?.district ||
+        advisoryData?.district ||
+        'Kerala';
 
   const elevation = forecastData?.static_features?.elevation_m ?? 100;
 
@@ -355,8 +398,7 @@ export default function Sidebar({
     <aside
       className="w-full md:w-[380px] lg:w-[410px] shrink-0 h-full rounded-[4rem] [corner-shape:squircle] overflow-hidden bg-white flex flex-col transition-all duration-300 relative z-20"
       style={{
-        fontFamily:
-          'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontFamily: 'var(--font-sans, Poppins, sans-serif)',
       }}
     >
       {/* Top Header: Location, Elevation & Language Switcher */}
@@ -367,18 +409,8 @@ export default function Sidebar({
               <h2 className="text-lg md:text-xl font-extrabold text-slate-900 truncate">
                 {villageName}
               </h2>
-              {availableVillages.length > 0 && onSelectPanchayat && (
-                <button
-                  type="button"
-                  onClick={() => setVillageSelectorOpen(!villageSelectorOpen)}
-                  className="text-slate-400 hover:text-slate-700 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors"
-                  title={t.switchPanchayat}
-                >
-                  <CaretDown size={14} />
-                </button>
-              )}
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+            <div className="flex items-center gap-2 text-xs text-slate-900 font-medium">
               <span>{district}</span>
               <span>•</span>
               <span>{t.elevation}: {Math.round(elevation)}m</span>
@@ -390,7 +422,7 @@ export default function Sidebar({
         <button
           type="button"
           onClick={() => setLang((prev) => (prev === 'en' ? 'ml' : 'en'))}
-          className="rounded-full px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-xs font-semibold text-slate-800 transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+          className="rounded-full px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-xs font-semibold text-slate-900 transition-all flex items-center gap-1.5 cursor-pointer shrink-0 outline outline-1 outline-slate-200"
           aria-label="Toggle language"
         >
           <Translate size={15} className="text-sky-600" />
@@ -399,35 +431,6 @@ export default function Sidebar({
       </div>
 
       {/* Dropdown for Panchayat Switcher if toggled */}
-      {villageSelectorOpen && availableVillages.length > 0 && (
-        <div className="px-4 py-2 bg-slate-50 max-h-48 overflow-y-auto z-30">
-          <div className="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest mb-1.5">
-            {t.selectVillage}
-          </div>
-          <div className="flex flex-col gap-1">
-            {availableVillages.map((v) => (
-              <button
-                key={v.panchayat_id || v.village_id}
-                type="button"
-                onClick={() => {
-                  if (onSelectPanchayat) {
-                    onSelectPanchayat(v.panchayat_id || v.village_id || '');
-                  }
-                  setVillageSelectorOpen(false);
-                }}
-                className={`text-left px-2.5 py-2 rounded-xl text-sm font-medium flex items-center justify-between transition-colors ${
-                  (v.panchayat_id === panchayatId || v.village_id === panchayatId)
-                    ? 'bg-sky-100 text-sky-900 font-extrabold'
-                    : 'text-slate-800 hover:bg-slate-200/60'
-                }`}
-              >
-                <span>{lang === 'ml' && v.name_ml ? v.name_ml : v.name}</span>
-                <span className="text-[11px] font-bold text-slate-500">{v.district}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Scrollable Content Container */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col gap-4">
@@ -443,13 +446,13 @@ export default function Sidebar({
         {/* ==================================================================== */}
         <section className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-800">
+            <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-900">
               {t.forecastTitle}
             </h3>
           </div>
 
           {/* Moving Pill Header Container */}
-          <div className="relative bg-slate-100 p-1 rounded-full flex items-center">
+          <div className="relative bg-slate-100 p-1 rounded-full flex items-center outline outline-1 outline-slate-200">
             {/* The sliding pill indicator */}
             <div
               className="absolute top-1 bottom-1 rounded-full bg-white transition-all duration-300 ease-out z-0"
@@ -469,7 +472,7 @@ export default function Sidebar({
                   type="button"
                   onClick={() => setActiveDay(index)}
                   className={`relative z-10 flex-1 py-1.5 text-center text-xs font-bold transition-colors duration-200 cursor-pointer rounded-full ${
-                    isSelected ? 'text-slate-900' : 'text-slate-500 hover:text-slate-800'
+                    isSelected ? 'text-slate-900' : 'text-slate-700 hover:text-slate-900'
                   }`}
                 >
                   {label}
@@ -479,7 +482,7 @@ export default function Sidebar({
           </div>
 
           {/* Active Tab Weather Summary Card */}
-          <div className="bg-slate-100/70 rounded-2xl p-3.5 flex flex-col gap-3">
+          <div className="bg-slate-100/70 rounded-[14px] p-3.5 flex flex-col gap-3">
             {/* Top Row: Weather Condition & Date */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
@@ -488,14 +491,14 @@ export default function Sidebar({
                 ) : activeForecast.condition.includes('Sunny') ? (
                   <Sun size={18} className="text-amber-500" weight="fill" />
                 ) : (
-                  <CloudSun size={18} className="text-slate-600" weight="fill" />
+                  <CloudSun size={18} className="text-slate-900" weight="fill" />
                 )}
                 <span className="text-sm font-extrabold text-slate-900">
                   {t.weatherConditions[activeForecast.condition as keyof typeof t.weatherConditions] ||
                     activeForecast.condition}
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-slate-500 bg-white px-2 py-0.5 rounded-full">
+              <span className="text-[11px] font-medium text-slate-700 bg-white px-2 py-0.5 rounded-full outline outline-1 outline-slate-200">
                 {activeForecast.dateStr}
               </span>
             </div>
@@ -503,8 +506,8 @@ export default function Sidebar({
             {/* Metric Grid: Temp Range, Rain Chance, Wind Speed */}
             <div className="grid grid-cols-3 gap-2 text-center">
               {/* Temp Range */}
-              <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
+              <div className="bg-white rounded-lg p-2 flex flex-col items-center justify-center">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700 mb-0.5">
                   <Thermometer size={12} className="text-rose-500" />
                   <span>{t.tempRange}</span>
                 </div>
@@ -514,8 +517,8 @@ export default function Sidebar({
               </div>
 
               {/* Rain Chance */}
-              <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
+              <div className="bg-white rounded-lg p-2 flex flex-col items-center justify-center">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700 mb-0.5">
                   <CloudRain size={12} className="text-sky-500" />
                   <span>{t.rainChance}</span>
                 </div>
@@ -525,8 +528,8 @@ export default function Sidebar({
               </div>
 
               {/* Wind Speed */}
-              <div className="bg-white rounded-xl p-2 flex flex-col items-center justify-center">
-                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 mb-0.5">
+              <div className="bg-white rounded-lg p-2 flex flex-col items-center justify-center">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700 mb-0.5">
                   <Wind size={12} className="text-teal-500" />
                   <span>{t.windSpeed}</span>
                 </div>
@@ -543,14 +546,14 @@ export default function Sidebar({
                   {activeForecast.steps.map((step, sIdx) => (
                     <div
                       key={sIdx}
-                      className="bg-white rounded-lg p-1.5 text-center flex flex-col items-center gap-0.5"
+                      className="bg-white rounded-md p-1.5 text-center flex flex-col items-center gap-0.5"
                     >
-                      <span className="text-[10px] font-bold text-slate-500">
+                      <span className="text-[10px] font-bold text-slate-700">
                         {sIdx === 0 ? '00h' : sIdx === 1 ? '06h' : sIdx === 2 ? '12h' : '18h'}
                       </span>
                       <span className="text-xs font-extrabold text-slate-900">{step.temp}°</span>
                       <span className="text-[10px] text-sky-700 font-bold">
-                        {step.rain > 0 ? `${step.rain}mm` : '—'}
+                        {step.rain > 0 ? `${step.rain}mm` : '-'}
                       </span>
                     </div>
                   ))}
@@ -565,7 +568,7 @@ export default function Sidebar({
         {/* ==================================================================== */}
         <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-800">
+            <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-900">
               {t.advisoryTitle}
             </h3>
           </div>
@@ -588,7 +591,7 @@ export default function Sidebar({
                 <span className="text-sm font-extrabold text-slate-900">{t.liveAdvisory}</span>
               </div>
               <span
-                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${riskBadgeBg}`}
+                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full outline outline-1 outline-current/20 ${riskBadgeBg}`}
               >
                 {riskText}
               </span>
@@ -605,14 +608,14 @@ export default function Sidebar({
             {advisory?.actionable_recommendations &&
               advisory.actionable_recommendations.length > 0 && (
                 <div className="flex flex-col gap-1.5 pt-1">
-                  <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-600">
+                  <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900">
                     {t.recommendations}:
                   </span>
                   <div className="flex flex-col gap-1">
                     {advisory.actionable_recommendations.map((rec: string, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-2 text-sm font-medium text-slate-800 bg-white/70 rounded-lg p-2"
+                        className="flex items-start gap-2 text-sm font-medium text-slate-900 bg-white/70 rounded-lg p-2"
                       >
                         <CheckCircle
                           size={13}
@@ -627,6 +630,70 @@ export default function Sidebar({
               )}
           </div>
         </section>
+
+        {/* ==================================================================== */}
+        {/* RECOMMENDED CROPS (RANKED PILLS) */}
+        {/* ==================================================================== */}
+        {Boolean(panchayatId) && cropData && cropData.recommendations && cropData.recommendations.length > 0 && (
+          <section className="flex flex-col gap-2 pt-2 border-t border-slate-100 mt-2">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-extrabold uppercase tracking-widest text-slate-900">
+                {t.topCrops}
+              </h3>
+            </div>
+            <div className="flex flex-col gap-2">
+              {cropData.recommendations.slice(0, 3).map((rec: any, idx: number) => {
+                const isTop = idx === 0;
+                const cropKey = (rec.crop || '').toLowerCase();
+                const cropDisplayName =
+                  lang === 'ml' && CROP_NAME_ML[cropKey]
+                    ? CROP_NAME_ML[cropKey]
+                    : rec.crop.charAt(0).toUpperCase() + rec.crop.slice(1);
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      if (onSelectCrop) {
+                        onSelectCrop(cropKey, cropDisplayName);
+                      }
+                    }}
+                    className={`flex flex-col gap-1 rounded-3xl p-3.5 border transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
+                      isTop
+                        ? 'bg-emerald-50/90 border-emerald-200/80 shadow-xs'
+                        : 'bg-slate-50 border-slate-200/70'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center justify-center ${
+                            isTop
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-slate-200 text-slate-800'
+                          }`}
+                        >
+                          #{idx + 1}
+                        </span>
+                        <span className="text-sm font-extrabold text-slate-900 tracking-wide uppercase flex items-center gap-1.5">
+                          <Plant size={15} className={isTop ? 'text-emerald-600' : 'text-slate-600'} weight="fill" />
+                          {cropDisplayName}
+                        </span>
+                      </div>
+                      <span className="text-xs font-extrabold text-emerald-700 bg-white px-2.5 py-0.5 rounded-full shadow-2xs border border-emerald-100">
+                        {Math.round(rec.suitability_score * 100)}% {t.match}
+                      </span>
+                    </div>
+                    {rec.explanation && (
+                      <p className="text-[11px] font-medium text-slate-600 leading-snug line-clamp-2 px-0.5 pt-0.5">
+                        {rec.explanation}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </aside>
   );
