@@ -24,6 +24,9 @@ import {
   Waves,
   Tree,
   User,
+  NavigationArrow,
+  Plus,
+  Minus,
   IconProps,
 } from '@phosphor-icons/react';
 import * as maplibregl from 'maplibre-gl';
@@ -82,20 +85,31 @@ const POPULAR_LOCATIONS = [
   { name: 'Thiruvananthapuram', district: 'Thiruvananthapuram', center: [76.95, 8.52] as [number, number], zoom: 11.5, type: 'region', icon: Buildings },
 ];
 
-// Hidden dual-dashboard: k=0 officer (statewide), k=1 farmer (field). Not shown in UI.
+// One dashboard, two profiles: k=0 officer (statewide Kerala view),
+// k=1 farmer (flies to their village). Search & village interaction identical.
 const DASH_OFFICER = 0;
 const DASH_FARMER = 1;
-const FARM_FOCUS = {
+const FARMER_HOME = {
   center: [76.08, 11.6] as [number, number],
   zoom: 12.6,
-  crop: 'Cardamom',
-  variety: 'Malabar',
-  acres: 4.2,
-  ndvi: 0.81,
-  moisture: '67%',
-  health: 'Optimal',
-  district: 'Wayanad',
 };
+
+// Resolve a village's centroid for popups/flyTo: prefer the backend-provided
+// centroid {lat, lon} (it may arrive JSON-stringified through GeoJSON
+// properties), falling back to the click location. Polygon geometry
+// coordinates are a nested ring and cannot be used directly as a center.
+function villageCenter(props: any, fallback: [number, number]): [number, number] {
+  let c = props?.centroid;
+  if (typeof c === 'string') {
+    try {
+      c = JSON.parse(c);
+    } catch {
+      c = null;
+    }
+  }
+  if (c && typeof c.lat === 'number' && typeof c.lon === 'number') return [c.lon, c.lat];
+  return fallback;
+}
 
 export default function Map3D({
   initialCenter = [76.27, 10.85] as [number, number], // Kerala, India
@@ -109,6 +123,7 @@ export default function Map3D({
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
+  const villageLayersBoundRef = useRef<Set<string>>(new Set());
 
   // Basemap & View Selector State
   const [currentBasemap, setCurrentBasemap] = useState<'osm' | 'satellite' | 'carto'>('satellite');
@@ -126,6 +141,10 @@ export default function Map3D({
   const isFarmerDash = dash === DASH_FARMER;
   const prevDashRef = useRef<number | null>(null);
 
+  // Map Controls State
+  const [is3D, setIs3D] = useState<boolean>(initialPitch > 0);
+  const [isLocating, setIsLocating] = useState(false);
+
   // Client-side village fetch fallback if villageData prop is not passed
   useEffect(() => {
     if (villageData) {
@@ -133,29 +152,38 @@ export default function Map3D({
       return;
     }
     let isMounted = true;
-    fetch(`${backendUrl}/villages?format=json&limit=300`)
+    fetch(`${backendUrl}/villages?format=geojson&limit=300`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (!isMounted || !data || !data.villages) return;
-        const features = data.villages.map((v: any) => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [v.lon, v.lat],
-          },
-          properties: {
-            village_id: v.village_id,
-            panchayat_id: v.panchayat_id,
-            panchayat_name: v.name,
-            name_ml: v.name_ml || '',
-            district: v.district,
-            block_id: v.nearest_block_id,
-            block_name: v.nearest_block_name,
-            elevation_m: v.static_features?.elevation_m ?? 100,
-            land_cover: v.static_features?.land_cover ?? 'agriculture',
-            current_risk_level: 'low',
-          },
-        }));
+        if (!isMounted || !data || !data.features) return;
+        // Color each village polygon by risk_level: critical/high=red(frost), medium=orange(heat), low=green(none)
+        const colorMap: Record<string, string> = {
+          critical: '#dc2626',
+          high: '#f97316',
+          medium: '#eab308',
+          low: '#22c55e',
+        };
+        const features = data.features.map((f: any) => {
+          const props = f.properties || {};
+          const risk = props.risk_level || 'low';
+          return {
+            ...f,
+            properties: {
+              ...props,
+              village_id: props.village_id,
+              panchayat_id: props.panchayat_id,
+              panchayat_name: props.name || props.panchayat_name || 'Village',
+              name_ml: props.name_ml || '',
+              district: props.district,
+              block_id: props.nearest_block_id || props.block_id,
+              block_name: props.nearest_block_name || props.block_name,
+              elevation_m: props.elevation_m ?? 100,
+              land_cover: props.land_cover ?? 'agriculture',
+              current_risk_level: risk,
+              fillColor: colorMap[risk] || '#22c55e',
+            },
+          };
+        });
         setLoadedVillageData({ type: 'FeatureCollection', features });
       })
       .catch((err) => console.warn('Village fetch notice:', err));
@@ -274,6 +302,8 @@ export default function Map3D({
       container: mapContainer.current,
       style: {
         version: 8,
+        // Glyph server for symbol text layers (village name labels)
+        glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
         sources: {
           'basemap-source': {
             type: 'raster',
@@ -456,10 +486,30 @@ export default function Map3D({
     return () => {
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
+      villageLayersBoundRef.current.clear();
       map.remove();
       mapRef.current = null;
     };
   }, [currentBasemap, initialCenter, initialZoom, initialPitch, initialBearing]);
+
+  // Village layer visibility/paint per dashboard:
+  // - Officer: full risk-shaded fills + heatmap, labels on from zoom 8
+  // - Farmer: subtle risk shading + always-on clickable village name labels
+  const applyVillageLayerMode = (map: maplibregl.Map, farmer: boolean) => {
+    const setVis = (id: string, visible: boolean) => {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
+    };
+    setVis('villages-heat', !farmer);
+    setVis('villages-fill', true);
+    setVis('villages-outline', true);
+    setVis('villages-labels', true);
+    if (map.getLayer('villages-fill')) {
+      map.setPaintProperty('villages-fill', 'fill-opacity', farmer ? 0.18 : 0.55);
+    }
+    if (map.getLayer('villages-outline')) {
+      map.setPaintProperty('villages-outline', 'line-opacity', farmer ? 0.55 : 0.9);
+    }
+  };
 
   // Reactive effect to render/update villages GeoJSON source & layers
   useEffect(() => {
@@ -468,84 +518,42 @@ export default function Map3D({
 
     if (map.getSource('villages-source')) {
       (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(loadedVillageData);
-      return;
+    } else {
+      map.addSource('villages-source', {
+        type: 'geojson',
+        data: loadedVillageData as any,
+      });
     }
 
-    map.addSource('villages-source', {
-      type: 'geojson',
-      data: loadedVillageData as any,
+    // Remove old point/heatmap layers if they exist
+    ['villages-heat', 'villages-points-bg', 'villages-points'].forEach((id) => {
+      if (map.getLayer(id)) map.removeLayer(id);
     });
 
-    // Heatmap at low zoom
-    if (!map.getLayer('villages-heat')) {
-      map.addLayer({
-        id: 'villages-heat',
-        type: 'heatmap',
-        source: 'villages-source',
-        maxzoom: 9,
-        paint: {
-          'heatmap-weight': 1,
-          'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 9, 2],
-          'heatmap-color': [
-            'interpolate',
-            ['linear'],
-            ['heatmap-density'],
-            0,
-            'rgba(16,185,129,0)',
-            0.3,
-            '#10b981',
-            0.6,
-            '#f59e0b',
-            1.0,
-            '#ef4444',
-          ],
-          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 8, 9, 20],
-          'heatmap-opacity': 0.75,
-        },
-      });
-    }
-
-    // Filled background disc — always visible halo behind the colored dot
-    if (!map.getLayer('villages-points-bg')) {
-      map.addLayer({
-        id: 'villages-points-bg',
-        type: 'circle',
-        source: 'villages-source',
-        minzoom: 8,
-        paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 9, 12, 16],
-          'circle-color': '#ffffff',
-          'circle-opacity': 0.85,
-          'circle-stroke-width': 0,
-        },
-      });
-    }
-
-    // Colored risk dot on top
+    // Village polygon fills — each village shaded by risk_level
     // red=frost (critical), orange=heat (high), yellow=rain (medium), green=none (low)
-    if (!map.getLayer('villages-points')) {
+    if (!map.getLayer('villages-fill')) {
       map.addLayer({
-        id: 'villages-points',
-        type: 'circle',
+        id: 'villages-fill',
+        type: 'fill',
         source: 'villages-source',
-        minzoom: 8,
+        minzoom: 6,
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 5, 12, 9],
-          'circle-color': [
-            'match',
-            ['get', 'current_risk_level'],
-            'critical',
-            '#dc2626',
-            'high',
-            '#f97316',
-            'medium',
-            '#eab308',
-            'low',
-            '#22c55e',
-            '#22c55e',
-          ],
-          'circle-stroke-width': 0,
-          'circle-opacity': 1,
+          'fill-color': ['get', 'fillColor'],
+          'fill-opacity': 0.55,
+          'fill-outline-color': '#ffffff',
+        },
+      });
+
+      map.addLayer({
+        id: 'villages-outline',
+        type: 'line',
+        source: 'villages-source',
+        minzoom: 6,
+        paint: {
+          'line-color': '#ffffff',
+          'line-width': 1.5,
+          'line-opacity': 0.9,
         },
       });
     }
@@ -556,26 +564,28 @@ export default function Map3D({
         id: 'villages-labels',
         type: 'symbol',
         source: 'villages-source',
-        minzoom: 9,
+        minzoom: 8,
         layout: {
           'text-field': ['get', 'panchayat_name'],
-          'text-size': 11,
-          'text-offset': [0, 1.6],
-          'text-anchor': 'top',
+          'text-size': 10,
+          'text-offset': [0, 0],
+          'text-anchor': 'center',
           'text-font': ['Open Sans Regular'],
+          'text-max-width': 10,
         },
         paint: {
           'text-color': '#0f172a',
           'text-halo-color': '#ffffff',
-          'text-halo-width': 2.5,
+          'text-halo-width': 2,
         },
       });
     }
 
-    // Click handler — listen on both the bg and dot layers
-    ['villages-points-bg', 'villages-points'].forEach((layerId) => {
+    // Click + pointer-cursor handlers for village fills, outlines, and name labels.
+    // Guarded so re-running this effect doesn't stack duplicate listeners.
+    ['villages-fill', 'villages-outline', 'villages-labels'].forEach((layerId) => {
+      if (!map.getLayer(layerId) || villageLayersBoundRef.current.has(layerId)) return;
       map.on('click', layerId, (e) => {
-        // only handle if this event has features (layer exists and is interactive)
         if (!e.features || !e.features[0]) return;
         handleVillageClick(e as any);
       });
@@ -585,13 +595,14 @@ export default function Map3D({
       map.on('mouseleave', layerId, () => {
         map.getCanvas().style.cursor = '';
       });
+      villageLayersBoundRef.current.add(layerId);
     });
 
     const mapNotNull = mapRef.current!;
     async function handleVillageClick(e: any) {
       if (!e.features || !e.features[0]) return;
       const props = e.features[0].properties as any;
-      const coords = (e.features[0].geometry as any).coordinates as [number, number];
+      const coords = villageCenter(props, [e.lngLat.lng, e.lngLat.lat]);
       mapNotNull.flyTo({ center: coords, zoom: Math.max(mapNotNull.getZoom(), 11), pitch: 50, duration: 800 });
 
       const pinIconHtml = renderToStaticMarkup(<MapPin size={14} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
@@ -603,6 +614,7 @@ export default function Map3D({
           <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a;">
             <div style="font-weight: 700; font-size: 13px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
             <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
+            ${props.name_ml ? `<div style="font-size: 11px; color: #334155; margin-bottom: 6px;">${props.name_ml}</div>` : ''}
             <div id="popup-loading-${props.village_id || '0'}" style="font-size: 11px; color: #0284c7; display: flex; align-items: center;">${loadingIconHtml} <span>Loading live advisory & forecast...</span></div>
           </div>
         `)
@@ -672,20 +684,8 @@ export default function Map3D({
       }
     }
 
-    const officer = dash === DASH_OFFICER;
-    if (map.getLayer('villages-heat')) {
-      map.setLayoutProperty('villages-heat', 'visibility', officer ? 'visible' : 'none');
-    }
-    if (map.getLayer('villages-points-bg')) {
-      map.setLayoutProperty('villages-points-bg', 'visibility', officer ? 'visible' : 'none');
-    }
-    if (map.getLayer('villages-points')) {
-      map.setLayoutProperty('villages-points', 'visibility', officer ? 'visible' : 'none');
-    }
-    if (map.getLayer('villages-labels')) {
-      map.setLayoutProperty('villages-labels', 'visibility', officer ? 'visible' : 'none');
-    }
-  }, [isLoaded, loadedVillageData, backendUrl]);
+    applyVillageLayerMode(map, isFarmerDash);
+  }, [isLoaded, loadedVillageData, backendUrl, isFarmerDash]);
 
   // Basemap switcher
   const switchBasemap = (type: 'osm' | 'satellite' | 'carto') => {
@@ -714,20 +714,12 @@ export default function Map3D({
 
   const activeBasemapObj = BASEMAP_OPTIONS.find((b) => b.id === currentBasemap) || BASEMAP_OPTIONS[0];
 
-  const setLayerVisible = (map: maplibregl.Map, id: string, visible: boolean) => {
-    if (!map.getLayer(id)) return;
-    map.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none');
-  };
-
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !isLoaded) return;
 
     const officer = dash === DASH_OFFICER;
-    setLayerVisible(map, 'villages-heat', officer);
-    setLayerVisible(map, 'villages-points-bg', officer);
-    setLayerVisible(map, 'villages-points', officer);
-    setLayerVisible(map, 'villages-labels', officer);
+    applyVillageLayerMode(map, !officer);
 
     markersRef.current.forEach((marker) => {
       marker.getElement().style.display = officer ? '' : 'none';
@@ -741,8 +733,8 @@ export default function Map3D({
     prevDashRef.current = dash;
 
     map.flyTo({
-      center: officer ? initialCenter : FARM_FOCUS.center,
-      zoom: officer ? initialZoom : FARM_FOCUS.zoom,
+      center: officer ? initialCenter : FARMER_HOME.center,
+      zoom: officer ? initialZoom : FARMER_HOME.zoom,
       pitch: officer ? initialPitch : 52,
       bearing: officer ? initialBearing : 18,
       duration: 1400,
@@ -806,69 +798,7 @@ export default function Map3D({
         <User size={22} color="#0f172a" weight={isFarmerDash ? 'fill' : 'regular'} />
       </button>
 
-      {/* Field dashboard chrome (k=1). Statewide search stays on k=0. */}
-      {isFarmerDash && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 20,
-            left: 20,
-            zIndex: 30,
-            width: 280,
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: 28,
-            padding: 16,
-            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-            <Plant size={18} color="#0284c7" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>{FARM_FOCUS.crop}</span>
-              <span style={{ fontSize: 11, color: '#64748b' }}>
-                {FARM_FOCUS.variety} · {FARM_FOCUS.district}
-              </span>
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 8,
-              marginBottom: 10,
-            }}
-          >
-            {[
-              { label: 'Area', value: `${FARM_FOCUS.acres} ac` },
-              { label: 'NDVI', value: String(FARM_FOCUS.ndvi) },
-              { label: 'Moisture', value: FARM_FOCUS.moisture },
-              { label: 'Health', value: FARM_FOCUS.health },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: 16,
-                  padding: '8px 10px',
-                }}
-              >
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  {stat.label}
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{stat.value}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ fontSize: 12, color: '#334155', lineHeight: 1.45 }}>
-            Rain likely in 48h. Hold spray until the canopy dries; check drainage on the lower terrace.
-          </div>
-        </div>
-      )}
-
-      {/* Top-Left Search: Button that smoothly shifts to Pill with Dropdown (Completely White, DESIGN.md) */}
-      {!isFarmerDash && (
+      {/* Top-Left Search: shared by both profiles; profile toggle only changes map focus */}
       <div
         ref={searchContainerRef}
         style={{
@@ -1073,7 +1003,6 @@ export default function Map3D({
           </div>
         )}
       </div>
-      )}
 
       {/* Change Map View - Flat Square Button & Options (Bottom-Left) */}
       <div

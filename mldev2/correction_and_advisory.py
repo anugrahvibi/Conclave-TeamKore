@@ -233,7 +233,7 @@ def load_training_data(csv_path=None):
         )
 
     X, y = _load_wide_or_long_csv(path)
-    print(f"✓ Loaded {len(X)} training rows from {path}")
+    print(f"Loaded {len(X)} training rows from {path}")
     print(f"  X shape: {X.shape}  (6 features: temp, rain, humidity, elevation, dist_to_water, land_cover)")
     return X, y
 
@@ -300,7 +300,7 @@ def _write_wide_training_csv_from_mldev1(src_path, dest_path):
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(wide_rows)
-    print(f"✓ Wrote {len(wide_rows)} rows to {dest_path}")
+    print(f"Wrote {len(wide_rows)} rows to {dest_path}")
 
 
 def _maybe_meters_to_km(dist_values):
@@ -379,7 +379,7 @@ class CorrectionModel:
         self.model.fit(X_scaled, y)
         self.is_trained = True
         
-        print(f"✓ Model trained on {len(X)} samples")
+        print(f"Model trained on {len(X)} samples")
         print(f"  Feature importances: {self._get_feature_names_and_importance()}")
     
     def predict(self, block_forecast, static_features=None):
@@ -462,6 +462,58 @@ class CorrectionModel:
         
         return float(correction)
     
+    def predict_batch(self, block_forecasts, static_features=None):
+        """
+        Predict correction deltas for many forecasts in one sklearn call.
+
+        Mathematically identical to calling predict() once per row (sklearn
+        predictions are row-independent), but avoids per-call overhead that
+        dominates when predicting single samples with a parallel forest.
+
+        Args:
+            block_forecasts: list of dicts, each with keys: temp_c, rain_mm, humidity_pct
+            static_features: dict with keys: elevation_m, dist_to_water_km, land_cover
+                             (shared by all rows, as for a single village across timesteps)
+
+        Returns:
+            list[float]: one correction delta per input row
+        """
+        if not self.is_trained:
+            raise RuntimeError("Model not trained. Call train() first.")
+        if not block_forecasts:
+            return []
+
+        if static_features is None:
+            static_features = {}
+
+        for bf in block_forecasts:
+            validate_block_forecast(bf)
+        validate_static_features(static_features)
+
+        elevation_val = static_features.get(
+            "elevation_m", static_features.get("elevation", DEFAULT_STATIC_FEATURES["elevation_m"])
+        )
+        dist_val = static_features.get(
+            "dist_to_water_km", static_features.get("dist_to_water", DEFAULT_STATIC_FEATURES["dist_to_water_km"])
+        )
+        land_cover_val = static_features.get("land_cover", DEFAULT_STATIC_FEATURES["land_cover"])
+
+        x_batch = np.array([
+            [
+                float(bf["temp_c"]),
+                float(bf["rain_mm"]),
+                float(bf["humidity_pct"]),
+                float(elevation_val),
+                float(dist_val),
+                encode_land_cover(land_cover_val),
+            ]
+            for bf in block_forecasts
+        ])
+
+        x_scaled = self.scaler.transform(x_batch)
+        corrections = self.model.predict(x_scaled)
+        return [float(c) for c in corrections]
+    
     def save(self, model_path):
         """Save the trained model to disk."""
         with open(model_path, 'wb') as f:
@@ -469,7 +521,7 @@ class CorrectionModel:
                 'model': self.model,
                 'scaler': self.scaler
             }, f)
-        print(f"✓ Model saved to {model_path}")
+        print(f"Model saved to {model_path}")
     
     def load(self, model_path):
         """Load a previously trained model from disk."""
@@ -478,7 +530,7 @@ class CorrectionModel:
             self.model = data['model']
             self.scaler = data['scaler']
         self.is_trained = True
-        print(f"✓ Model loaded from {model_path}")
+        print(f"Model loaded from {model_path}")
     
     def _get_feature_names_and_importance(self):
         """Helper to show which features matter most."""
@@ -678,13 +730,13 @@ class AgroAdvisoryEngine:
         """Save rules to JSON (for easy sharing with team)."""
         with open(rules_path, 'w') as f:
             json.dump(self.rules, f, indent=2)
-        print(f"✓ Rules saved to {rules_path}")
+        print(f"Rules saved to {rules_path}")
     
     def load(self, rules_path):
         """Load rules from JSON."""
         with open(rules_path, 'r') as f:
             self.rules = json.load(f)
-        print(f"✓ Rules loaded from {rules_path}")
+        print(f"Rules loaded from {rules_path}")
 
 
 # ============================================================================

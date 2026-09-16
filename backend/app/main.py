@@ -26,7 +26,7 @@ from contextlib import asynccontextmanager
 async def lifespan(app: FastAPI):
     """Validates and warms up services on application startup."""
     print("=" * 70)
-    print(f"🚀 Starting {settings.PROJECT_NAME} v{settings.VERSION}")
+    print(f"Starting {settings.PROJECT_NAME} v{settings.VERSION}")
     print(f"   Indexed {spatial_service.total_villages} Kerala Panchayats & Municipalities")
     model_status = "Loaded & Ready" if forecast_service.pipeline.correction_model.is_trained else "Untrained"
     print(f"   ML Correction Model: {model_status}")

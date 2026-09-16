@@ -1,0 +1,512 @@
+INFO:     Started server process [16464]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Model loaded from C:\Users\EmilShain\Code\Conclave-TeamKore\backend\artifacts\correction_model.pkl
+Rules loaded from C:\Users\EmilShain\Code\Conclave-TeamKore\backend\artifacts\advisory_rules.json
+Rules loaded from C:\Users\EmilShain\Code\Conclave-TeamKore\backend\artifacts\advisory_rules.json
+======================================================================
+Starting Village-Level Weather Downscaling & Agro-Advisory API v1.0.0
+   Indexed 1031 Kerala Panchayats & Municipalities
+   ML Correction Model: Loaded & Ready
+   Agro-Advisory Engine: Loaded (11 active rules)
+   Interactive Docs available at: http://0.0.0.0:0/docs
+======================================================================
+INFO:     127.0.0.1:61161 - "GET /health HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Precomputed forecasts for 1031 villages in 154.7s
+INFO:     127.0.0.1:65189 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'high_wind' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:49241 - "GET /villages?format=geojson HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:55428 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:59417 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50654 - "GET /advisory/KL_PANCH_0161?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50656 - "GET /recommend-crop/KL_PANCH_0161 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50655 - "GET /forecast/KL_PANCH_0161 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+C:\Users\EmilShain\Code\Conclave-TeamKore\backend\app\services\advisory_service.py:84: UserWarning: Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+  rule_result = self.engine.get_advisory(weather_code, stage)
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50655 - "GET /forecast/KL_PANCH_0123 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50656 - "GET /advisory/KL_PANCH_0123?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50654 - "GET /recommend-crop/KL_PANCH_0123 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:50216 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:64395 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:55920 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:50491 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:51281 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:52568 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50073 - "GET /advisory/KL_PANCH_0145?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50075 - "GET /recommend-crop/KL_PANCH_0145 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50073 - "GET /advisory/KL_PANCH_0145?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50075 - "GET /recommend-crop/KL_PANCH_0145 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50073 - "GET /recommend-crop/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50075 - "GET /advisory/KL_PANCH_0145?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0145 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Village has no soil data; falling back to scoring without soil factor.
+INFO:     127.0.0.1:50073 - "GET /recommend-crop/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50075 - "GET /advisory/KL_PANCH_0145?crop_stage=spraying_window HTTP/1.1" 200 OK
+Village has no soil data; falling back to scoring without soil factor.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:50075 - "GET /advisory/KL_PANCH_0145?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0145 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50073 - "GET /recommend-crop/KL_PANCH_0145 HTTP/1.1" 200 OK
+Village has no soil data; falling back to scoring without soil factor.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:50073 - "GET /advisory/KL_PANCH_0144?crop_stage=spraying_window HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50074 - "GET /forecast/KL_PANCH_0144 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50075 - "GET /recommend-crop/KL_PANCH_0144 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:53858 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53860 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+Weather code 'no_rain_7d' or crop stage 'spraying_window' not found in rules. Using safe fallback advisory.
+INFO:     127.0.0.1:53605 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53604 - "GET /villages?format=geojson&limit=300 HTTP/1.1" 200 OK

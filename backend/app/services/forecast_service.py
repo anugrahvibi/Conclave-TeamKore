@@ -4,6 +4,8 @@ to generate downscaled 3-day village forecasts.
 """
 
 from typing import Any, Dict, List, Optional, Tuple
+import logging
+import time
 import numpy as np
 import pandas as pd
 
@@ -12,13 +14,40 @@ from backend.app.services.data_service import data_service
 from backend.app.services.spatial_service import spatial_service, haversine_km
 from mldev2.correction_and_advisory import WeatherCorrectionAndAdvisory
 
+logger = logging.getLogger("backend.forecast_service")
+
 
 class ForecastService:
     def __init__(self):
         self.pipeline: Optional[WeatherCorrectionAndAdvisory] = None
         self.df_blocks: Optional[pd.DataFrame] = None
         self.timestamps: List[str] = []
+        self._forecast_cache: Dict[str, Dict[str, Any]] = {}
         self._initialize()
+        self._precompute_all_villages_async()
+
+    def _precompute_all_villages_async(self):
+        """Warms the forecast cache for all villages in a background thread.
+
+        Uses the batched ML predict so each village costs ~15ms instead of
+        ~400ms, making the whole state computable in seconds without blocking
+        startup or request handling.
+        """
+        import threading
+
+        def _warm():
+            try:
+                t0 = time.perf_counter()
+                for vid in list(spatial_service.villages.keys()):
+                    self.get_forecast_for_village(vid)
+                print(
+                    f"Precomputed forecasts for {len(self._forecast_cache)} villages "
+                    f"in {time.perf_counter() - t0:.1f}s"
+                )
+            except Exception as e:
+                print(f"Forecast precompute failed (will compute on demand): {e}")
+
+        threading.Thread(target=_warm, daemon=True).start()
 
     def _initialize(self):
         """Loads ML correction model and pre-caches block weather observations."""
@@ -44,6 +73,12 @@ class ForecastService:
         if not village:
             return None
 
+        # Serve from cache when available (warmed at startup / on first compute)
+        vid = village["village_id"]
+        cached = self._forecast_cache.get(vid)
+        if cached is not None:
+            return cached
+
         v_lat = village["lat"]
         v_lon = village["lon"]
         static_features = village["static_features"]
@@ -51,6 +86,8 @@ class ForecastService:
         forecast_steps = []
         temps, rains, humids, winds = [], [], [], []
 
+        # First pass: IDW interpolation for every timestep
+        idw_results = []
         for ts in self.timestamps:
             ts_df = self.df_blocks[self.df_blocks["timestamp"] == ts]
             
@@ -78,30 +115,30 @@ class ForecastService:
                 vals = ts_df[["temp", "rainfall", "humidity", "wind"]].values[k_idx]
                 interp = np.dot(weights, vals)
 
-            base_temp = float(interp[0])
-            base_rain = max(0.0, float(interp[1]))
-            base_humid = float(np.clip(interp[2], 0.0, 100.0))
-            base_wind = max(0.0, float(interp[3]))
+            idw_results.append((ts, ts_df, interp))
 
-            # Call ML correction model
-            block_forecast_input = {
-                "temp_c": base_temp,
-                "rain_mm": base_rain,
-                "humidity_pct": base_humid
-            }
+        # Second pass: ONE batched ML predict for all timesteps (~15ms vs ~350ms
+        # for 12 individual sklearn calls; identical math, row-independent).
+        if self.pipeline and self.pipeline.correction_model.is_trained:
+            block_forecasts = [
+                {"temp_c": float(i[2][0]), "rain_mm": max(0.0, float(i[2][1])), "humidity_pct": float(np.clip(i[2][2], 0.0, 100.0))}
+                for i in idw_results
+            ]
             static_feat_input = {
                 "elevation_m": static_features["elevation_m"],
                 "dist_to_water_km": static_features["dist_to_water_km"],
                 "land_cover": static_features.get("land_cover", "agriculture")
             }
+            deltas = self.pipeline.correction_model.predict_batch(block_forecasts, static_feat_input)
+        else:
+            deltas = [0.0] * len(idw_results)
 
-            if self.pipeline and self.pipeline.correction_model.is_trained:
-                correction_delta = self.pipeline.correction_model.predict(
-                    block_forecast_input,
-                    static_feat_input
-                )
-            else:
-                correction_delta = 0.0
+        # Third pass: assemble steps with corrected values
+        for (ts, ts_df, interp), correction_delta in zip(idw_results, deltas):
+            base_temp = float(interp[0])
+            base_rain = max(0.0, float(interp[1]))
+            base_humid = float(np.clip(interp[2], 0.0, 100.0))
+            base_wind = max(0.0, float(interp[3]))
 
             corrected_temp = round(base_temp + correction_delta, 2)
             final_rain = round(base_rain, 2)
@@ -158,8 +195,8 @@ class ForecastService:
             "distance_km": village["nearest_block_dist_km"]
         }
 
-        return {
-            "village_id": village["village_id"],
+        result = {
+            "village_id": vid,
             "panchayat_id": village["panchayat_id"],
             "village_name": village["name"],
             "village_name_ml": village["name_ml"],
@@ -168,6 +205,8 @@ class ForecastService:
             "summary": summary,
             "forecast_steps": forecast_steps
         }
+        self._forecast_cache[vid] = result
+        return result
 
 
 forecast_service = ForecastService()
