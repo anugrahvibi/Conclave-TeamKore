@@ -476,11 +476,19 @@ export default function Map3D({
 
     };
 
-    if (map.isStyleLoaded()) {
+    let setupDone = false;
+    const safeSetup = () => {
+      if (setupDone) return;
+      setupDone = true;
       setupControls();
+    };
+
+    if (map.isStyleLoaded()) {
+      safeSetup();
     } else {
-      map.once('style.load', setupControls);
-      map.once('load', setupControls);
+      map.once('style.load', safeSetup);
+      map.once('load', safeSetup);
+      setTimeout(safeSetup, 1200);
     }
 
     return () => {
