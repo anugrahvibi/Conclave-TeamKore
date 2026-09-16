@@ -183,3 +183,18 @@ class HealthResponse(BaseModel):
     model_trained: bool
     features_count: int = 6
     spatial_engine: str
+    weather_source: Optional[str] = None
+    is_live_weather: Optional[bool] = None
+
+class WeatherStatusResponse(BaseModel):
+    status: str
+    data_source: str
+    is_live: bool
+    last_updated: Optional[str] = None
+    cache_age_seconds: Optional[float] = None
+    cache_ttl_seconds: int
+    ttl_remaining_seconds: float
+    station_count: int
+    step_hours: int
+    api_key_configured: bool
+    last_error: Optional[str] = None

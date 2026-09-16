@@ -59,11 +59,29 @@ class ForecastService:
             rules_path=rules_path
         )
 
-        if settings.BLOCK_FORECAST_CSV.exists():
-            self.df_blocks = pd.read_csv(settings.BLOCK_FORECAST_CSV)
-            self.timestamps = sorted(self.df_blocks["timestamp"].unique().tolist())
-        else:
-            raise FileNotFoundError(f"Block forecast CSV not found at {settings.BLOCK_FORECAST_CSV}")
+        from backend.app.services.live_weather_service import live_weather_service
+        try:
+            self.df_blocks = live_weather_service.get_forecast_dataframe()
+        except Exception:
+            if settings.BLOCK_FORECAST_CSV.exists():
+                self.df_blocks = pd.read_csv(settings.BLOCK_FORECAST_CSV)
+            else:
+                raise FileNotFoundError(f"Block forecast data not found at {settings.BLOCK_FORECAST_CSV}")
+        self.timestamps = sorted(self.df_blocks["timestamp"].unique().tolist())
+
+    def refresh_live_forecasts(self, force_refresh: bool = True) -> Dict[str, Any]:
+        """
+        Fetches fresh forecasts from Open-Meteo, updates in-memory block data,
+        clears old forecast cache, and triggers background cache warming.
+        """
+        from backend.app.services.live_weather_service import live_weather_service
+        df = live_weather_service.get_forecast_dataframe(force_refresh=force_refresh)
+        self.df_blocks = df
+        self.timestamps = sorted(df["timestamp"].unique().tolist())
+        data_service.update_forecast_dataframe(df)
+        self._forecast_cache.clear()
+        self._precompute_all_villages_async()
+        return live_weather_service.get_status()
 
     def get_forecast_for_village(self, identifier: str) -> Optional[Dict[str, Any]]:
         """

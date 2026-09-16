@@ -42,4 +42,10 @@ class Settings:
     IDW_POWER: float = 2.0
     IDW_K_NEAREST: int = 4
 
+    # Live Weather Settings (Open-Meteo)
+    OPEN_METEO_API_KEY: str | None = os.getenv("OPEN_METEO_API_KEY", None)
+    USE_LIVE_WEATHER: bool = os.getenv("USE_LIVE_WEATHER", "true").lower() == "true"
+    WEATHER_CACHE_TTL_SECONDS: int = int(os.getenv("WEATHER_CACHE_TTL_SECONDS", "3600"))
+    WEATHER_STEP_HOURS: int = int(os.getenv("WEATHER_STEP_HOURS", "6"))
+
 settings = Settings()

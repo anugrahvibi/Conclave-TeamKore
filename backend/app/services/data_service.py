@@ -48,25 +48,26 @@ class DataService:
         self._load_data()
 
     def _load_data(self):
-        """Loads and normalizes the block forecast dataset."""
-        if settings.BLOCK_FORECAST_CSV.exists():
-            df = pd.read_csv(settings.BLOCK_FORECAST_CSV)
-            # Ensure proper schema
-            required_cols = ["block_id", "timestamp", "temp", "rainfall", "humidity", "wind", "lat", "lon"]
-            for col in required_cols:
-                if col not in df.columns:
-                    raise ValueError(f"Missing required column '{col}' in block_forecast.csv")
-            
-            # Enrich with station names and districts if available
-            df["block_name"] = df["block_id"].apply(
-                lambda bid: KERALA_BLOCK_STATIONS.get(bid, {}).get("name", bid)
-            )
-            df["district"] = df["block_id"].apply(
-                lambda bid: KERALA_BLOCK_STATIONS.get(bid, {}).get("district", "Kerala")
-            )
-            self.df_blocks = df
-        else:
-            raise FileNotFoundError(f"Block forecast CSV not found at {settings.BLOCK_FORECAST_CSV}")
+        """Loads initial block forecast dataset (from live service or fallback)."""
+        from backend.app.services.live_weather_service import live_weather_service
+        try:
+            self.df_blocks = live_weather_service.get_forecast_dataframe()
+        except Exception:
+            if settings.BLOCK_FORECAST_CSV.exists():
+                df = pd.read_csv(settings.BLOCK_FORECAST_CSV)
+                df["block_name"] = df["block_id"].apply(
+                    lambda bid: KERALA_BLOCK_STATIONS.get(bid, {}).get("name", bid)
+                )
+                df["district"] = df["block_id"].apply(
+                    lambda bid: KERALA_BLOCK_STATIONS.get(bid, {}).get("district", "Kerala")
+                )
+                self.df_blocks = df
+            else:
+                raise
+
+    def update_forecast_dataframe(self, df: pd.DataFrame):
+        """Dynamically updates the active in-memory block forecast dataframe."""
+        self.df_blocks = df
 
     def get_all_blocks(self) -> List[Dict]:
         """Returns metadata for all 31 agro-climatic block stations."""
@@ -95,7 +96,7 @@ class DataService:
         return None
 
     def get_block_forecasts(self, block_id: str) -> List[Dict]:
-        """Returns all 12 forecast timestamps for a given block station."""
+        """Returns all forecast timestamps for a given block station."""
         if self.df_blocks is None:
             return []
         sub = self.df_blocks[self.df_blocks["block_id"] == block_id]

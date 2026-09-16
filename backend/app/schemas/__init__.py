@@ -20,6 +20,7 @@ from .models import (
     RiskDistribution,
     BlockSummaryResponse,
     HealthResponse,
+    WeatherStatusResponse,
 )
 
 __all__ = [
@@ -38,4 +39,5 @@ __all__ = [
     "RiskDistribution",
     "BlockSummaryResponse",
     "HealthResponse",
+    "WeatherStatusResponse",
 ]

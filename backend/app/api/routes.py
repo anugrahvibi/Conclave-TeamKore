@@ -15,6 +15,7 @@ from backend.app.schemas import (
     AdvisoryResponse,
     BlockSummaryResponse,
     HealthResponse,
+    WeatherStatusResponse,
     GeoJSONFeatureCollection,
     VillageDetail,
     ForecastSummary,
@@ -26,6 +27,7 @@ from backend.app.services.data_service import data_service, KERALA_BLOCK_STATION
 from backend.app.services.spatial_service import spatial_service
 from backend.app.services.forecast_service import forecast_service
 from backend.app.services.advisory_service import advisory_service
+from backend.app.services.live_weather_service import live_weather_service
 
 router = APIRouter()
 
@@ -44,8 +46,28 @@ def health_check():
         "loaded_blocks": len(KERALA_BLOCK_STATIONS),
         "model_trained": model_trained,
         "features_count": 6,
-        "spatial_engine": "In-Memory KDTree + OSM GeoJSON Polygons"
+        "spatial_engine": "In-Memory KDTree + OSM GeoJSON Polygons",
+        "weather_source": live_weather_service._data_source,
+        "is_live_weather": live_weather_service._data_source == "LIVE_OPEN_METEO",
     }
+
+
+@router.get("/weather/status", response_model=WeatherStatusResponse, summary="Live Weather Pipeline Status")
+def get_weather_status():
+    """
+    Returns real-time status of the Open-Meteo weather ingestion pipeline,
+    including active data source, cache TTL, station coverage, and last update time.
+    """
+    return live_weather_service.get_status()
+
+
+@router.post("/weather/refresh", response_model=WeatherStatusResponse, summary="Refresh Live Weather Forecasts")
+def refresh_weather():
+    """
+    Triggers an immediate batch fetch from Open-Meteo for all 31 block stations,
+    invalidates the village forecast cache, and re-warms downscaling predictions.
+    """
+    return forecast_service.refresh_live_forecasts(force_refresh=True)
 
 
 @router.get("/model/info", response_model=ModelInfoResponse, summary="ML Model Metadata & Feature Importance")

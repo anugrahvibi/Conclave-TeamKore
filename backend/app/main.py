@@ -25,8 +25,22 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Validates and warms up services on application startup."""
+    from backend.app.services.live_weather_service import live_weather_service
+    import threading
+
+    def _warm_live_weather():
+        try:
+            if settings.USE_LIVE_WEATHER:
+                print("⚡ Fetching initial live weather from Open-Meteo...")
+                forecast_service.refresh_live_forecasts(force_refresh=True)
+                print(f"✓ Live weather initialized successfully ({live_weather_service._data_source})")
+        except Exception as e:
+            print(f"Notice: Background live weather fetch ({e}). Using baseline data.")
+
+    threading.Thread(target=_warm_live_weather, daemon=True).start()
+
     print("=" * 70)
-    print(f"Starting {settings.PROJECT_NAME} v{settings.VERSION}")
+    print(f"🚀 Starting {settings.PROJECT_NAME} v{settings.VERSION}")
     print(f"   Indexed {spatial_service.total_villages} Kerala Panchayats & Municipalities")
     model_status = "Loaded & Ready" if forecast_service.pipeline.correction_model.is_trained else "Untrained"
     print(f"   ML Correction Model: {model_status}")
