@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: conclaveai-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /docs
+    envVars:
+      - key: USE_LIVE_WEATHER
+        value: "true"
+      - key: WEATHER_CACHE_TTL_SECONDS
+        value: "3600"
