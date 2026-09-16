@@ -824,10 +824,10 @@ export default function Map3D({
     let isDestroyed = false;
     let setupDone = false;
     let setupTimeout: any;
-    const safeSetup = () => {
+    const safeSetup = (force = false) => {
       if (setupDone || isDestroyed) return;
-      if (!map.isStyleLoaded()) {
-        setupTimeout = setTimeout(safeSetup, 200);
+      if (!force && map && !map.isStyleLoaded()) {
+        setupTimeout = setTimeout(() => safeSetup(false), 200);
         return;
       }
       setupDone = true;
@@ -835,11 +835,11 @@ export default function Map3D({
     };
 
     if (map.isStyleLoaded()) {
-      safeSetup();
+      safeSetup(true);
     } else {
-      map.once('style.load', safeSetup);
-      map.once('load', safeSetup);
-      setupTimeout = setTimeout(safeSetup, 1200);
+      map.once('style.load', () => safeSetup(true));
+      map.once('load', () => safeSetup(true));
+      setupTimeout = setTimeout(() => safeSetup(true), 800);
     }
 
     return () => {
