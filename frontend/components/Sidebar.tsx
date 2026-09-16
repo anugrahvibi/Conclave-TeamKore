@@ -422,7 +422,7 @@ export default function Sidebar({
         <button
           type="button"
           onClick={() => setLang((prev) => (prev === 'en' ? 'ml' : 'en'))}
-          className="rounded-full px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-xs font-semibold text-slate-900 transition-all flex items-center gap-1.5 cursor-pointer shrink-0 outline outline-1 outline-slate-200"
+          className="rounded-full px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-xs font-semibold text-slate-900 transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
           aria-label="Toggle language"
         >
           <Translate size={15} className="text-sky-600" />
@@ -452,7 +452,7 @@ export default function Sidebar({
           </div>
 
           {/* Moving Pill Header Container */}
-          <div className="relative bg-slate-100 p-1 rounded-full flex items-center outline outline-1 outline-slate-200">
+          <div className="relative bg-slate-100 p-1 rounded-full flex items-center">
             {/* The sliding pill indicator */}
             <div
               className="absolute top-1 bottom-1 rounded-full bg-white transition-all duration-300 ease-out z-0"
@@ -498,7 +498,7 @@ export default function Sidebar({
                     activeForecast.condition}
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-slate-700 bg-white px-2 py-0.5 rounded-full outline outline-1 outline-slate-200">
+              <span className="text-[11px] font-medium text-slate-700 bg-white px-2 py-0.5 rounded-full">
                 {activeForecast.dateStr}
               </span>
             </div>
@@ -591,7 +591,7 @@ export default function Sidebar({
                 <span className="text-sm font-extrabold text-slate-900">{t.liveAdvisory}</span>
               </div>
               <span
-                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full outline outline-1 outline-current/20 ${riskBadgeBg}`}
+                className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full    ${riskBadgeBg}`}
               >
                 {riskText}
               </span>
@@ -659,7 +659,7 @@ export default function Sidebar({
                     }}
                     className={`flex flex-col gap-1 rounded-3xl p-3.5 border transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
                       isTop
-                        ? 'bg-emerald-50/90 border-emerald-200/80 shadow-xs'
+                        ? 'bg-emerald-50/90 border-emerald-200/80 '
                         : 'bg-slate-50 border-slate-200/70'
                     }`}
                   >
@@ -679,7 +679,7 @@ export default function Sidebar({
                           {cropDisplayName}
                         </span>
                       </div>
-                      <span className="text-xs font-extrabold text-emerald-700 bg-white px-2.5 py-0.5 rounded-full shadow-2xs border border-emerald-100">
+                      <span className="text-xs font-extrabold text-emerald-700 bg-white px-2.5 py-0.5 rounded-full border border-emerald-100">
                         {Math.round(rec.suitability_score * 100)}% {t.match}
                       </span>
                     </div>

@@ -19,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen w-full bg-white p-1 md:p-2 flex flex-col items-center justify-center">
+    <main className="min-h-screen w-full bg-slate-200 p-1 md:p-2 flex flex-col items-center justify-center">
       <div className="flex flex-col md:flex-row gap-2 md:gap-3 w-full h-[calc(100vh-0.5rem)] md:h-[calc(100vh-1rem)]">
         {/* Left Sidebar with squircle rounding, hover transition, 3-day forecast moving pills, advisory card, & language toggle */}
         <Sidebar

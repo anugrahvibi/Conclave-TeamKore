@@ -46,6 +46,15 @@ class AdvisoryService:
         if stage not in VALID_CROP_STAGES:
             stage = "spraying_window"
 
+        from backend.app.services.crop_recommendation_service import recommend_crops
+
+        # Fetch top crop dynamically for the village based on soil and weather data
+        static_features = village.get("static_features", {})
+        recommendations = recommend_crops(forecast_data, static_features)
+        
+        top_crop_info = recommendations[0] if recommendations else None
+        top_crop_name = top_crop_info["crop"] if top_crop_info else "rice"
+
         # Evaluate weather condition across the next 24-48 hours
         steps = forecast_data["forecast_steps"]
         next_24h_steps = steps[:4]  # 4 steps * 6h = 24 hours
@@ -87,19 +96,21 @@ class AdvisoryService:
         matched_rule = rule_result.get("matched_rule")
 
         # Determine risk level and actionable steps
-        risk_level, recommendations = self._compute_risk_and_actions(
+        risk_level, recommendations_list = self._compute_risk_and_actions(
             weather_code=weather_code,
             crop_stage=stage,
             total_24h_rain=total_24h_rain,
             max_temp=max_temp_24h,
             max_wind=max_wind_24h,
-            elevation_m=village["static_features"]["elevation_m"]
+            elevation_m=village["static_features"]["elevation_m"],
+            top_crop=top_crop_name
         )
 
         return {
             "village_id": village["village_id"],
             "panchayat_id": village["panchayat_id"],
             "village_name": village["name"],
+            "top_crop": top_crop_name,
             "crop_stage": stage,
             "weather_inferred": weather_code,
             "current_weather": current_weather,
@@ -108,7 +119,7 @@ class AdvisoryService:
                 "confidence": confidence,
                 "matched_rule": matched_rule,
                 "risk_level": risk_level,
-                "actionable_recommendations": recommendations
+                "actionable_recommendations": recommendations_list
             }
         }
 
@@ -119,7 +130,8 @@ class AdvisoryService:
         total_24h_rain: float,
         max_temp: float,
         max_wind: float,
-        elevation_m: float
+        elevation_m: float,
+        top_crop: str = "rice"
     ) -> tuple[str, List[str]]:
         """Determines categorical risk level and practical recommendations."""
         actions = []
@@ -138,6 +150,10 @@ class AdvisoryService:
                     "Heavy downpour expected. Inspect drainage channels to prevent field inundation.",
                     "Postpone all chemical spraying and harvesting until conditions improve."
                 ])
+            if top_crop == "rubber":
+                actions.append("Rubber: Ensure rain-guarding of tapping panels; halt tapping to avoid latex wash-off.")
+            elif top_crop == "vegetables":
+                actions.append("Vegetables: Highly susceptible to rot. Clear furrows immediately.")
 
         elif weather_code == "rain_24h":
             if crop_stage == "spraying_window":
@@ -162,6 +178,9 @@ class AdvisoryService:
             else:
                 risk = "medium"
                 actions.append("Ensure regular field clearing and check for standing water.")
+                
+            if top_crop == "coconut":
+                actions.append("Coconut: Check for button shedding due to sudden moisture changes.")
 
         elif weather_code == "no_rain_7d":
             if crop_stage in ["seedling", "flowering"]:
@@ -176,6 +195,10 @@ class AdvisoryService:
                     "Schedule supplementary irrigation during early morning or late evening hours.",
                     "Monitor soil moisture tension."
                 ])
+            if top_crop == "banana":
+                actions.append("Banana: High moisture requirement. Ensure pseudo-stem does not show desiccation.")
+            elif top_crop == "tapioca":
+                actions.append("Tapioca: Drought tolerant, but prolonged dry spells may require light irrigation.")
 
         elif weather_code == "high_temp_dry":
             risk = "high"
@@ -183,6 +206,10 @@ class AdvisoryService:
                 "Maintain thin water layer in paddy fields to moderate canopy temperature.",
                 "Provide shade netting for sensitive nursery saplings."
             ])
+            if top_crop == "rice":
+                actions.append("Rice: Maintain continuous standing water of 5cm to prevent cracking of fields.")
+            elif top_crop == "banana":
+                actions.append("Banana: Protect exposed bunches from sunburn; apply leaf mulch.")
 
         elif weather_code == "high_wind":
             risk = "high" if crop_stage == "flowering" else "medium"
@@ -190,6 +217,10 @@ class AdvisoryService:
                 "Provide propping/staking for tall crops (banana, cassava, sugarcane).",
                 "Halt chemical mist spraying to prevent droplet drift."
             ])
+            if top_crop == "banana":
+                actions.append("Banana: Critical wind risk. Provide robust bamboo staking immediately.")
+            elif top_crop == "coconut":
+                actions.append("Coconut: Beware of falling fronds and immature nut drop.")
 
         elif weather_code == "frost_risk":
             risk = "critical"
@@ -197,6 +228,8 @@ class AdvisoryService:
                 "Irrigate fields late in the afternoon to retain ambient ground heat.",
                 "Apply light surface mulching over vegetable beds."
             ])
+            if top_crop == "vegetables":
+                actions.append("Vegetables: Cover beds with protective sheets overnight.")
 
         else:
             risk = "low"
@@ -210,6 +243,8 @@ class AdvisoryService:
                     "Conditions optimal for field activities, fertilization, and crop weeding.",
                     "Continue standard agricultural calendar routines."
                 ])
+            if top_crop == "rubber":
+                actions.append("Rubber: Optimal conditions for tapping.")
 
         return risk, actions
 

@@ -1513,7 +1513,7 @@ export default function Map3D({
               borderRadius: 9999,
               padding: '6px 12px',
               border: '1px solid #e2e8f0',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
+              boxShadow: 'none',
               display: 'flex',
               alignItems: 'center',
               gap: 8,
@@ -1550,7 +1550,7 @@ export default function Map3D({
               borderRadius: 9999,
               padding: '6px 12px',
               border: '1px solid #e2e8f0',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
+              boxShadow: 'none',
               display: 'flex',
               alignItems: 'center',
               gap: 8,
@@ -1723,7 +1723,7 @@ export default function Map3D({
             borderRadius: 12,
             padding: '12px 14px',
             border: '1px solid #e2e8f0',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
             gap: 8,
@@ -1789,7 +1789,7 @@ export default function Map3D({
             overflow: 'hidden',
             border: '1px solid #e2e8f0',
             background: '#fff',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            boxShadow: 'none',
           }}
         >
           <button
@@ -1847,7 +1847,7 @@ export default function Map3D({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            boxShadow: 'none',
             padding: 0,
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
@@ -1878,7 +1878,7 @@ export default function Map3D({
             fontWeight: 700,
             color: '#0f172a',
             fontFamily: 'var(--font-sans, Poppins, sans-serif)',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            boxShadow: 'none',
             padding: 0,
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
@@ -1891,4 +1891,5 @@ export default function Map3D({
     </div>
   );
 }
+
 
