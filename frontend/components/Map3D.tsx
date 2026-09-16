@@ -526,7 +526,7 @@ export default function Map3D({
     }
   };
 
-  // Suggestions computation (supports Crops, Villages, Regions)
+  // Suggestions computation (supports Crops, Villages)
   const suggestions = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const list: Array<{
@@ -555,18 +555,21 @@ export default function Map3D({
         });
       });
 
-      POPULAR_LOCATIONS.forEach((loc) => {
-        list.push({
-          id: `pop-${loc.name}`,
-          title: loc.name,
-          subtitle: loc.district,
-          badge: 'Region',
-          type: 'region',
-          coords: loc.center,
-          zoom: loc.zoom,
-          icon: loc.icon,
+      if (loadedVillageData?.features) {
+        loadedVillageData.features.slice(0, 4).forEach((f: any) => {
+          const p = f.properties;
+          list.push({
+            id: `v-${p.village_id || p.panchayat_id}`,
+            title: p.panchayat_name,
+            subtitle: `${p.district || ''} • Elev: ${p.elevation_m || 100}m`,
+            badge: 'Village',
+            type: 'village',
+            coords: f.geometry.coordinates as [number, number],
+            zoom: 12.5,
+            icon: MapPin,
+          });
         });
-      });
+      }
 
       return list;
     }
@@ -612,22 +615,6 @@ export default function Map3D({
           });
           if (list.length >= 8) break;
         }
-      }
-    }
-
-    // 3. Filter popular regions
-    for (const loc of POPULAR_LOCATIONS) {
-      if (loc.name.toLowerCase().includes(q) || loc.district.toLowerCase().includes(q)) {
-        list.push({
-          id: `pop-${loc.name}`,
-          title: loc.name,
-          subtitle: loc.district,
-          badge: 'Region',
-          type: 'region',
-          coords: loc.center,
-          zoom: loc.zoom,
-          icon: loc.icon,
-        });
       }
     }
 
