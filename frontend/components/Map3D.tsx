@@ -41,6 +41,9 @@ interface Map3DProps {
   className?: string;
   villageData?: any;
   backendUrl?: string;
+  selectedPanchayatId?: string;
+  onSelectPanchayat?: (id: string, villageProps?: any) => void;
+  onVillagesLoaded?: (villages: any[]) => void;
 }
 
 const cartoApiKey = process.env.NEXT_PUBLIC_CARTO_API_KEY;
@@ -75,6 +78,157 @@ const BASEMAP_OPTIONS = [
       : 'https://a.basemaps.cartocdn.com/rastertiles/voyager/4/11/7.png',
   },
 ];
+
+// Available crops for statewide suitability mapping
+export interface ActiveCrop {
+  id: string;
+  name: string;
+  category?: string;
+  description?: string;
+}
+
+export const AVAILABLE_CROPS = [
+  {
+    id: 'rice',
+    name: 'Rice (Paddy)',
+    category: 'Cereal / Wetland',
+    aliases: ['rice', 'paddy', 'nellu', 'virippu', 'mundakan', 'puncha', 'grain'],
+    description: 'Optimal in warm alluvial lowlands (Palakkad, Alappuzha, Thrissur)',
+  },
+  {
+    id: 'banana',
+    name: 'Banana (Nendran / Plantain)',
+    category: 'Horticulture / Cash Crop',
+    aliases: ['banana', 'nendran', 'plantain', 'ethakka', 'plantains'],
+    description: 'Optimal in fertile river valleys & loamy soil (Thrissur, Wayanad)',
+  },
+  {
+    id: 'coconut',
+    name: 'Coconut',
+    category: 'Plantation / Coastal',
+    aliases: ['coconut', 'thengu', 'keram', 'coconut palm', 'copra', 'kera'],
+    description: 'Optimal in coastal & midland sandy loam (Kozhikode, Malappuram)',
+  },
+  {
+    id: 'tapioca',
+    name: 'Tapioca (Cassava)',
+    category: 'Tuber / Root Crop',
+    aliases: ['tapioca', 'cassava', 'kappa', 'maravalli', 'yucca', 'manioc'],
+    description: 'Optimal in well-drained lateritic midlands (Kollam, Pathanamthitta)',
+  },
+  {
+    id: 'vegetables',
+    name: 'Vegetables (Generic / Seasonal)',
+    category: 'Horticulture / Seasonal',
+    aliases: ['vegetables', 'vegetable', 'veg', 'pachakkari', 'horticulture', 'greens'],
+    description: 'Optimal in mild elevations with fertile loam (Idukki, Palakkad)',
+  },
+  {
+    id: 'rubber',
+    name: 'Rubber (Hevea brasiliensis)',
+    category: 'Plantation / Foothills',
+    aliases: ['rubber', 'hevea', 'latex', 'rubber tree', 'kottayam'],
+    description: 'Optimal on humid foothill slopes & lateritic soils (Kottayam, Idukki)',
+  },
+];
+
+function computeClientCropSuitability(cropId: string, features: any[]) {
+  return features.map((f: any) => {
+    const p = f.properties || {};
+    const elev = Number(p.elevation_m ?? 100);
+    const lc = String(p.land_cover ?? 'agriculture').toLowerCase();
+
+    let score = 0.55;
+    let reason = '';
+    if (cropId === 'rice') {
+      if (elev <= 300 && (lc.includes('agri') || lc.includes('wetland') || lc.includes('alluvial') || lc.includes('plain'))) {
+        score = 0.88;
+        reason = 'Ideal warm tropical lowland alluvial terrain with high water availability.';
+      } else if (elev <= 700) {
+        score = 0.65;
+        reason = 'Acceptable midland conditions for seasonal paddy cultivation.';
+      } else {
+        score = 0.35;
+        reason = 'High elevation above optimal threshold for paddy growth.';
+      }
+    } else if (cropId === 'banana') {
+      if (elev <= 600 && !lc.includes('water')) {
+        score = 0.85;
+        reason = 'Well-drained loamy valley floor with optimal ambient temperature.';
+      } else if (elev <= 1100) {
+        score = 0.68;
+        reason = 'Suitable highland plantation microclimate.';
+      } else {
+        score = 0.38;
+        reason = 'Excessive elevation and cold exposure for plantains.';
+      }
+    } else if (cropId === 'coconut') {
+      if (elev <= 350) {
+        score = 0.90;
+        reason = 'Ideal coastal/midland humidity and sandy-loam soil.';
+      } else if (elev <= 650) {
+        score = 0.62;
+        reason = 'Moderate midland growth zone.';
+      } else {
+        score = 0.30;
+        reason = 'High altitude unsuitable for coconut palms.';
+      }
+    } else if (cropId === 'tapioca') {
+      if (elev >= 50 && elev <= 750 && !lc.includes('wetland')) {
+        score = 0.86;
+        reason = 'Excellent lateritic midland slope drainage with zero waterlogging risk.';
+      } else if (elev < 50) {
+        score = 0.55;
+        reason = 'Moderate risk of low-lying water accumulation.';
+      } else {
+        score = 0.40;
+        reason = 'Suboptimal high-altitude temperatures.';
+      }
+    } else if (cropId === 'rubber') {
+      if (elev >= 100 && elev <= 600 && !lc.includes('wetland')) {
+        score = 0.87;
+        reason = 'Prime undulating lateritic foothill slopes with steady rainfall.';
+      } else if (elev < 100) {
+        score = 0.58;
+        reason = 'Marginal lowland moisture saturation.';
+      } else {
+        score = 0.36;
+        reason = 'High elevation limits latex flow and bark renewal.';
+      }
+    } else {
+      if (elev >= 200 && elev <= 1200) {
+        score = 0.84;
+        reason = 'Temperate highland microclimate ideal for diverse seasonal horticulture.';
+      } else {
+        score = 0.64;
+        reason = 'Warm lowland agro-climatic zone with standard seasonal yield.';
+      }
+    }
+
+    const fillColor =
+      score >= 0.75
+        ? '#15803d'
+        : score >= 0.60
+        ? '#22c55e'
+        : score >= 0.45
+        ? '#eab308'
+        : '#94a3b8';
+
+    const confidence = score >= 0.75 ? 'high' : score >= 0.50 ? 'medium' : 'low';
+
+    return {
+      ...f,
+      properties: {
+        ...p,
+        fillColor,
+        crop_suitability_score: score,
+        crop_confidence: confidence,
+        crop_explanation: reason,
+        crop_id: cropId,
+      },
+    };
+  });
+}
 
 // Preset quick search locations
 const POPULAR_LOCATIONS = [
@@ -119,6 +273,9 @@ export default function Map3D({
   className = '',
   villageData,
   backendUrl = 'http://localhost:8000',
+  selectedPanchayatId,
+  onSelectPanchayat,
+  onVillagesLoaded,
 }: Map3DProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -130,6 +287,12 @@ export default function Map3D({
   const [isMapViewMenuOpen, setIsMapViewMenuOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loadedVillageData, setLoadedVillageData] = useState<any>(villageData);
+
+  // Crop Suitability Mode State (disables risk level display while active)
+  const [activeCrop, setActiveCrop] = useState<ActiveCrop | null>(null);
+  const [isLoadingCrop, setIsLoadingCrop] = useState(false);
+  const activeCropRef = useRef<ActiveCrop | null>(null);
+  activeCropRef.current = activeCrop;
 
   // Search Bar / Pill State
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -185,6 +348,16 @@ export default function Map3D({
           };
         });
         setLoadedVillageData({ type: 'FeatureCollection', features });
+        if (onVillagesLoaded) {
+          const list = features.map((f: any) => ({
+            village_id: f.properties?.village_id,
+            panchayat_id: f.properties?.panchayat_id,
+            name: f.properties?.panchayat_name || f.properties?.name || 'Village',
+            name_ml: f.properties?.name_ml,
+            district: f.properties?.district,
+          }));
+          onVillagesLoaded(list);
+        }
       })
       .catch((err) => console.warn('Village fetch notice:', err));
 
@@ -215,32 +388,186 @@ export default function Map3D({
     }
   }, [isSearchOpen]);
 
-  // Suggestions computation
-  const suggestions = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) {
-      return POPULAR_LOCATIONS.map((loc) => ({
-        id: `pop-${loc.name}`,
-        title: loc.name,
-        subtitle: loc.district,
-        badge: 'Region',
-        coords: loc.center,
-        zoom: loc.zoom,
-        icon: loc.icon,
-      }));
+  // Crop Suitability Selector & Clear Actions
+  const selectCrop = async (cropId: string, cropName: string, desc?: string) => {
+    setIsLoadingCrop(true);
+    setActiveCrop({ id: cropId, name: cropName, description: desc });
+    setIsSearchOpen(false);
+    setSearchQuery('');
+
+    const map = mapRef.current;
+    if (map) {
+      map.flyTo({
+        center: [76.27, 10.85],
+        zoom: 7.3,
+        pitch: 35,
+        bearing: -15,
+        duration: 1200,
+        essential: true,
+      });
     }
 
+    try {
+      const res = await fetch(`${backendUrl}/crops/suitability/${cropId}`);
+      if (res.ok) {
+        const data = await res.json();
+        const villageMap = new Map<string, any>();
+        (data.villages || []).forEach((v: any) => {
+          villageMap.set(v.village_id, v);
+          if (v.panchayat_id) villageMap.set(v.panchayat_id, v);
+        });
+
+        if (loadedVillageData?.features) {
+          const updatedFeatures = loadedVillageData.features.map((f: any) => {
+            const p = f.properties || {};
+            const match = villageMap.get(p.village_id) || villageMap.get(p.panchayat_id);
+            const score = match ? match.suitability_score : 0.40;
+            const confidence = match ? match.confidence : 'low';
+            const explanation = match ? match.explanation : 'Standard agro-climatic conditions.';
+            const fillColor = match ? match.fillColor : (score >= 0.75 ? '#15803d' : score >= 0.60 ? '#22c55e' : score >= 0.45 ? '#eab308' : '#94a3b8');
+            return {
+              ...f,
+              properties: {
+                ...p,
+                fillColor,
+                crop_suitability_score: score,
+                crop_confidence: confidence,
+                crop_explanation: explanation,
+                crop_id: cropId,
+              },
+            };
+          });
+
+          const newFC = { type: 'FeatureCollection' as const, features: updatedFeatures };
+          setLoadedVillageData(newFC);
+          if (map && map.getSource('villages-source')) {
+            (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(newFC as any);
+          }
+        }
+      } else {
+        if (loadedVillageData?.features) {
+          const updatedFeatures = computeClientCropSuitability(cropId, loadedVillageData.features);
+          const newFC = { type: 'FeatureCollection' as const, features: updatedFeatures };
+          setLoadedVillageData(newFC);
+          if (map && map.getSource('villages-source')) {
+            (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(newFC as any);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Suitability fetch notice:', err);
+      if (loadedVillageData?.features) {
+        const updatedFeatures = computeClientCropSuitability(cropId, loadedVillageData.features);
+        const newFC = { type: 'FeatureCollection' as const, features: updatedFeatures };
+        setLoadedVillageData(newFC);
+        if (map && map.getSource('villages-source')) {
+          (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(newFC as any);
+        }
+      }
+    } finally {
+      setIsLoadingCrop(false);
+    }
+  };
+
+  const clearCropMode = () => {
+    setActiveCrop(null);
+    const colorMap: Record<string, string> = {
+      critical: '#dc2626',
+      high: '#f97316',
+      medium: '#eab308',
+      low: '#22c55e',
+    };
+    if (loadedVillageData?.features) {
+      const restoredFeatures = loadedVillageData.features.map((f: any) => {
+        const p = f.properties || {};
+        const risk = p.current_risk_level || p.risk_level || 'low';
+        return {
+          ...f,
+          properties: {
+            ...p,
+            fillColor: colorMap[risk] || '#22c55e',
+            crop_suitability_score: undefined,
+            crop_confidence: undefined,
+            crop_explanation: undefined,
+            crop_id: undefined,
+          },
+        };
+      });
+      const restoredFC = { type: 'FeatureCollection' as const, features: restoredFeatures };
+      setLoadedVillageData(restoredFC);
+      const map = mapRef.current;
+      if (map && map.getSource('villages-source')) {
+        (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(restoredFC as any);
+      }
+    }
+  };
+
+  // Suggestions computation (supports Crops, Villages, Regions)
+  const suggestions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     const list: Array<{
       id: string;
       title: string;
       subtitle: string;
       badge: string;
-      coords: [number, number];
-      zoom: number;
+      type: 'crop_suitability' | 'village' | 'region' | 'parcel';
+      cropId?: string;
+      coords?: [number, number];
+      zoom?: number;
       icon: React.ComponentType<IconProps>;
     }> = [];
 
-    // Filter villages
+    if (!q) {
+      // Suggest crops first for easy discovery
+      AVAILABLE_CROPS.slice(0, 4).forEach((c) => {
+        list.push({
+          id: `crop-${c.id}`,
+          title: c.name,
+          subtitle: c.description,
+          badge: 'Crop Suitability',
+          type: 'crop_suitability',
+          cropId: c.id,
+          icon: Plant,
+        });
+      });
+
+      POPULAR_LOCATIONS.forEach((loc) => {
+        list.push({
+          id: `pop-${loc.name}`,
+          title: loc.name,
+          subtitle: loc.district,
+          badge: 'Region',
+          type: 'region',
+          coords: loc.center,
+          zoom: loc.zoom,
+          icon: loc.icon,
+        });
+      });
+
+      return list;
+    }
+
+    // 1. Filter Crops
+    for (const crop of AVAILABLE_CROPS) {
+      const nameMatch = crop.name.toLowerCase().includes(q);
+      const idMatch = crop.id.toLowerCase().includes(q);
+      const aliasMatch = crop.aliases.some((a) => a.toLowerCase().includes(q));
+      const descMatch = crop.description.toLowerCase().includes(q);
+
+      if (nameMatch || idMatch || aliasMatch || descMatch || q.includes('crop')) {
+        list.push({
+          id: `crop-${crop.id}`,
+          title: crop.name,
+          subtitle: crop.description,
+          badge: 'Crop Suitability',
+          type: 'crop_suitability',
+          cropId: crop.id,
+          icon: Plant,
+        });
+      }
+    }
+
+    // 2. Filter villages
     if (loadedVillageData?.features) {
       for (const f of loadedVillageData.features) {
         const p = f.properties;
@@ -254,35 +581,29 @@ export default function Map3D({
             title: p.panchayat_name,
             subtitle: `${p.district || ''} • Elev: ${p.elevation_m || 100}m`,
             badge: 'Village',
+            type: 'village',
             coords: f.geometry.coordinates as [number, number],
             zoom: 12.5,
             icon: MapPin,
           });
-          if (list.length >= 6) break;
+          if (list.length >= 8) break;
         }
       }
     }
 
-    // Filter crops
-    if (cropData?.features) {
-      for (const f of cropData.features) {
-        const p = f.properties;
-        const cropType = (p.cropType || '').toLowerCase();
-        const variety = (p.variety || '').toLowerCase();
-        const farmer = (p.farmer || '').toLowerCase();
-
-        if (cropType.includes(q) || variety.includes(q) || farmer.includes(q)) {
-          list.push({
-            id: `c-${p.id || Math.random()}`,
-            title: `${p.cropType} (${p.variety})`,
-            subtitle: `Farmer: ${p.farmer} • ${p.fieldAreaAcres} ac`,
-            badge: 'Crop',
-            coords: f.geometry.coordinates[0][0] as [number, number],
-            zoom: 14.5,
-            icon: Plant,
-          });
-          if (list.length >= 10) break;
-        }
+    // 3. Filter popular regions
+    for (const loc of POPULAR_LOCATIONS) {
+      if (loc.name.toLowerCase().includes(q) || loc.district.toLowerCase().includes(q)) {
+        list.push({
+          id: `pop-${loc.name}`,
+          title: loc.name,
+          subtitle: loc.district,
+          badge: 'Region',
+          type: 'region',
+          coords: loc.center,
+          zoom: loc.zoom,
+          icon: loc.icon,
+        });
       }
     }
 
@@ -425,7 +746,7 @@ export default function Map3D({
               .setLngLat(e.lngLat)
               .setHTML(`
                 <div style="font-family: system-ui, sans-serif; padding: 6px 10px; color: #111;">
-                  <strong style="font-size: 14px; color: ${props.color}; display: flex; align-items: center;">${plantIconHtml} <span>${props.cropType} (${props.variety})</span></strong>
+                  <strong style="font-size: 16px; font-weight: 800; color: ${props.color}; display: flex; align-items: center;">${plantIconHtml} <span>${props.cropType} (${props.variety})</span></strong>
                   <div style="font-size: 11px; margin-top: 4px; color: #444;">Farmer: <b>${props.farmer}</b></div>
                   <div style="font-size: 11px; color: #444;">Area: <b>${props.fieldAreaAcres} Acres</b></div>
                   <div style="font-size: 11px; color: #444;">NDVI: <b>${props.ndvi}</b> | Health: <b>${props.healthStatus}</b></div>
@@ -476,9 +797,15 @@ export default function Map3D({
 
     };
 
+    let isDestroyed = false;
     let setupDone = false;
+    let setupTimeout: any;
     const safeSetup = () => {
-      if (setupDone) return;
+      if (setupDone || isDestroyed) return;
+      if (!map.isStyleLoaded()) {
+        setupTimeout = setTimeout(safeSetup, 200);
+        return;
+      }
       setupDone = true;
       setupControls();
     };
@@ -488,10 +815,13 @@ export default function Map3D({
     } else {
       map.once('style.load', safeSetup);
       map.once('load', safeSetup);
-      setTimeout(safeSetup, 1200);
+      setupTimeout = setTimeout(safeSetup, 1200);
     }
 
     return () => {
+      isDestroyed = true;
+      clearTimeout(setupTimeout);
+      setIsLoaded(false);
       markersRef.current.forEach((m) => m.remove());
       markersRef.current = [];
       villageLayersBoundRef.current.clear();
@@ -523,6 +853,7 @@ export default function Map3D({
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !isLoaded || !loadedVillageData) return;
+    if (!map.isStyleLoaded()) return;
 
     if (map.getSource('villages-source')) {
       (map.getSource('villages-source') as maplibregl.GeoJSONSource).setData(loadedVillageData);
@@ -620,7 +951,7 @@ export default function Map3D({
         .setLngLat(coords)
         .setHTML(`
           <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a;">
-            <div style="font-weight: 700; font-size: 13px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
+            <div style="font-weight: 800; font-size: 16px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name || 'Village'}</span></div>
             <div style="font-size: 11px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
             ${props.name_ml ? `<div style="font-size: 11px; color: #334155; margin-bottom: 6px;">${props.name_ml}</div>` : ''}
             <div id="popup-loading-${props.village_id || '0'}" style="font-size: 11px; color: #0284c7; display: flex; align-items: center;">${loadingIconHtml} <span>Loading live advisory & forecast...</span></div>
@@ -630,6 +961,9 @@ export default function Map3D({
 
       try {
         const targetId = props.panchayat_id || props.village_id || 'KL_PANCH_0001';
+        if (onSelectPanchayat) {
+          onSelectPanchayat(targetId, props);
+        }
         const [advRes, fcRes, cropRes] = await Promise.all([
           fetch(`${backendUrl}/advisory/${targetId}?crop_stage=spraying_window`),
           fetch(`${backendUrl}/forecast/${targetId}`),
@@ -638,27 +972,6 @@ export default function Map3D({
         const adv = advRes.ok ? await advRes.json() : null;
         const fc = fcRes.ok ? await fcRes.json() : null;
         const crops = cropRes.ok ? await cropRes.json() : null;
-
-        const advData = adv?.advisory;
-        const riskLevel = advData?.risk_level || 'low';
-        // Map risk_level to officer dashboard category colors: frost=red, heat=orange, rain=yellow, none=green
-        const riskColor =
-          riskLevel === 'critical'
-            ? '#dc2626'
-            : riskLevel === 'high'
-            ? '#f97316'
-            : riskLevel === 'medium'
-            ? '#eab308'
-            : '#22c55e';
-
-        const plantIconHtml = renderToStaticMarkup(<Plant size={12} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
-        const topCrops = crops?.recommendations?.slice(0, 2) || [];
-        const cropHtml = topCrops.length > 0
-          ? `<div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;">
-              <span style="font-size: 10px; font-weight: 700; color: #0284c7; display: flex; align-items: center;">${plantIconHtml} <span>Top ML Crops:</span></span>
-              ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">• <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
-             </div>`
-          : '';
 
         const tempIconHtml = renderToStaticMarkup(<Thermometer size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
         const rainIconHtml = renderToStaticMarkup(<CloudRain size={12} style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 2 }} />);
@@ -674,19 +987,89 @@ export default function Map3D({
              </div>`
           : '';
 
-        popup.setHTML(`
-          <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 280px;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
-              <strong style="font-size: 13px; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
-              <span style="background: ${riskColor}; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">
-                ${riskLevel}
-              </span>
+        const currentCrop = activeCropRef.current;
+        if (currentCrop) {
+          // In Crop Suitability mode: Display crop match details, pause risk levels
+          const rawScore = props.crop_suitability_score != null ? props.crop_suitability_score : 0.65;
+          const cropScore = Math.round(rawScore * 100);
+          const cropConf = props.crop_confidence || (cropScore >= 75 ? 'high' : cropScore >= 50 ? 'medium' : 'low');
+          const cropColor =
+            cropScore >= 75
+              ? '#15803d'
+              : cropScore >= 60
+              ? '#22c55e'
+              : cropScore >= 45
+              ? '#eab308'
+              : '#94a3b8';
+          const confBadgeBg = cropConf === 'high' ? '#ecfdf5' : cropConf === 'medium' ? '#fefce8' : '#f8fafc';
+          const confBadgeCol = cropConf === 'high' ? '#047857' : cropConf === 'medium' ? '#b45309' : '#64748b';
+          const plantIconHtml = renderToStaticMarkup(<Plant size={13} color="#15803d" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
+
+          popup.setHTML(`
+            <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 290px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
+                <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
+                <span style="background: ${cropColor}; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                  ${cropScore}% Match
+                </span>
+              </div>
+              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''} • Elev: ${props.elevation_m ?? 100}m</div>
+
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px;">
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; display: flex; align-items: center; justify-content: space-between;">
+                  <span style="display: flex; align-items: center;">${plantIconHtml} <span>${currentCrop.name}</span></span>
+                  <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; background: ${confBadgeBg}; color: ${confBadgeCol}; padding: 1px 4px; border-radius: 3px;">
+                    ${cropConf} confidence
+                  </span>
+                </div>
+                <div style="font-size: 10px; color: #334155; margin-top: 4px; line-height: 1.35;">
+                  ${props.crop_explanation || 'Optimal micro-climate conditions, temperature and terrain for cultivation.'}
+                </div>
+              </div>
+
+              ${forecastHtml}
+              <div style="font-size: 9px; color: #94a3b8; text-align: center; margin-top: 4px; font-style: italic;">
+                Risk level display paused during crop suitability view
+              </div>
             </div>
-            <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''}</div>
-            ${forecastHtml}
-            ${advData?.text ? `<div style="font-size: 10px; color: #334155; line-height: 1.3; margin-bottom: 4px;">${advData.text}</div>` : ''}
-            ${cropHtml}          </div>
-        `);
+          `);
+        } else {
+          // Standard Risk Level Advisory Mode
+          const advData = adv?.advisory;
+          const riskLevel = advData?.risk_level || 'low';
+          const riskColor =
+            riskLevel === 'critical'
+              ? '#dc2626'
+              : riskLevel === 'high'
+              ? '#f97316'
+              : riskLevel === 'medium'
+              ? '#eab308'
+              : '#22c55e';
+
+          const plantIconHtml = renderToStaticMarkup(<Plant size={12} color="#0284c7" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: 4 }} />);
+          const topCrops = crops?.recommendations?.slice(0, 2) || [];
+          const cropHtml = topCrops.length > 0
+            ? `<div style="margin-top: 6px; border-top: 1px solid #e2e8f0; padding-top: 4px;">
+                <span style="font-size: 10px; font-weight: 700; color: #0284c7; display: flex; align-items: center;">${plantIconHtml} <span>Top ML Crops:</span></span>
+                ${topCrops.map((c: any) => `<div style="font-size: 10px; color: #334155;">• <b>${c.crop}</b> (${Math.round(c.suitability_score * 100)}% match)</div>`).join('')}
+               </div>`
+            : '';
+
+          popup.setHTML(`
+            <div style="font-family: system-ui, sans-serif; padding: 4px; color: #0f172a; max-width: 280px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
+                <strong style="font-size: 16px; font-weight: 800; display: flex; align-items: center;">${pinIconHtml} <span>${props.panchayat_name}</span></strong>
+                <span style="background: ${riskColor}; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">
+                  ${riskLevel}
+                </span>
+              </div>
+              <div style="font-size: 10px; color: #64748b; margin-bottom: 6px;">${props.district || ''}</div>
+              ${forecastHtml}
+              ${advData?.text ? `<div style="font-size: 10px; color: #334155; line-height: 1.3; margin-bottom: 4px;">${advData.text}</div>` : ''}
+              ${cropHtml}
+            </div>
+          `);
+        }
       } catch {
         // Keep initial popup content if fetch fails
       }
@@ -706,16 +1089,27 @@ export default function Map3D({
     }
   };
 
-  // Fly to suggestion
-  const handleSelectSuggestion = (item: { coords: [number, number]; zoom: number }) => {
-    if (!mapRef.current) return;
-    mapRef.current.flyTo({
-      center: item.coords,
-      zoom: item.zoom,
-      pitch: 50,
-      duration: 1500,
-      essential: true,
-    });
+  // Fly to suggestion or select crop
+  const handleSelectSuggestion = (item: any) => {
+    if (item.type === 'crop_suitability' && item.cropId) {
+      selectCrop(item.cropId, item.title, item.subtitle);
+      return;
+    }
+
+    if (item.type === 'village' && onSelectPanchayat) {
+      const vid = item.id.startsWith('v-') ? item.id.replace('v-', '') : item.id;
+      onSelectPanchayat(vid, item);
+    }
+
+    if (item.coords && mapRef.current) {
+      mapRef.current.flyTo({
+        center: item.coords,
+        zoom: item.zoom || 12,
+        pitch: 50,
+        duration: 1500,
+        essential: true,
+      });
+    }
     setIsSearchOpen(false);
     setSearchQuery('');
   };
@@ -749,6 +1143,80 @@ export default function Map3D({
       essential: true,
     });
   }, [dash, isLoaded, initialCenter, initialZoom, initialPitch, initialBearing]);
+
+  // Handle external panchayat selection from sidebar
+  useEffect(() => {
+    if (!mapRef.current || !isLoaded || !selectedPanchayatId || !loadedVillageData?.features) return;
+    const match = loadedVillageData.features.find(
+      (f: any) =>
+        f.properties?.panchayat_id === selectedPanchayatId ||
+        f.properties?.village_id === selectedPanchayatId
+    );
+    if (match) {
+      const coords = villageCenter(match.properties, match.geometry.coordinates as [number, number]);
+      mapRef.current.flyTo({
+        center: coords,
+        zoom: 12,
+        pitch: 45,
+        duration: 1200,
+        essential: true,
+      });
+    }
+  }, [selectedPanchayatId, isLoaded, loadedVillageData]);
+
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn({ duration: 300 });
+  };
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut({ duration: 300 });
+  };
+
+  const handleToggle3D = () => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+    if (is3D) {
+      // Switch to 2D
+      map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.setMaxPitch(0);
+          mapRef.current.dragRotate.disable();
+          mapRef.current.touchZoomRotate.disableRotation();
+        }
+      }, 800);
+      setIs3D(false);
+    } else {
+      // Switch to 3D
+      map.setMaxPitch(85);
+      map.dragRotate.enable();
+      map.touchZoomRotate.enableRotation();
+      map.easeTo({ pitch: 45, duration: 800 });
+      setIs3D(true);
+    }
+  };
+
+  const handleCurrentLocation = () => {
+    if (!mapRef.current) return;
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setIsLocating(false);
+        const coords = [pos.coords.longitude, pos.coords.latitude] as [number, number];
+        mapRef.current!.flyTo({
+          center: coords,
+          zoom: 14,
+          duration: 1500,
+        });
+      },
+      (err) => {
+        setIsLocating(false);
+        console.warn('Geolocation error:', err);
+        alert('Could not get current location.');
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+  };
 
   return (
     <div
@@ -985,7 +1453,7 @@ export default function Map3D({
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <item.icon size={16} color="#0284c7" />
+                      <item.icon size={16} color={item.type === 'crop_suitability' ? '#15803d' : '#0284c7'} />
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                         <span style={{ fontSize: 12, fontWeight: 600, color: '#0f172a' }}>{item.title}</span>
                         <span style={{ fontSize: 10, color: '#64748b' }}>{item.subtitle}</span>
@@ -995,8 +1463,18 @@ export default function Map3D({
                       style={{
                         fontSize: 9,
                         fontWeight: 700,
-                        background: item.badge === 'Crop' ? '#ecfdf5' : item.badge === 'Village' ? '#f0f9ff' : '#f8fafc',
-                        color: item.badge === 'Crop' ? '#059669' : item.badge === 'Village' ? '#0284c7' : '#64748b',
+                        background:
+                          item.badge === 'Crop Suitability' || item.badge === 'Crop'
+                            ? '#ecfdf5'
+                            : item.badge === 'Village'
+                            ? '#f0f9ff'
+                            : '#f8fafc',
+                        color:
+                          item.badge === 'Crop Suitability' || item.badge === 'Crop'
+                            ? '#059669'
+                            : item.badge === 'Village'
+                            ? '#0284c7'
+                            : '#64748b',
                         padding: '2px 6px',
                         borderRadius: 9999,
                         border: '1px solid rgba(0,0,0,0.06)',
@@ -1011,6 +1489,148 @@ export default function Map3D({
           </div>
         )}
       </div>
+
+      {/* Floating Crop Suitability Banner & Legend (Top Center) */}
+      {activeCrop && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 20,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 35,
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            maxWidth: '92%',
+            animation: 'fadeIn 0.2s ease-out',
+            pointerEvents: 'auto',
+          }}
+        >
+          {/* Main Suitability Pill */}
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: 9999,
+              padding: '6px 14px 6px 12px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.09)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+            }}
+          >
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: '50%',
+                background: '#dcfce7',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Plant size={18} weight="fill" color="#15803d" />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>
+                  {activeCrop.name}
+                </span>
+                <span
+                  style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    background: '#ecfdf5',
+                    color: '#059669',
+                    padding: '1px 6px',
+                    borderRadius: 9999,
+                    border: '1px solid rgba(5,150,105,0.2)',
+                  }}
+                >
+                  Best Growing Zones
+                </span>
+                {isLoadingCrop && (
+                  <CircleNotch size={14} color="#15803d" className="animate-spin" />
+                )}
+              </div>
+              <span style={{ fontSize: 10, color: '#64748b' }}>
+                Risk level display paused • Green highlights highest cultivation suitability
+              </span>
+            </div>
+
+            <button
+              onClick={clearCropMode}
+              title="Exit crop mode & restore risk levels"
+              style={{
+                background: '#f1f5f9',
+                border: 'none',
+                borderRadius: 9999,
+                padding: '4px 10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                fontSize: 11,
+                fontWeight: 600,
+                color: '#475569',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                marginLeft: 4,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#e2e8f0';
+                e.currentTarget.style.color = '#0f172a';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.color = '#475569';
+              }}
+            >
+              <X size={12} weight="bold" />
+              <span>Exit Crop View</span>
+            </button>
+          </div>
+
+          {/* Color Scale Legend */}
+          <div
+            style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: 9999,
+              padding: '3px 14px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              fontSize: 10,
+              fontWeight: 600,
+              color: '#475569',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#15803d' }} />
+              <span>≥75% Optimal</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e' }} />
+              <span>60–74% Good</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#eab308' }} />
+              <span>45–59% Moderate</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#94a3b8' }} />
+              <span>&lt;45% Suboptimal</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Change Map View - Flat Square Button & Options (Bottom-Left) */}
       <div
@@ -1132,6 +1752,126 @@ export default function Map3D({
           >
             Map View
           </span>
+        </button>
+      </div>
+
+      {/* Right side controls (Zoom, Current Location, 3D Toggle) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 30, // Just above the MapLibre attribution 'i' button
+          right: 10,
+          zIndex: 20,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}
+      >
+        {/* Zoom Controls */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 8,
+            overflow: 'hidden',
+            border: '1px solid #e2e8f0',
+            background: '#fff',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          }}
+        >
+          <button
+            onClick={handleZoomIn}
+            title="Zoom In"
+            style={{
+              width: 32,
+              height: 32,
+              background: '#fff',
+              border: 'none',
+              borderBottom: '1px solid #e2e8f0',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = '#fff')}
+          >
+            <Plus size={16} color="#0f172a" weight="bold" />
+          </button>
+          <button
+            onClick={handleZoomOut}
+            title="Zoom Out"
+            style={{
+              width: 32,
+              height: 32,
+              background: '#fff',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = '#fff')}
+          >
+            <Minus size={16} color="#0f172a" weight="bold" />
+          </button>
+        </div>
+
+        {/* Current Location */}
+        <button
+          onClick={handleCurrentLocation}
+          title="Current Location"
+          style={{
+            width: 32,
+            height: 32,
+            background: '#fff',
+            border: '1px solid #e2e8f0',
+            borderRadius: 8,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            padding: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = '#fff')}
+        >
+          {isLocating ? (
+            <CircleNotch size={16} color="#0284c7" className="animate-spin" />
+          ) : (
+            <NavigationArrow size={16} color="#0f172a" weight="fill" />
+          )}
+        </button>
+
+        {/* 2D/3D Toggle */}
+        <button
+          onClick={handleToggle3D}
+          title={is3D ? 'Switch to 2D view' : 'Switch to 3D view'}
+          style={{
+            width: 32,
+            height: 32,
+            background: '#fff',
+            border: '1px solid #e2e8f0',
+            borderRadius: 8,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 12,
+            fontWeight: 700,
+            color: '#0f172a',
+            fontFamily: 'system-ui, sans-serif',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            padding: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = '#f8fafc')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = '#fff')}
+        >
+          {is3D ? '2D' : '3D'}
         </button>
       </div>
     </div>

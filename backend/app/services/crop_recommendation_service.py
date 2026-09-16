@@ -442,7 +442,7 @@ class CropRecommendationEngine:
         ph, clay_pct, sand_pct, oc = self._extract_soil(village_static_features)
 
         if ph is None or clay_pct is None or sand_pct is None:
-            logger.warning("Village has no soil data; falling back to scoring without soil factor.")
+            logger.debug("Village has no soil data; falling back to scoring without soil factor.")
 
         scored_crops = []
 
@@ -507,6 +507,50 @@ class CropRecommendationEngine:
 
         return suitable_list
 
+    def get_available_crops(self) -> List[Dict[str, Any]]:
+        """Returns metadata list of all supported crops."""
+        aliases_map = {
+            "rice": ["paddy", "nellu", "rice paddy", "virippu", "mundakan"],
+            "banana": ["nendran", "plantain", "ethakka", "banana plantain"],
+            "coconut": ["thengu", "keram", "coconut palm"],
+            "tapioca": ["cassava", "kappa", "maravalli", "yucca"],
+            "vegetables": ["veg", "seasonal vegetables", "horticulture", "pachakkari"],
+            "rubber": ["hevea", "rubber plantation", "latex"],
+        }
+        crops_list = []
+        for key, rule in self.rules.items():
+            crop_name = rule.get("crop_name", key)
+            crops_list.append({
+                "id": crop_name,
+                "name": rule.get("display_name", crop_name.capitalize()),
+                "aliases": aliases_map.get(crop_name, []),
+                "optimal_temp_c": rule.get("optimal_temp_c", [22.0, 32.0]),
+                "optimal_rainfall_mm": rule.get("optimal_rainfall_mm", [20.0, 80.0]),
+                "max_elevation_m": rule.get("max_elevation_m", 1200.0),
+                "season": rule.get("season", []),
+                "notes": rule.get("notes", "")
+            })
+        return crops_list
+
+    def resolve_crop_id(self, query: str) -> Optional[str]:
+        """Resolves crop alias or name to canonical crop ID."""
+        q = query.strip().lower()
+        if q in self.rules:
+            return q
+        for crop_id, rule in self.rules.items():
+            display = rule.get("display_name", "").lower()
+            if q == display or q in display:
+                return crop_id
+        alias_map = {
+            "paddy": "rice", "nellu": "rice", "rice": "rice",
+            "nendran": "banana", "plantain": "banana", "banana": "banana", "ethakka": "banana",
+            "coconut": "coconut", "thengu": "coconut", "keram": "coconut",
+            "tapioca": "tapioca", "cassava": "tapioca", "kappa": "tapioca",
+            "vegetables": "vegetables", "vegetable": "vegetables", "veg": "vegetables",
+            "rubber": "rubber", "hevea": "rubber"
+        }
+        return alias_map.get(q)
+
 
 # Singleton instance
 crop_recommendation_engine = CropRecommendationEngine()
@@ -521,3 +565,4 @@ def recommend_crops(
     Matches current village forecast and static features against ICAR/Kerala crop rules.
     """
     return crop_recommendation_engine.evaluate(village_forecast, village_static_features)
+

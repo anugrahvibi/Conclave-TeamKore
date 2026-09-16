@@ -1,5 +1,8 @@
 # Design Guidelines
 
+## Typography
+- **Font Family**: Only the **Poppins** font must be used throughout the application for all text, headings, and monospaced elements. No other fonts (like Geist, Inter, or Roboto) are permitted.
+
 ## Styling & Layout
 
 ### UI Components
@@ -16,13 +19,14 @@
 - **Third-Party Surfaces**: Override bundled-library chrome (MapLibre popups, close buttons, attribution) in `globals.css` so third-party components follow these rounding rules too.
 
 ### Styling Restrictions (Strict)
-- **No Double Outlines**: Never stack an outline on top of a border (or two decorative outlines on one element). An element gets a single border at most; use filled background/opacity changes for selection states instead of nested outline rings.
+- **No Strokes or Outlines (Except Map View Box)**: Visual separation, hierarchy, and depth must be created solely using background fill contrast. All borders, strokes, and outlines are strictly prohibited on all UI elements, components, cards, chips, and overlays — with the sole exception of the main map view box container frame.
+- **Contrast via Fills**: Use subtle background surface fills (e.g. `#ffffff`, `#f8fafc`, `#f1f5f9`, `#e2e8f0`) and solid color fills for selection, badges, and emphasis instead of borders or outlines.
 - **No Glow**: No glowing effects of any kind — no `box-shadow` spread with a bright color (e.g. `0 0 10px ...`), no `text-shadow` halos, no `filter: drop-shadow` glows, no luminous highlight rings.
 - **No Gradients**: Never use `linear-gradient`, `radial-gradient`, or CSS `gradient()` values for backgrounds, overlays, or icon scrims — including gradient overlays on imagery (e.g. basemap preview tiles).
 - **No Dark Components**: No dark-surface UI chrome. Components must stay light: white/`#f8fafc`-family surfaces with slate text. No dark scrim backgrounds (e.g. `rgba(15,23,42,...)`, `#020617`), no dark translucent panels with `backdrop-blur`, no dark text-shadow for label readability.
   - *Exception*: The map container that sits directly behind the 3D globe stays dark (`bg-slate-950`) — the globe renders against space, and a white backdrop would wash out the atmosphere and horizon.
-- **No Shadow**: No `box-shadow` or `text-shadow` at all. Depth is conveyed with 1px borders on light surfaces only (`#e2e8f0`-family).
-- **Selection & Emphasis**: Selection state = solid 2px `#0284c7` border + no outline ring; emphasis = solid fills, not shadows or gradients.
+- **No Shadow**: No `box-shadow` or `text-shadow` at all.
+- **Selection & Emphasis**: Selection state = solid color fill changes (e.g. `#sky-100` / `#0284c7` solid fill) with zero borders, strokes, or outlines.
 
 ## Map Styling
 - **Map surfaces**: Terrain, hillshade and sky colors must also stay in the light palette (no near-black shadow/horizon colors like `#020617`).

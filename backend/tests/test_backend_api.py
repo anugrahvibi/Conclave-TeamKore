@@ -4,7 +4,10 @@ Tests all 4 PRD endpoints + health check + performance benchmark.
 """
 
 import time
-import pytest
+try:
+    import pytest
+except ImportError:
+    pytest = None
 from fastapi.testclient import TestClient
 from backend.app.main import app
 
